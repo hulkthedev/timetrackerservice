@@ -1,0 +1,59 @@
+{
+  "name": "arvato/wishlistservice",
+  "license": "proprietary",
+  "type": "project",
+  "description": "WishlistService. Exposes functionality as REST Api",
+  "version": "1.0.0",
+  "autoload": {
+    "psr-4": {
+      "Arvato\\WishlistService\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Arvato\\WishlistService\\": "tests/unit/"
+    }
+  },
+  "config": {
+    "http-basic": {
+      "stash.arvato-cp.com": {
+        "username": "continuous_integration",
+        "password": "123Arvato!"
+      }
+    },
+    "preferred-install": {
+      "*": "dist"
+    },
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "apcu-autoloader": true
+  },
+  "require": {
+    "php": ">=7.2",
+    "ext-apcu": "*",
+    "ext-curl": "*",
+    "ext-igbinary": "*",
+    "ext-intl": "*",
+    "ext-json": "*",
+    "ext-pdo": "*",
+    "ext-redis": "*",
+    "ext-simplexml": "*",
+    "ext-zlib": "*",
+    "doctrine/doctrine-bundle": "^1.11",
+    "jms/serializer-bundle": "^3.4",
+    "symfony/dependency-injection": "^4",
+    "symfony/flex": "^1",
+    "symfony/framework-bundle": "^4",
+    "symfony/intl": "^4",
+    "symfony/monolog-bundle": "^3",
+    "symfony/validator": "^4",
+    "symfony/yaml": "^4"
+  },
+  "require-dev": {
+    "behat/behat": "~3.5",
+    "phpunit/phpunit": "~8",
+    "symfony/console": "^4",
+    "symfony/dotenv": "~4"
+  },
+  "repositories": []
+}
