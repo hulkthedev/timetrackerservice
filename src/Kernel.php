@@ -1,6 +1,6 @@
 <?php
 
-namespace Hulk\TtimeTracker;
+namespace Hulk\TimeTracker;
 
 use Exception;
 use Generator;
