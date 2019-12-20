@@ -1,9 +1,8 @@
-FROM XXX
+FROM php:7.4.1-fpm-alpine3.10
 
 LABEL time.tracker.maintainer="fatal.error.27@gmail.com"
 
 COPY . /var/www/html
 
-RUN mkdir -p /var/www/html/app/cache && \
-    chown -R www-data:www-data /var/www/html && \
-    chmod -R u+rw /var/www/html
+RUN usermod -u 1000 www-data \
+    && chown -R www-data:www-data /var/www/html

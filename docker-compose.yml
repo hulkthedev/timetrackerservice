@@ -1,18 +1,13 @@
 version: '2.2'
 services:
-  wishlistservice:
-    image: ${REGISTRY_URL}/team-c/wishlistservice:${IMAGE_TAG}
+  timetrackerservice:
+    image: timetrackerservice:latest
     build:
       context: .
       dockerfile: Dockerfile
-    restart: "always"
-    ports:
-      - "80"
-    env_file:
-      - docker/environment/pool-${POOL}.env
-      - docker/environment/prod/common-prod.env
-      - docker/environment/prod/newrelic-prod.env
-    mem_limit: 256m
-    memswap_limit: 256m
-    labels:
-      - com.docker.swarm.reschedule-policies=["on-node-failure"]
+#    volumes:
+#      - .:/var/www/html
+#    ports:
+#      - 888:80
+#    mem_limit: 128m
+#    memswap_limit: 128m

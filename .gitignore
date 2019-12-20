@@ -1,10 +1,10 @@
 .idea/
-/app/cache/*
-/app/log/*
+vendor/
 
 junit.xml
 clover.xml
 symfony.lock
+composer.lock
 
 ###> symfony/framework-bundle ###
 /.env.local

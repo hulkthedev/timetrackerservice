@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Starting wishlistservice PHPUnit Tests..."
+echo "Starting PHPUnit Tests..."
 
 docker run -i \
     --rm \
@@ -12,11 +12,8 @@ docker run -i \
             --colors=always \
             --coverage-clover=clover.xml \
             --log-junit junit.xml \
-            --prepend tests/unit/xdebug-filter.php \
             $@
 
 RESULT=$?
-
-./scripts/fix_coverage_paths.sh
 
 exit ${RESULT}
