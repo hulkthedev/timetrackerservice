@@ -43,7 +43,6 @@
     "symfony/yaml": "^5"
   },
   "require-dev": {
-    "behat/behat": "~3.5",
     "phpunit/phpunit": "~8"
   },
   "repositories": []
