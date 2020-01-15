@@ -104,3 +104,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 https://symfony.com/doc/current/best_practices.html#creating-the-project
 
 https://symfony.com/doc/current/setup.html#creating-symfony-applications
+http://geekyplatypus.com/dockerise-your-php-application-with-nginx-and-php7-fpm/
