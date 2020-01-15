@@ -4,6 +4,7 @@
 
 **/.git*
 **/tests
+**/bin
 
 junit.xml
 clover.xml
