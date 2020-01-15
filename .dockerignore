@@ -1,22 +1,21 @@
 .idea
-.*
 *.properties
 *.sh
-*.yml
 
 **/.git*
 **/tests
 
+junit.xml
 clover.xml
+
 composer.json
 composer.lock
-configs
-docker
+
+symfony.lock
+
 Dockerfile
-junit.xml
-node_modules
-npm_cache
+
 package-lock.json
 package.json
-react
+
 README.md

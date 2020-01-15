@@ -8,9 +8,6 @@ docker run \
   ${USER} \
   ${CACHE_DIR} \
   -v $(pwd):/app \
-    composer "$@" \
-      --ignore-platform-reqs \
-      --optimize-autoloader \
-      --prefer-dist
+    composer create-project symfony/skeleton tester
 
 exit $?
