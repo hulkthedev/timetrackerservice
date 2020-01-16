@@ -1,4 +1,24 @@
-getAll:
+GetAllEntries:
   path: /tracking
-  controller: App\Controller::getAll
+  controller: App\Controller\MainController::getAllEntries
   methods: [GET]
+
+GetEntry:
+  path: /tracking/{day}
+  controller: App\Controller\MainController::getEntry
+  methods: [GET]
+
+AddAntry:
+  path: /tracking
+  controller: App\Controller\MainController::addAntry
+  methods: [POST]
+
+ChangeEntry:
+  path: /tracking/{day}
+  controller: App\Controller\MainController::changeEntry
+  methods: [PATCH]
+
+DeleteEntry:
+  path: /tracking/{day}
+  controller: App\Controller\MainController::deleteEntry
+  methods: [DELETE]
