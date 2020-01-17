@@ -1,0 +1,17 @@
+App\Usecase\GetEntityRequest:
+  properties:
+    date:
+      - NotBlank: ~
+      - Type: string
+      - Length:
+          min: 8
+          max: 8
+
+App\Usecase\DeleteEntityRequest:
+  properties:
+    date:
+      - NotBlank: ~
+      - Type: string
+      - Length:
+          min: 8
+          max: 8

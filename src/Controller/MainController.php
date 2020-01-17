@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Usecase\GetEntityRequest;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -14,51 +16,65 @@ class MainController extends DefaultController
      */
     public function getAllEntries(): Response
     {
-        return $this->createSuccessfullyResponse([
+        return $this->createResponse([
             'code' => 1,
             'message' => 'SUCCESS'
         ]);
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
-    public function getEntry(): Response
+    public function getEntry(Request $request): Response
     {
-        return $this->createSuccessfullyResponse([
+        $payload = ['date' => $request->get('date')];
+        $result = $this->validatePayload($payload, GetEntityRequest::class);
+
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        return $this->createResponse([
             'code' => 1,
             'message' => 'SUCCESS'
         ]);
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
-    public function addEntry(): Response
+    public function addEntry(Request $request): Response
     {
-        return $this->createSuccessfullyResponse([
+        return $this->createResponse([
             'code' => 1,
             'message' => 'SUCCESS'
         ]);
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
-    public function changeEntry(): Response
+    public function changeEntry(Request $request): Response
     {
-        return $this->createSuccessfullyResponse([
+        return $this->createResponse([
             'code' => 1,
             'message' => 'SUCCESS'
         ]);
     }
 
     /**
+     * @param Request $request
      * @return Response
      */
-    public function deleteEntry(): Response
+    public function deleteEntry(Request $request): Response
     {
-        return $this->createSuccessfullyResponse([
+        $payload = ['date' => $request->get('date')];
+        $result = $this->validatePayload($payload, GetEntityRequest::class);
+
+        return $this->createResponse([
             'code' => 1,
             'message' => 'SUCCESS'
         ]);
