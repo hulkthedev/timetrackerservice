@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Usecase\FaultyResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -9,8 +10,6 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Validator\ConstraintViolation;
-use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -39,7 +38,7 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * @param $payload
+     * @param array $payload
      * @param string $model
      * @return object
      */
@@ -48,20 +47,9 @@ class DefaultController extends AbstractController
         $data = $this->serializer->deserialize(json_encode($payload), $model, self::DEFAULT_FORMAT);
         $violations = $this->validator->validate($data);
 
-        if (0 !== count($violations)) {
-
-            /**
-             * Faulty Response objekt hier mit daten anreichetn und als Response wiedergeben
-             * - message
-             * - attribute
-             * - errocode
-             * - 400er http code
-             */
-
-            return $this->createResponse([
-                'Message' => 'Error',
-                'Code' => -2
-            ], Response::HTTP_BAD_REQUEST);
+        if ($violations->count() > 0) {
+            $response = new FaultyResponse($violations);
+            return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
         }
 
         return $data;

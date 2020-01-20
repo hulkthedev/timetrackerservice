@@ -8,17 +8,17 @@ GetEntry:
   controller: App\Controller\MainController::getEntry
   methods: [GET]
 
-AddAntry:
-  path: /tracking
-  controller: App\Controller\MainController::addAntry
-  methods: [PUT]
-
-ChangeEntry:
-  path: /tracking/{date}
-  controller: App\Controller\MainController::changeEntry
-  methods: [PATCH]
-
-DeleteEntry:
-  path: /tracking/{date}
-  controller: App\Controller\MainController::deleteEntry
-  methods: [DELETE]
+#AddAntry:
+#  path: /tracking
+#  controller: App\Controller\MainController::addAntry
+#  methods: [PUT]
+#
+#ChangeEntry:
+#  path: /tracking/{date}
+#  controller: App\Controller\MainController::changeEntry
+#  methods: [PATCH]
+#
+#DeleteEntry:
+#  path: /tracking/{date}
+#  controller: App\Controller\MainController::deleteEntry
+#  methods: [DELETE]
