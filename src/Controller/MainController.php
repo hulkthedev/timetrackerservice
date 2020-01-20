@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Usecase\GetAllEntities\GetAllEntitiesInteractor;
 use App\Usecase\GetEntity\GetEntityInteractor;
 use App\Usecase\GetEntity\GetEntityRequest;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,14 +14,13 @@ use Symfony\Component\HttpFoundation\Response;
 class MainController extends DefaultController
 {
     /**
+     * @param GetAllEntitiesInteractor $interactor
      * @return Response
      */
-    public function getAllEntries(): Response
+    public function getAllEntries(GetAllEntitiesInteractor $interactor): Response
     {
-        return $this->createResponse([
-            'code' => 1,
-            'message' => 'SUCCESS'
-        ]);
+        $response = $interactor->execute();
+        return $this->createResponse($response);
     }
 
     /**
