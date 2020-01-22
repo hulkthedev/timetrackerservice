@@ -38,6 +38,8 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * 1579626589
+     *
      * @param array $payload
      * @param string $model
      * @return object
@@ -46,6 +48,9 @@ class DefaultController extends AbstractController
     {
         $data = $this->serializer->deserialize(json_encode($payload), $model, self::DEFAULT_FORMAT);
         $violations = $this->validator->validate($data);
+
+//        var_dump($violations);
+//        die('TOT');
 
         if ($violations->count() > 0) {
             $response = new FaultyResponse($violations);

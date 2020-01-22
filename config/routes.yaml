@@ -1,24 +1,28 @@
-GetAllEntries:
+# https://symfony.com/doc/current/routing.html
+
+api_get_all_entries:
   path: /tracking
   controller: App\Controller\MainController::getAllEntries
   methods: [GET]
 
-GetEntry:
+api_get_entry:
   path: /tracking/{date}
   controller: App\Controller\MainController::getEntry
   methods: [GET]
 
-#AddAntry:
-#  path: /tracking
-#  controller: App\Controller\MainController::addAntry
-#  methods: [PUT]
-#
-#ChangeEntry:
-#  path: /tracking/{date}
+api_add_entry:
+  path: /tracking/{timestamp}
+  controller: App\Controller\MainController::addEntry
+  defaults:
+    timestamp: "1234567890"
+  methods: [PUT]
+
+#api_change_entry:
+#  path: /tracking/{date}/from/{timeForm}/to/{timeTo}
 #  controller: App\Controller\MainController::changeEntry
 #  methods: [PATCH]
-#
-#DeleteEntry:
-#  path: /tracking/{date}
-#  controller: App\Controller\MainController::deleteEntry
-#  methods: [DELETE]
+
+api_delete_entry:
+  path: /tracking/{date}
+  controller: App\Controller\MainController::deleteEntry
+  methods: [DELETE]

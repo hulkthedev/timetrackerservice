@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Usecase\GetEntity;
+namespace App\Usecase\AddEntity;
 
 use App\Usecase\BaseInteractor;
 use App\Usecase\ResultCodes;
@@ -8,7 +8,7 @@ use App\Usecase\ResultCodes;
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class GetEntityInteractor extends BaseInteractor
+class AddEntityInteractor extends BaseInteractor
 {
     /**
      * @return array

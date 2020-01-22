@@ -1,4 +1,18 @@
+# https://symfony.com/doc/current/validation.html
+
 App\Usecase\GetEntity\GetEntityRequest:
   properties:
     date:
       - Date: ~
+
+App\Usecase\DeleteEntity\DeleteEntityRequest:
+  properties:
+    date:
+      - Date: ~
+
+App\Usecase\AddEntity\AddEntityRequest:
+  properties:
+    timestamp:
+      - Length:
+          min: 10
+          max: 13
