@@ -17,7 +17,7 @@ class GetAllEntitiesInteractor extends BaseInteractor
     {
         return [
             'code' => ResultCodes::CODE_SUCCESS,
-            'entries' => []
+            'entities' => []
         ];
     }
 }

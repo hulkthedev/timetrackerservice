@@ -17,7 +17,7 @@ class DeleteEntityInteractor extends BaseInteractor
     {
         return [
             'code' => ResultCodes::CODE_SUCCESS,
-            'entries' => []
+            'entities' => []
         ];
     }
 }

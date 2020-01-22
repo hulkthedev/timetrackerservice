@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Usecase\AddEntity\AddEntityInteractor;
 use App\Usecase\AddEntity\AddEntityRequest;
+use App\Usecase\ChangeEntity\ChangeEntityInteractor;
+use App\Usecase\ChangeEntity\ChangeEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityInteractor;
 use App\Usecase\DeleteEntity\DeleteEntityRequest;
 use App\Usecase\GetAllEntities\GetAllEntitiesInteractor;
@@ -15,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class MainController extends DefaultController
+class EntityController extends DefaultController
 {
     /**
      * @param GetAllEntitiesInteractor $interactor
@@ -52,9 +54,12 @@ class MainController extends DefaultController
      */
     public function addEntry(Request $request, AddEntityInteractor $interactor): Response
     {
-        $payload = ['timestamp' => $request->get('timestamp')];
-        $result = $this->validatePayload($payload, AddEntityRequest::class);
+        $payload = [
+            'date' => $request->get('date'),
+            'begin' => (int)$request->get('begin')
+        ];
 
+        $result = $this->validatePayload($payload, AddEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }
@@ -63,17 +68,27 @@ class MainController extends DefaultController
         return $this->createResponse($response);
     }
 
-//    /**
-//     * @param Request $request
-//     * @return Response
-//     */
-//    public function changeEntry(Request $request): Response
-//    {
-//        return $this->createResponse([
-//            'code' => 1,
-//            'message' => 'SUCCESS'
-//        ]);
-//    }
+    /**
+     * @param Request $request
+     * @param ChangeEntityInteractor $interactor
+     * @return Response
+     */
+    public function changeEntry(Request $request, ChangeEntityInteractor $interactor): Response
+    {
+        $payload = [
+            'date' => $request->get('date'),
+            'begin' => (int)$request->get('begin'),
+            'end' => (int)$request->get('end')
+        ];
+
+        $result = $this->validatePayload($payload, ChangeEntityRequest::class);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $response = $interactor->execute();
+        return $this->createResponse($response);
+    }
 
     /**
      * @param Request $request
