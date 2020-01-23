@@ -20,6 +20,8 @@ use Symfony\Component\HttpFoundation\Response;
 class EntityController extends DefaultController
 {
     /**
+     * @todo add validation?
+     *
      * @param GetAllEntitiesInteractor $interactor
      * @return Response
      */
@@ -36,7 +38,7 @@ class EntityController extends DefaultController
      */
     public function getEntry(Request $request, GetEntityInteractor $interactor): Response
     {
-        $result = $this->validatePayload(['date' => $request->get('date')], GetEntityRequest::class);
+        $result = $this->validateRequest($request, GetEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }
@@ -52,7 +54,7 @@ class EntityController extends DefaultController
      */
     public function deleteEntry(Request $request, DeleteEntityInteractor $interactor): Response
     {
-        $result = $this->validatePayload(['date' => $request->get('date')], DeleteEntityRequest::class);
+        $result = $this->validateRequest($request, DeleteEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }
@@ -70,22 +72,7 @@ class EntityController extends DefaultController
      */
     public function addEntry(Request $request, AddEntityInteractor $interactor): Response
     {
-        $result = $this->validateContentType($request->getContentType());
-        if ($result instanceof Response) {
-            return $result;
-        }
-
-        $result = $this->validateJsonData($request->getContent());
-        if ($result instanceof Response) {
-            return $result;
-        }
-
-        $payload = array_merge(
-            ['date' => $request->get('date')],
-            json_decode($request->getContent(), true)
-        );
-
-        $result = $this->validatePayload($payload, AddEntityRequest::class);
+        $result = $this->validateRequest($request, AddEntityRequest::class, true);
         if ($result instanceof Response) {
             return $result;
         }
@@ -103,22 +90,7 @@ class EntityController extends DefaultController
      */
     public function changeEntry(Request $request, ChangeEntityInteractor $interactor): Response
     {
-        $result = $this->validateContentType($request->getContentType());
-        if ($result instanceof Response) {
-            return $result;
-        }
-
-        $result = $this->validateJsonData($request->getContent());
-        if ($result instanceof Response) {
-            return $result;
-        }
-
-        $payload = array_merge(
-            ['date' => $request->get('date')],
-            json_decode($request->getContent(), true)
-        );
-
-        $result = $this->validatePayload($payload, ChangeEntityRequest::class);
+        $result = $this->validateRequest($request, ChangeEntityRequest::class, true);
         if ($result instanceof Response) {
             return $result;
         }

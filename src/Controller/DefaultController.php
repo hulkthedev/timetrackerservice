@@ -41,17 +41,49 @@ class DefaultController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param string $model
+     * @param bool $validateJson
+     * @return EntityRequestInterface|Response
+     */
+    protected function validateRequest(Request $request, string $model, bool $validateJson = false)
+    {
+        $result = $this->validateContentType($request->getContentType());
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $json = [];
+        if ($validateJson) {
+            $requestBody = $request->getContent();
+            $result = $this->validateJsonData($requestBody);
+            if ($result instanceof Response) {
+                return $result;
+            }
+
+            $json = json_decode($requestBody, true);
+        }
+
+        $result = $this->validatePayload(array_merge(['date' => $request->get('date')], $json), $model);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        return $result;
+    }
+
+    /**
      * @param array $payload
      * @param string $model
      * @return Response|EntityRequestInterface
      */
-    protected function validatePayload(array $payload, $model)
+    private function validatePayload(array $payload, $model)
     {
         $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
         $violations = $this->validator->validate($data);
 
         if ($violations->count() > 0) {
-            $response = new FaultyResponse('Syntax error on attribute ' . $violations->get(0)->getPropertyPath());
+            $response = new FaultyResponse('Invalid param ' . $violations->get(0)->getPropertyPath());
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
 
@@ -62,10 +94,10 @@ class DefaultController extends AbstractController
      * @param string|null $contentType
      * @return Response|null
      */
-    protected function validateContentType(?string $contentType)
+    private function validateContentType(?string $contentType)
     {
         if (strtolower($contentType) !== self::SUPPORTED_FORMAT) {
-            $response = new FaultyResponse('Unsupported content-type', ResultCodes::CODE_INVALID_MEDIA_TYPE);
+            $response = new FaultyResponse('Invalid content-type', ResultCodes::CODE_INVALID_MEDIA_TYPE);
             return $this->createResponse($response->presentResponse(), Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
         }
 
@@ -76,10 +108,10 @@ class DefaultController extends AbstractController
      * @param string|null $json
      * @return Response|null
      */
-    protected function validateJsonData(?string $json)
+    private function validateJsonData(?string $json)
     {
         if (null === $json || null === json_decode($json)) {
-            $response = new FaultyResponse('Invalid json syntax', ResultCodes::CODE_INVALID_JSON_CONTENT);
+            $response = new FaultyResponse('Invalid json', ResultCodes::CODE_INVALID_JSON_CONTENT);
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
     }
