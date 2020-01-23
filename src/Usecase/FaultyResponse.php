@@ -17,7 +17,7 @@ class FaultyResponse
      * @param string $message
      * @param int $code
      */
-    public function __construct(string $message, int $code = ResultCodes::CODE_SYNTAX_ERROR)
+    public function __construct(string $message, int $code = ResultCodes::CODE_INVALID_SYNTAX)
     {
         $this->code = $code;
         $this->message = $message;

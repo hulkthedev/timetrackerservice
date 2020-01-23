@@ -6,6 +6,7 @@ use App\Usecase\EntityRequestInterface;
 use App\Usecase\FaultyResponse;
 use App\Usecase\ResultCodes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -64,11 +65,23 @@ class DefaultController extends AbstractController
     protected function validateContentType(?string $contentType)
     {
         if (strtolower($contentType) !== self::SUPPORTED_FORMAT) {
-            $response = new FaultyResponse('Unsupported content-type', ResultCodes::CODE_UNSUPPORTED_MEDIA_TYPE);
+            $response = new FaultyResponse('Unsupported content-type', ResultCodes::CODE_INVALID_MEDIA_TYPE);
             return $this->createResponse($response->presentResponse(), Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
         }
 
         return null;
+    }
+
+    /**
+     * @param string|null $json
+     * @return Response|null
+     */
+    protected function validateJsonData(?string $json)
+    {
+        if (null === $json || null === json_decode($json)) {
+            $response = new FaultyResponse('Invalid json syntax', ResultCodes::CODE_INVALID_JSON_CONTENT);
+            return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

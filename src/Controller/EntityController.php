@@ -47,10 +47,26 @@ class EntityController extends DefaultController
 
     /**
      * @param Request $request
+     * @param DeleteEntityInteractor $interactor
+     * @return Response
+     */
+    public function deleteEntry(Request $request, DeleteEntityInteractor $interactor): Response
+    {
+        $result = $this->validatePayload(['date' => $request->get('date')], DeleteEntityRequest::class);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $response = $interactor->execute($result);
+        return $this->createResponse($response);
+    }
+
+    /**
+     * @todo add Location: /api/orders/ in response header
+     *
+     * @param Request $request
      * @param AddEntityInteractor $interactor
      * @return Response
-     *
-     * @todo add Location: /api/orders/ in response header
      */
     public function addEntry(Request $request, AddEntityInteractor $interactor): Response
     {
@@ -59,7 +75,17 @@ class EntityController extends DefaultController
             return $result;
         }
 
-        $result = $this->validatePayload(['date' => $request->get('date')], AddEntityRequest::class);
+        $result = $this->validateJsonData($request->getContent());
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $payload = array_merge(
+            ['date' => $request->get('date')],
+            json_decode($request->getContent(), true)
+        );
+
+        $result = $this->validatePayload($payload, AddEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }
@@ -69,6 +95,8 @@ class EntityController extends DefaultController
     }
 
     /**
+     * @todo dont work @ symfony
+     *
      * @param Request $request
      * @param ChangeEntityInteractor $interactor
      * @return Response
@@ -80,23 +108,17 @@ class EntityController extends DefaultController
             return $result;
         }
 
-        $result = $this->validatePayload(['date' => $request->get('date')], ChangeEntityRequest::class);
+        $result = $this->validateJsonData($request->getContent());
         if ($result instanceof Response) {
             return $result;
         }
 
-        $response = $interactor->execute($result);
-        return $this->createResponse($response);
-    }
+        $payload = array_merge(
+            ['date' => $request->get('date')],
+            json_decode($request->getContent(), true)
+        );
 
-    /**
-     * @param Request $request
-     * @param DeleteEntityInteractor $interactor
-     * @return Response
-     */
-    public function deleteEntry(Request $request, DeleteEntityInteractor $interactor): Response
-    {
-        $result = $this->validatePayload(['date' => $request->get('date')], DeleteEntityRequest::class);
+        $result = $this->validatePayload($payload, ChangeEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }

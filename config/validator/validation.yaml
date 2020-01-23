@@ -14,6 +14,12 @@ App\Usecase\AddEntity\AddEntityRequest:
   properties:
     date:
       - Date: ~
+    begin:
+      - Type:
+          type: integer
+      - Length:
+          min: 10
+          max: 13
 
 App\Usecase\ChangeEntity\ChangeEntityRequest:
   properties:

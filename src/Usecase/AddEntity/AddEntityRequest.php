@@ -11,4 +11,7 @@ class AddEntityRequest implements EntityRequestInterface
 {
     /** @var string */
     public $date;
+
+    /** @var int */
+    public $begin;
 }
