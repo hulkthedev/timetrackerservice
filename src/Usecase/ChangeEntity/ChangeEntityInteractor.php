@@ -3,6 +3,7 @@
 namespace App\Usecase\ChangeEntity;
 
 use App\Usecase\BaseInteractor;
+use App\Usecase\EntityRequestInterface;
 use App\Usecase\ResultCodes;
 
 /**
@@ -11,9 +12,10 @@ use App\Usecase\ResultCodes;
 class ChangeEntityInteractor extends BaseInteractor
 {
     /**
+     * @param EntityRequestInterface $request
      * @return array
      */
-    public function execute(): array
+    public function execute(EntityRequestInterface $request): array
     {
         return [
             'code' => ResultCodes::CODE_SUCCESS,

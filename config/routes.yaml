@@ -16,13 +16,11 @@ api_delete_entity:
   methods: [DELETE]
 
 api_add_entity:
-  path: /tracking/{date}/begin/{!begin}
+  path: /tracking/{date}
   controller: App\Controller\EntityController::addEntry
-  defaults:
-    begin: 0
   methods: [PUT]
 
 api_change_entry:
-  path: /tracking/{date}/begin/{begin}/end/{end}
+  path: /tracking/{date}
   controller: App\Controller\MainController::changeEntry
   methods: [PATCH]

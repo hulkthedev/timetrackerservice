@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Usecase\EntityRequestInterface;
 use App\Usecase\FaultyResponse;
+use App\Usecase\ResultCodes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -18,7 +20,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class DefaultController extends AbstractController
 {
-    protected const DEFAULT_FORMAT = 'json';
+    protected const SUPPORTED_FORMAT = 'json';
 
     /** @var ValidatorInterface */
     private $validator;
@@ -38,23 +40,35 @@ class DefaultController extends AbstractController
     }
 
     /**
-     * 1579626589
-     *
      * @param array $payload
      * @param string $model
-     * @return object
+     * @return Response|EntityRequestInterface
      */
     protected function validatePayload(array $payload, $model)
     {
-        $data = $this->serializer->deserialize(json_encode($payload), $model, self::DEFAULT_FORMAT);
+        $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
         $violations = $this->validator->validate($data);
 
         if ($violations->count() > 0) {
-            $response = new FaultyResponse($violations);
-            return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
+            $response = new FaultyResponse('Syntax error on attribute ' . $violations->get(0)->getPropertyPath());
+            return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
 
         return $data;
+    }
+
+    /**
+     * @param string|null $contentType
+     * @return Response|null
+     */
+    protected function validateContentType(?string $contentType)
+    {
+        if (strtolower($contentType) !== self::SUPPORTED_FORMAT) {
+            $response = new FaultyResponse('Unsupported content-type', ResultCodes::CODE_UNSUPPORTED_MEDIA_TYPE);
+            return $this->createResponse($response->presentResponse(), Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
+        }
+
+        return null;
     }
 
     /**
@@ -64,6 +78,6 @@ class DefaultController extends AbstractController
      */
     protected function createResponse($content, int $status = Response::HTTP_OK): Response
     {
-        return new Response(json_encode($content), $status);
+        return new Response(json_encode($content), $status, ['Content-Type' => 'application/json']);
     }
 }

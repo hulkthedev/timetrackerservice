@@ -7,6 +7,7 @@ namespace App\Usecase;
  */
 class ResultCodes
 {
+    public const CODE_UNSUPPORTED_MEDIA_TYPE = -2;
     public const CODE_SYNTAX_ERROR = -1;
     public const CODE_SUCCESS = 1;
 }

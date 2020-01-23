@@ -36,14 +36,12 @@ class EntityController extends DefaultController
      */
     public function getEntry(Request $request, GetEntityInteractor $interactor): Response
     {
-        $payload = ['date' => $request->get('date')];
-        $result = $this->validatePayload($payload, GetEntityRequest::class);
-
+        $result = $this->validatePayload(['date' => $request->get('date')], GetEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }
 
-        $response = $interactor->execute();
+        $response = $interactor->execute($result);
         return $this->createResponse($response);
     }
 
@@ -51,21 +49,23 @@ class EntityController extends DefaultController
      * @param Request $request
      * @param AddEntityInteractor $interactor
      * @return Response
+     *
+     * @todo add Location: /api/orders/ in response header
      */
     public function addEntry(Request $request, AddEntityInteractor $interactor): Response
     {
-        $payload = [
-            'date' => $request->get('date'),
-            'begin' => (int)$request->get('begin')
-        ];
-
-        $result = $this->validatePayload($payload, AddEntityRequest::class);
+        $result = $this->validateContentType($request->getContentType());
         if ($result instanceof Response) {
             return $result;
         }
 
-        $response = $interactor->execute();
-        return $this->createResponse($response);
+        $result = $this->validatePayload(['date' => $request->get('date')], AddEntityRequest::class);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $response = $interactor->execute($result);
+        return $this->createResponse($response, Response::HTTP_CREATED);
     }
 
     /**
@@ -75,18 +75,17 @@ class EntityController extends DefaultController
      */
     public function changeEntry(Request $request, ChangeEntityInteractor $interactor): Response
     {
-        $payload = [
-            'date' => $request->get('date'),
-            'begin' => (int)$request->get('begin'),
-            'end' => (int)$request->get('end')
-        ];
-
-        $result = $this->validatePayload($payload, ChangeEntityRequest::class);
+        $result = $this->validateContentType($request->getContentType());
         if ($result instanceof Response) {
             return $result;
         }
 
-        $response = $interactor->execute();
+        $result = $this->validatePayload(['date' => $request->get('date')], ChangeEntityRequest::class);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $response = $interactor->execute($result);
         return $this->createResponse($response);
     }
 
@@ -97,14 +96,12 @@ class EntityController extends DefaultController
      */
     public function deleteEntry(Request $request, DeleteEntityInteractor $interactor): Response
     {
-        $payload = ['date' => $request->get('date')];
-        $result = $this->validatePayload($payload, DeleteEntityRequest::class);
-
+        $result = $this->validatePayload(['date' => $request->get('date')], DeleteEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
         }
 
-        $response = $interactor->execute();
+        $response = $interactor->execute($result);
         return $this->createResponse($response);
     }
 }

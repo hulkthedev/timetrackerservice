@@ -14,20 +14,8 @@ App\Usecase\AddEntity\AddEntityRequest:
   properties:
     date:
       - Date: ~
-    begin:
-      - Length:
-          min: 10
-          max: 13
 
 App\Usecase\ChangeEntity\ChangeEntityRequest:
   properties:
     date:
       - Date: ~
-    begin:
-      - Length:
-          min: 10
-          max: 13
-    end:
-      - Length:
-          min: 10
-          max: 13
