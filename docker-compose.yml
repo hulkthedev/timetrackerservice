@@ -17,5 +17,14 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
-#    mem_limit: 128m
-#    memswap_limit: 128m
+#    links:
+#      - mariadb-timetrackerservice
+
+#  mariadb-timetrackerservice:
+#    image: mariadb
+#    environment:
+#      MYSQL_ROOT_PASSWORD: admin
+#      MYSQL_DATABASE: test
+#    volumes:
+#      - ./sql/migrate:/docker-entrypoint-initdb.d
+#      - ./config/mariadb:/etc/mysql/conf.d
