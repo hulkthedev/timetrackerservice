@@ -119,10 +119,12 @@ class DefaultController extends AbstractController
     /**
      * @param mixed $content
      * @param int $status
+     * @param array $header
      * @return Response
      */
-    protected function createResponse($content, int $status = Response::HTTP_OK): Response
+    protected function createResponse($content, int $status = Response::HTTP_OK, array $header = []): Response
     {
-        return new Response(json_encode($content), $status, ['Content-Type' => 'application/json']);
+        $json = $this->serializer->serialize($content, self::SUPPORTED_FORMAT);
+        return new Response($json, $status, array_merge(['Content-Type' => 'application/json'], $header));
     }
 }

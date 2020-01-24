@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Usecase;
+namespace App\Entity;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class Modes
+class EntityModes
 {
     public const MODE_WORKING = 'working';
     public const MODE_SICK = 'sick';

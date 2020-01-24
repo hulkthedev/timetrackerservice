@@ -78,7 +78,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response, Response::HTTP_CREATED);
+        return $this->createResponse($response, Response::HTTP_CREATED, ['Location' => '/2020-01-01']);
     }
 
     /**
