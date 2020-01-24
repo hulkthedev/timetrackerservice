@@ -20,15 +20,13 @@ use Symfony\Component\HttpFoundation\Response;
 class EntityController extends DefaultController
 {
     /**
-     * @todo add validation?
-     *
      * @param GetAllEntitiesInteractor $interactor
      * @return Response
      */
     public function getAllEntries(GetAllEntitiesInteractor $interactor): Response
     {
         $response = $interactor->execute();
-        return $this->createResponse($response);
+        return $this->createResponse($response->presentResponse());
     }
 
     /**
@@ -44,7 +42,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response);
+        return $this->createResponse($response->presentResponse());
     }
 
     /**
@@ -60,7 +58,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response);
+        return $this->createResponse($response->presentResponse());
     }
 
     /**
@@ -78,7 +76,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response, Response::HTTP_CREATED, ['Location' => '/2020-01-01']);
+        return $this->createResponse($response->presentResponse(), Response::HTTP_CREATED, ['Location' => '/2020-01-01']);
     }
 
     /**
@@ -96,6 +94,6 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response);
+        return $this->createResponse($response->presentResponse());
     }
 }

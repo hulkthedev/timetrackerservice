@@ -2,12 +2,12 @@
 
 namespace App\Usecase\GetEntity;
 
-use App\Usecase\BaseRequest;
+use App\Usecase\BaseResponse;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class GetEntityRequest extends BaseRequest
+class GetEntityResponse extends BaseResponse
 {
 
 }

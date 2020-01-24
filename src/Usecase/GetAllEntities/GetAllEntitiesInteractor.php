@@ -3,6 +3,7 @@
 namespace App\Usecase\GetAllEntities;
 
 use App\Usecase\BaseInteractor;
+use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
 
 /**
@@ -11,13 +12,16 @@ use App\Usecase\ResultCodes;
 class GetAllEntitiesInteractor extends BaseInteractor
 {
     /**
-     * @return array
+     * @return BaseResponse
      */
-    public function execute(): array
+    public function execute(): BaseResponse
     {
-        return [
-            'code' => ResultCodes::CODE_SUCCESS,
-            'entities' => []
-        ];
+        try {
+
+        } catch (\Exception $exception) {
+
+        }
+
+        return new GetAllEntitiesResponse(ResultCodes::CODE_SUCCESS);
     }
 }

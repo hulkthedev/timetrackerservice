@@ -2,7 +2,8 @@
 
 namespace App\Controller;
 
-use App\Usecase\EntityRequestInterface;
+use App\Usecase\BaseRequest;
+use App\Usecase\BaseResponse;
 use App\Usecase\FaultyResponse;
 use App\Usecase\ResultCodes;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -44,7 +45,7 @@ class DefaultController extends AbstractController
      * @param Request $request
      * @param string $model
      * @param bool $validateJson
-     * @return EntityRequestInterface|Response
+     * @return BaseRequest|Response
      */
     protected function validateRequest(Request $request, string $model, bool $validateJson = false)
     {
@@ -75,7 +76,7 @@ class DefaultController extends AbstractController
     /**
      * @param array $payload
      * @param string $model
-     * @return Response|EntityRequestInterface
+     * @return Response|BaseResponse
      */
     private function validatePayload(array $payload, $model)
     {

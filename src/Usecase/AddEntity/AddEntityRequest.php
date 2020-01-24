@@ -2,16 +2,13 @@
 
 namespace App\Usecase\AddEntity;
 
-use App\Usecase\EntityRequestInterface;
+use App\Usecase\BaseRequest;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class AddEntityRequest implements EntityRequestInterface
+class AddEntityRequest extends BaseRequest
 {
-    /** @var string */
-    public $date;
-
     /** @var int */
     public $begin;
 

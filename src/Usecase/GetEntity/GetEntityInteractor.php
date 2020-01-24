@@ -3,7 +3,8 @@
 namespace App\Usecase\GetEntity;
 
 use App\Usecase\BaseInteractor;
-use App\Usecase\EntityRequestInterface;
+use App\Usecase\BaseRequest;
+use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
 
 /**
@@ -12,14 +13,17 @@ use App\Usecase\ResultCodes;
 class GetEntityInteractor extends BaseInteractor
 {
     /**
-     * @param EntityRequestInterface $request
-     * @return array
+     * @param BaseRequest $request
+     * @return BaseResponse
      */
-    public function execute(EntityRequestInterface $request): array
+    public function execute(BaseRequest $request): BaseResponse
     {
-        return [
-            'code' => ResultCodes::CODE_SUCCESS,
-            'entities' => []
-        ];
+        try {
+
+        } catch (\Exception $exception) {
+
+        }
+
+        return new GetEntityResponse(ResultCodes::CODE_SUCCESS);
     }
 }
