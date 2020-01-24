@@ -62,8 +62,6 @@ class EntityController extends DefaultController
     }
 
     /**
-     * @todo add Location: /api/orders/ in response header
-     *
      * @param Request $request
      * @param AddEntityInteractor $interactor
      * @return Response
@@ -80,8 +78,6 @@ class EntityController extends DefaultController
     }
 
     /**
-     * @todo dont work @ symfony
-     *
      * @param Request $request
      * @param ChangeEntityInteractor $interactor
      * @return Response
