@@ -21,4 +21,7 @@ class Day
 
     /** @var string */
     public $mode;
+
+    /** @var int */
+    public $delta;
 }
