@@ -83,7 +83,7 @@ class DefaultController extends AbstractController
         $violations = $this->validator->validate($data);
 
         if ($violations->count() > 0) {
-            $response = new FaultyResponse('Invalid param ' . $violations->get(0)->getPropertyPath());
+            $response = new FaultyResponse($violations->get(0)->getMessage());
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
 

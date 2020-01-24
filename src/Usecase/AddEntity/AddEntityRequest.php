@@ -14,4 +14,7 @@ class AddEntityRequest implements EntityRequestInterface
 
     /** @var int */
     public $begin;
+
+    /** @var string */
+    public $mode;
 }
