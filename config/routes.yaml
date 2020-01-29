@@ -20,7 +20,7 @@ api_add_entity:
   controller: App\Controller\EntityController::addEntry
   methods: [PUT]
 
-api_change_entry:
+api_update_entry:
   path: /tracking/{date}
-  controller: App\Controller\MainController::changeEntry
+  controller: App\Controller\MainController::updateEntry
   methods: [PATCH]

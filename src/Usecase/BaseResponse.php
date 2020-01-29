@@ -3,11 +3,12 @@
 namespace App\Usecase;
 
 use App\Entity\Day;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-abstract class BaseResponse
+class BaseResponse
 {
     /** @var int */
     private $code;
@@ -15,14 +16,33 @@ abstract class BaseResponse
     /** @var Day[] */
     private $entities;
 
+    /** @var int */
+    private $httpStatus = Response::HTTP_OK;
+
     /**
-     * @param Day[] $entities
      * @param int $code
+     * @param Day[] $entities
      */
     public function __construct(int $code, array $entities = [])
     {
         $this->code = $code;
         $this->entities = $entities;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHttpStatus(): int
+    {
+        return $this->httpStatus;
+    }
+
+    /**
+     * @param int $httpStatus
+     */
+    public function setHttpStatus(int $httpStatus): void
+    {
+        $this->httpStatus = $httpStatus;
     }
 
     /**

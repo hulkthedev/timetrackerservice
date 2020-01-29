@@ -33,6 +33,7 @@
     "ext-ctype": "*",
     "ext-iconv": "*",
     "ext-json": "*",
+    "ext-pdo": "*",
     "symfony/serializer": "^5",
     "symfony/property-access": "^5",
     "symfony/dependency-injection": "^5",

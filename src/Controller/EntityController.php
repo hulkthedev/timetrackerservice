@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Usecase\AddEntity\AddEntityInteractor;
 use App\Usecase\AddEntity\AddEntityRequest;
-use App\Usecase\ChangeEntity\ChangeEntityInteractor;
-use App\Usecase\ChangeEntity\ChangeEntityRequest;
+use App\Usecase\UpdateEntity\UpdateEntityInteractor;
+use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityInteractor;
 use App\Usecase\DeleteEntity\DeleteEntityRequest;
 use App\Usecase\GetAllEntities\GetAllEntitiesInteractor;
@@ -79,12 +79,12 @@ class EntityController extends DefaultController
 
     /**
      * @param Request $request
-     * @param ChangeEntityInteractor $interactor
+     * @param UpdateEntityInteractor $interactor
      * @return Response
      */
-    public function changeEntry(Request $request, ChangeEntityInteractor $interactor): Response
+    public function updateEntry(Request $request, UpdateEntityInteractor $interactor): Response
     {
-        $result = $this->validateRequest($request, ChangeEntityRequest::class, true);
+        $result = $this->validateRequest($request, UpdateEntityRequest::class, true);
         if ($result instanceof Response) {
             return $result;
         }
