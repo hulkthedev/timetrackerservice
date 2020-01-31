@@ -2,6 +2,7 @@
 
 namespace App\Usecase;
 
+use App\Repository\MariaDbTrackingRepository;
 use App\Repository\RepositoryInterface;
 
 /**
@@ -16,9 +17,9 @@ class BaseInteractor
     protected RepositoryInterface $repository;
 
     /**
-     * @param RepositoryInterface $repository
+     * @param MariaDbTrackingRepository $repository
      */
-    public function __construct(RepositoryInterface $repository)
+    public function __construct(MariaDbTrackingRepository $repository)
     {
         $this->repository = $repository;
     }

@@ -8,9 +8,10 @@ namespace App\Entity;
 class Day
 {
     public int $id;
+    public string $mode;
+
     public string $date;
     public string $begin;
     public string $end;
-    public string $mode;
     public int $delta;
 }

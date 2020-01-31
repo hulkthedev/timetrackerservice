@@ -12,19 +12,26 @@ services:
 
   php-timetrackerservice:
     image: php-timetrackerservice:latest
+    env_file:
+      - config/environment/common-dev.env
+      - config/environment/mariadb-dev.env
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
-#    links:
-#      - mariadb-timetrackerservice
+    links:
+      - mariadb-timetrackerservice
 
-#  mariadb-timetrackerservice:
-#    image: mariadb
-#    environment:
-#      MYSQL_ROOT_PASSWORD: admin
-#      MYSQL_DATABASE: test
-#    volumes:
-#      - ./sql/migrate:/docker-entrypoint-initdb.d
-#      - ./config/mariadb:/etc/mysql/conf.d
+  mariadb-timetrackerservice:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: timetracker
+      MYSQL_PASSWORD: time1234
+      MYSQL_DATABASE: timetracking
+    volumes:
+      - ./config/mariadb/migrate:/docker-entrypoint-initdb.d
+      - ./config/mariadb:/etc/mysql/conf.d
+    ports:
+      - "3306/tcp"
