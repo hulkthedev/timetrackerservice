@@ -10,6 +10,7 @@ use DateTime;
 use Exception;
 use PDOException;
 use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
@@ -26,12 +27,12 @@ class AddEntityInteractor extends BaseInteractor
             $entity = $this->createEntityFromRequest($request);
             $list = $this->repository->save($entity);
         } catch (PDOException $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::CODE_PDO_EXCEPTION, Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (Exception $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::CODE_UNKNOWN_ERROR, Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->createUnsuccessfullyResponse(ResultCodes::PDO_EXCEPTION, Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Throwable $exception) {
+            return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR, Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return new AddEntityResponse(ResultCodes::CODE_SUCCESS, $list);
+        return new AddEntityResponse(ResultCodes::SUCCESS, $list);
     }
 
     /**

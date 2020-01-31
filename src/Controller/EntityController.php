@@ -42,7 +42,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response->presentResponse());
+        return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
     }
 
     /**
@@ -58,7 +58,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response->presentResponse());
+        return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
     }
 
     /**
@@ -74,7 +74,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response->presentResponse(), Response::HTTP_CREATED, ['Location' => '/2020-01-01']);
+        return $this->createResponse($response->presentResponse(), Response::HTTP_CREATED);
     }
 
     /**
@@ -90,6 +90,6 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response->presentResponse());
+        return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
     }
 }

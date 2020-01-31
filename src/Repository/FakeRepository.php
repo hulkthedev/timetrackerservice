@@ -3,13 +3,15 @@
 namespace App\Repository;
 
 use App\Entity\Day;
+use App\Repository\Exception\EntityNotFoundException;
 
 class FakeRepository implements RepositoryInterface
 {
+    private $entities = [];
 
     public function getAll()
     {
-        return [];
+        return $this->entities;
     }
 
     /**
@@ -17,7 +19,11 @@ class FakeRepository implements RepositoryInterface
      */
     public function get(Day $entity)
     {
-        return [$entity];
+        if (isset($this->entities[$entity->date])) {
+            return $this->entities[$entity->date];
+        }
+
+        throw new EntityNotFoundException();
     }
 
     /**
@@ -25,7 +31,8 @@ class FakeRepository implements RepositoryInterface
      */
     public function save(Day $entity)
     {
-        return [$entity];
+        $this->entities[$entity->date] = $entity;
+        return $this->getAll();
     }
 
     /**
@@ -33,7 +40,11 @@ class FakeRepository implements RepositoryInterface
      */
     public function update(Day $entity)
     {
-        return [$entity];
+        if (isset($this->entities[$entity->date])) {
+            return $this->save($entity);
+        }
+
+        throw new EntityNotFoundException();
     }
 
     /**
@@ -41,6 +52,11 @@ class FakeRepository implements RepositoryInterface
      */
     public function delete(Day $entity)
     {
-        return [$entity];
+        if (isset($this->entities[$entity->date])) {
+            unset($this->entities[$entity->date]);
+            return $this->getAll();
+        }
+
+        throw new EntityNotFoundException();
     }
 }

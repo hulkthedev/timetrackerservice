@@ -7,21 +7,10 @@ namespace App\Entity;
  */
 class Day
 {
-    /** @var int */
-    public $id;
-
-    /** @var string */
-    public $date;
-
-    /** @var string */
-    public $begin;
-
-    /** @var string */
-    public $end;
-
-    /** @var string */
-    public $mode;
-
-    /** @var int */
-    public $delta;
+    public int $id;
+    public string $date;
+    public string $begin;
+    public string $end;
+    public string $mode;
+    public int $delta;
 }

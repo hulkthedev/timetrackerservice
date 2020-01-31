@@ -10,14 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BaseResponse
 {
-    /** @var int */
-    private $code;
+    private int $code;
 
     /** @var Day[] */
-    private $entities;
-
-    /** @var int */
-    private $httpStatus = Response::HTTP_OK;
+    private array $entities;
+    private int $httpStatus = Response::HTTP_OK;
 
     /**
      * @param int $code

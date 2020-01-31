@@ -9,14 +9,7 @@ use App\Usecase\BaseRequest;
  */
 class UpdateEntityRequest extends BaseRequest
 {
-    /** @var int */
-    public $begin;
-
-    /** @var int */
-    public $end;
-
-    /** @var string */
-    public $mode;
-
-
+    public int $begin;
+    public int $end;
+    public string $mode;
 }

@@ -24,11 +24,8 @@ class DefaultController extends AbstractController
 {
     protected const SUPPORTED_FORMAT = 'json';
 
-    /** @var ValidatorInterface */
-    private $validator;
-
-    /** @var SerializerInterface  */
-    private $serializer;
+    private ValidatorInterface $validator;
+    private SerializerInterface $serializer;
 
     public function __construct()
     {
@@ -80,6 +77,7 @@ class DefaultController extends AbstractController
      */
     private function validatePayload(array $payload, $model)
     {
+        /** @var BaseResponse $data */
         $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
         $violations = $this->validator->validate($data);
 
@@ -98,7 +96,7 @@ class DefaultController extends AbstractController
     private function validateContentType(?string $contentType)
     {
         if (strtolower($contentType) !== self::SUPPORTED_FORMAT) {
-            $response = new FaultyResponse('Invalid content-type', ResultCodes::CODE_INVALID_MEDIA_TYPE);
+            $response = new FaultyResponse('Invalid content-type', ResultCodes::INVALID_MEDIA_TYPE);
             return $this->createResponse($response->presentResponse(), Response::HTTP_UNSUPPORTED_MEDIA_TYPE);
         }
 
@@ -112,7 +110,7 @@ class DefaultController extends AbstractController
     private function validateJsonData(?string $json)
     {
         if (null === $json || null === json_decode($json)) {
-            $response = new FaultyResponse('Invalid json', ResultCodes::CODE_INVALID_JSON_CONTENT);
+            $response = new FaultyResponse('Invalid json', ResultCodes::INVALID_JSON_CONTENT);
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
     }

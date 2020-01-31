@@ -7,17 +7,14 @@ namespace App\Usecase;
  */
 class FaultyResponse
 {
-    /** @var int */
-    private $code;
-
-    /** @var string */
-    private $message;
+    private int $code;
+    private string $message;
 
     /**
      * @param string $message
      * @param int $code
      */
-    public function __construct(string $message, int $code = ResultCodes::CODE_INVALID_SYNTAX)
+    public function __construct(string $message, int $code = ResultCodes::INVALID_SYNTAX)
     {
         $this->code = $code;
         $this->message = $message;

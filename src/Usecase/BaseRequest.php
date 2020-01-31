@@ -7,6 +7,5 @@ namespace App\Usecase;
  */
 class BaseRequest
 {
-    /** @var string */
-    public $date;
+    public string $date;
 }

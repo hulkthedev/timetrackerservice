@@ -13,8 +13,7 @@ class BaseInteractor
     protected const DEFAULT_TIME_FORMAT = 'H:i:s';
     protected const DEFAULT_DATE_TIME_FORMAT = self::DEFAULT_DATE_FORMAT . ' ' . self::DEFAULT_TIME_FORMAT;
 
-    /** @var RepositoryInterface */
-    protected $repository;
+    protected RepositoryInterface $repository;
 
     /**
      * @param RepositoryInterface $repository

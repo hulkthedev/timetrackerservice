@@ -7,12 +7,9 @@ namespace App\Entity;
  */
 class Week
 {
-    /** @var int */
-    public $number;
-
-    /** @var int */
-    public $delta;
+    public int $number;
+    public int $delta;
 
     /** @var Day[] */
-    public $days;
+    public array $days;
 }
