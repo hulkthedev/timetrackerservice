@@ -9,6 +9,6 @@ use App\Usecase\BaseRequest;
  */
 class AddEntityRequest extends BaseRequest
 {
-    public int $begin;
     public string $mode;
+    public int $begin;
 }

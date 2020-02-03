@@ -2,36 +2,48 @@
 
 namespace App\Repository;
 
-use App\Entity\Day;
-use App\Repository\Exception\EntityNotFoundException;
+use App\Repository\Exception\DatabaseException;
+use App\Usecase\AddEntity\AddEntityRequest;
+use App\Usecase\DeleteEntity\DeleteEntityRequest;
+use App\Usecase\GetEntity\GetEntityRequest;
+use App\Usecase\UpdateEntity\UpdateEntityRequest;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
 interface RepositoryInterface
 {
-    public function getAll();
+    /**
+     * @return array
+     * @throws DatabaseException
+     */
+    public function getAll(): array;
 
     /**
-     * @param Day $entity
-     * @throws EntityNotFoundException
+     * @param GetEntityRequest $request
+     * @return array
+     * @throws DatabaseException
      */
-    public function get(Day $entity);
+    public function get(GetEntityRequest $request): array;
 
     /**
-     * @param Day $entity
+     * @param AddEntityRequest $request
+     * @return array
+     * @throws DatabaseException
      */
-    public function save(Day $entity);
+    public function save(AddEntityRequest $request): array;
 
     /**
-     * @param Day $entity
-     * @throws EntityNotFoundException
+     * @param UpdateEntityRequest $request
+     * @return array
+     * @throws DatabaseException
      */
-    public function update(Day $entity);
+    public function update(UpdateEntityRequest $request): array;
 
     /**
-     * @param Day $entity
-     * @throws EntityNotFoundException
+     * @param DeleteEntityRequest $request
+     * @return array
+     * @throws DatabaseException
      */
-    public function delete(Day $entity);
+    public function delete(DeleteEntityRequest $request): array;
 }

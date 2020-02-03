@@ -5,7 +5,7 @@ namespace App\Entity;
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class EntityModes
+class Modes
 {
     public const MODE_WORKING = 'working';
     public const MODE_SICK = 'sick';

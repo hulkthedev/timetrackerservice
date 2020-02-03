@@ -9,9 +9,8 @@ class Day
 {
     public int $id;
     public string $mode;
-
     public string $date;
-    public string $begin;
-    public string $end;
+    public int $begin;
+    public int $end;
     public int $delta;
 }

@@ -3,8 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Day;
-use App\Repository\Exception\DatabaseGoneException;
+use App\Repository\Exception\DatabaseException;
+use App\Repository\Mapper\MariaDbToJsonMapper as Mapper;
+use App\Usecase\AddEntity\AddEntityRequest;
+use App\Usecase\DeleteEntity\DeleteEntityRequest;
+use App\Usecase\GetEntity\GetEntityRequest;
 use App\Usecase\ResultCodes;
+use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use PDO;
 
 /**
@@ -14,64 +19,109 @@ class MariaDbTrackingRepository implements RepositoryInterface
 {
     private const DATABASE_CONNECTION_TIMEOUT = 30;
 
-    private PDO $pdo;
+    private ?PDO $pdo = null;
+    private Mapper $mapper;
 
     /**
-     * @throws DatabaseGoneException
+     * @param Mapper $mapper
      */
-    public function __construct()
+    public function __construct(Mapper $mapper)
     {
-        $host = getenv('MARIADB_HOST');
-        $user = getenv('MARIADB_USER');
-        $password = getenv('MARIADB_PASSWORD');
-        $name = getenv('MARIADB_NAME');
-        $port = getenv('MARIADB_PORT');
+        $this->mapper = $mapper;
+    }
 
-        if (empty($host) || empty($user) || empty($password) || empty($name) || empty($port)) {
-            throw new DatabaseGoneException();
+    /**
+     * @inheritDoc
+     */
+    public function getAll(): array
+    {
+        $statement = $this->getPdoDriver()->query('SELECT * FROM timetracking');
+        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        return $this->mapper->map($list);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get(GetEntityRequest $request): array
+    {
+        $statement = $this->getPdoDriver()->prepare('SELECT * FROM timetracking WHERE date = :date');
+        $statement->execute(['date' => $request->date]);
+
+        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $this->mapper->map($list);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function save(AddEntityRequest $request): array
+    {
+        $query = 'INSERT INTO timetracking (date, mode, begin_timestamp, end_timestamp, delta) VALUES (:date, :mode, :begin_timestamp, :end_timestamp, :delta)';
+        $statement = $this->getPdoDriver()->prepare($query);
+
+        $result = $statement->execute([
+            'date' => $request->date,
+            'mode' => $request->mode,
+            'begin_timestamp' => $request->begin,
+            'end_timestamp' => 0,
+            'delta' => 0
+        ]);
+
+        if (true !== $result) {
+            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
         }
 
-        $dsn = "mysql:dbname=$name;host=$host;port=$port;charset=utf8mb4";
-        $this->pdo = new PDO($dsn, $user, $password, [PDO::ATTR_TIMEOUT => self::DATABASE_CONNECTION_TIMEOUT]);
+        return $this->getAll();
+    }
+
+    /**
+     * @todo still buggy
+     * @inheritDoc
+     */
+    public function update(UpdateEntityRequest $request): array
+    {
+        return [];
     }
 
     /**
      * @inheritDoc
      */
-    public function getAll()
+    public function delete(DeleteEntityRequest $request): array
     {
-        die('getAll');
+        $statement = $this->getPdoDriver()->prepare('DELETE FROM timetracking WHERE date = :date');
+        $result = $statement->execute(['date' => $request->date]);
+
+        if (true !== $result) {
+            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
+        }
+
+        return $this->getAll();
     }
 
     /**
-     * @inheritDoc
+     * @return PDO
+     * @throws DatabaseException
      */
-    public function get(Day $entity)
+    private function getPdoDriver(): PDO
     {
-        die('get');
-    }
+        if (null === $this->pdo) {
+            $host = getenv('MARIADB_HOST');
+            $user = getenv('MARIADB_USER');
+            $password = getenv('MARIADB_PASSWORD');
+            $name = getenv('MARIADB_NAME');
+            $port = getenv('MARIADB_PORT');
 
-    /**
-     * @inheritDoc
-     */
-    public function save(Day $entity)
-    {
-        die('save');
-    }
+            if (empty($host) || empty($user) || empty($password) || empty($name) || empty($port)) {
+                throw new DatabaseException(ResultCodes::PDO_EXCEPTION);
+            }
 
-    /**
-     * @inheritDoc
-     */
-    public function update(Day $entity)
-    {
-        die('update');
-    }
+            $this->pdo = new PDO("mysql:dbname=$name;host=$host;port=$port;charset=utf8mb4", $user, $password, [
+                PDO::ATTR_TIMEOUT => self::DATABASE_CONNECTION_TIMEOUT
+            ]);
+        }
 
-    /**
-     * @inheritDoc
-     */
-    public function delete(Day $entity)
-    {
-        die('delete');
+        return $this->pdo;
     }
 }

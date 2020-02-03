@@ -2,16 +2,10 @@
 
 namespace App\Usecase\GetEntity;
 
-use App\Entity\Day;
-use App\Repository\Exception\EntityNotFoundException;
+use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
-use App\Usecase\BaseRequest;
 use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
-use Exception;
-use PDOException;
-use Symfony\Component\HttpFoundation\Response;
-use Throwable;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
@@ -19,35 +13,21 @@ use Throwable;
 class GetEntityInteractor extends BaseInteractor
 {
     /**
-     * @param BaseRequest $request
+     * @param GetEntityRequest $request
      * @return BaseResponse
      */
-    public function execute(BaseRequest $request): BaseResponse
+    public function execute(GetEntityRequest $request): BaseResponse
     {
         try {
-            $entity = $this->createEntityFromRequest($request);
-            $list = $this->repository->get($entity);
-        } catch (PDOException $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::PDO_EXCEPTION, Response::HTTP_INTERNAL_SERVER_ERROR);
-        } catch (EntityNotFoundException $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::ENTITY_NOT_FOUND_EXCEPTION, Response::HTTP_NOT_FOUND);
-        } catch (Throwable $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR, Response::HTTP_INTERNAL_SERVER_ERROR);
+            $list = $this->repository->get($request);
+        } catch (DatabaseException $exception) {
+            return $this->createUnsuccessfullyResponse($exception->getCode());
+        } catch (\PDOException $exception) {
+            return $this->createUnsuccessfullyResponse(ResultCodes::PDO_EXCEPTION);
+        } catch (\Throwable $throwable) {
+            return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }
 
         return new GetEntityResponse(ResultCodes::SUCCESS, $list);
-    }
-
-    /**
-     * @param BaseRequest $request
-     * @return Day
-     * @throws Exception
-     */
-    private function createEntityFromRequest(BaseRequest $request): Day
-    {
-        $day = new Day();
-        $day->date = $request->date;
-
-        return $day;
     }
 }
