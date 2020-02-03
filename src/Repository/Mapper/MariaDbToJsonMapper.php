@@ -54,16 +54,16 @@ class MariaDbToJsonMapper
         $beginDateTime = new DateTime();
         $beginDateTime->setTimestamp($entity['begin_timestamp']);
 
-//        $endDateTime = new DateTime();
-//        $endDateTime->setTimestamp($entity['end_timestamp']);
+        $endDateTime = new DateTime();
+        $endDateTime->setTimestamp($entity['end_timestamp']);
 
         $day = new Day();
         $day->id = $entity['id'];
         $day->mode = $entity['mode'];
         $day->date = $entity['date'];
-        $day->begin = $entity['begin_timestamp'];
-        $day->end = $entity['end_timestamp'];
-        $day->delta = $entity['delta'];
+        $day->begin = $beginDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
+        $day->end = $endDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
+        $day->delta = (int)$entity['delta'];
 
         return $day;
     }

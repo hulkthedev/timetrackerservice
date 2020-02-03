@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\Day;
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbToJsonMapper as Mapper;
 use App\Usecase\AddEntity\AddEntityRequest;

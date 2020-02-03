@@ -18,8 +18,8 @@ class DayTest extends TestCase
         TestCase::assertEquals(1, $day->id);
         TestCase::assertEquals('2020-01-01', $day->date);
         TestCase::assertEquals(Modes::MODE_WORKING, $day->mode);
-        TestCase::assertEquals(1234567890123, $day->begin);
-        TestCase::assertEquals(1234567890567, $day->end);
-        TestCase::assertEquals(30, $day->delta);
+        TestCase::assertEquals('09:48:43', $day->begin);
+        TestCase::assertEquals('18:04:32', $day->end);
+        TestCase::assertEquals('+34', $day->delta);
     }
 }

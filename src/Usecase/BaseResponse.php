@@ -2,7 +2,6 @@
 
 namespace App\Usecase;
 
-use App\Entity\Day;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -10,15 +9,13 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class BaseResponse
 {
-    private int $code;
-
-    /** @var Day[] */
-    private array $entities;
+    private int $code = ResultCodes::SUCCESS;
     private int $httpStatus = Response::HTTP_OK;
+    private array $entities;
 
     /**
      * @param int $code
-     * @param Day[] $entities
+     * @param array $entities
      */
     public function __construct(int $code, array $entities = [])
     {

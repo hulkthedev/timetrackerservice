@@ -10,7 +10,7 @@ class Day
     public int $id;
     public string $mode;
     public string $date;
-    public int $begin;
-    public int $end;
+    public string $begin;
+    public string $end;
     public int $delta;
 }
