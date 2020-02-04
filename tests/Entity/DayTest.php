@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Stubs\DayStub;
+use App\Usecase\Modes;
 use PHPUnit\Framework\TestCase;
 
 /**

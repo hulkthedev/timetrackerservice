@@ -3,7 +3,7 @@
 namespace App\Repository\Mapper;
 
 use App\Entity\Day;
-use App\Repository\Exception\DatabaseException;
+use App\Entity\Week;
 use App\Usecase\BaseInteractor;
 use DateTime;
 use Exception;
@@ -16,18 +16,26 @@ class MariaDbToJsonMapper
     /**
      * @param array $list
      * @return array
-     * @throws DatabaseException
      * @throws Exception
      */
-    public function map(array $list): array
+    public function mapToList(array $list): array
     {
-        $mappedList = [];
-        foreach ($list as $index => $entity) {
-            $day = $this->createDayFromEntity($entity);
-            $mappedList[] = $day;
+        $days = [];
+        foreach ($list as $entity) {
+            $days[] = $this->createDayFromEntity($entity);
         }
 
-        return $mappedList;
+        return $this->sort($days);
+    }
+
+    /**
+     * @param array $entity
+     * @return Day
+     * @throws Exception
+     */
+    public function mapToDay(array $entity): Day
+    {
+        return $this->createDayFromEntity($entity);
     }
 
     /**
@@ -44,12 +52,11 @@ class MariaDbToJsonMapper
         $endDateTime->setTimestamp($entity['end_timestamp']);
 
         $day = new Day();
-        $day->id = $entity['id'];
         $day->mode = $entity['mode'];
         $day->date = $entity['date'];
+        $day->number = $beginDateTime->format('N');
         $day->begin = $beginDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
         $day->end = $endDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
-        $day->delta = (int)$entity['delta'];
 
         return $day;
     }
@@ -57,9 +64,29 @@ class MariaDbToJsonMapper
     /**
      * @param array $list
      * @return array
+     * @throws Exception
      */
-    private function sortByWeek(array $list): array
+    private function sort(array $list): array
     {
-        return [];
+        $groupedDays = [];
+
+        /** @var Day $day */
+        foreach ($list as $day) {
+            $weekNo = (new DateTime($day->date))->format('W');
+            $groupedDays[(int)$weekNo][] = $day;
+        }
+
+        $result = [];
+
+        /** @var Day $day */
+        foreach ($groupedDays as $weekNo => $week) {
+            $weekEntity = new Week();
+            $weekEntity->weekNo = $weekNo;
+            $weekEntity->weekDays = $week;
+
+            $result[] = $weekEntity;
+        }
+
+        return $result;
     }
 }

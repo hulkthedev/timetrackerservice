@@ -41,7 +41,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
         }
 
-        return $this->mapper->map($list);
+        return $this->mapper->mapToList($list);
     }
 
     /**
@@ -57,7 +57,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::ENTITY_NOT_FOUND);
         }
 
-        return $this->mapper->map($entity);
+        return [$this->mapper->mapToDay(reset($entity))];
     }
 
     /**

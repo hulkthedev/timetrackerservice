@@ -7,6 +7,7 @@ use App\Usecase\AddEntity\AddEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityRequest;
 use App\Usecase\GetEntity\GetEntityRequest;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
+use Exception;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
@@ -16,6 +17,7 @@ interface RepositoryInterface
     /**
      * @return array
      * @throws DatabaseException
+     * @throws Exception
      */
     public function getAll(): array;
 
@@ -23,6 +25,7 @@ interface RepositoryInterface
      * @param GetEntityRequest $request
      * @return array
      * @throws DatabaseException
+     * @throws Exception
      */
     public function get(GetEntityRequest $request): array;
 

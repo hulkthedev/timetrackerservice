@@ -7,10 +7,10 @@ namespace App\Entity;
  */
 class Day
 {
-    public int $id;
+    public int $number;
     public string $mode;
     public string $date;
     public string $begin;
     public string $end;
-    public int $delta;
+    public int $delta = 0;
 }

@@ -3,7 +3,7 @@
 namespace App\Entity\Stubs;
 
 use App\Entity\Day;
-use App\Entity\Modes;
+use App\Usecase\Modes;
 
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
@@ -12,7 +12,7 @@ class DayStub extends Day
 {
     public function __construct()
     {
-        $this->id = 1;
+        $this->number = 1;
         $this->mode = Modes::MODE_WORKING;
         $this->date = '2020-01-01';
         $this->begin = '09:48:43';
