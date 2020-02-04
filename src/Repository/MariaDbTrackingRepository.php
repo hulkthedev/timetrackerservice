@@ -37,6 +37,10 @@ class MariaDbTrackingRepository implements RepositoryInterface
         $statement = $this->getPdoDriver()->query('SELECT * FROM timetracking');
         $list = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+        if (empty($list)) {
+            throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
+        }
+
         return $this->mapper->map($list);
     }
 
@@ -48,14 +52,18 @@ class MariaDbTrackingRepository implements RepositoryInterface
         $statement = $this->getPdoDriver()->prepare('SELECT * FROM timetracking WHERE date = :date');
         $statement->execute(['date' => $request->date]);
 
-        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $this->mapper->map($list);
+        $entity = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($entity)) {
+            throw new DatabaseException(ResultCodes::ENTITY_NOT_FOUND);
+        }
+
+        return $this->mapper->map($entity);
     }
 
     /**
      * @inheritDoc
      */
-    public function save(AddEntityRequest $request): array
+    public function save(AddEntityRequest $request): bool
     {
         $query = 'INSERT INTO timetracking (date, mode, begin_timestamp, end_timestamp, delta) VALUES (:date, :mode, :begin_timestamp, :end_timestamp, :delta)';
         $statement = $this->getPdoDriver()->prepare($query);
@@ -72,22 +80,21 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
         }
 
-        return $this->getAll();
+        return true;
     }
 
     /**
-     * @todo still buggy
      * @inheritDoc
      */
-    public function update(UpdateEntityRequest $request): array
+    public function update(UpdateEntityRequest $request): bool
     {
-        return [];
+        return true;
     }
 
     /**
      * @inheritDoc
      */
-    public function delete(DeleteEntityRequest $request): array
+    public function delete(DeleteEntityRequest $request): bool
     {
         $statement = $this->getPdoDriver()->prepare('DELETE FROM timetracking WHERE date = :date');
         $result = $statement->execute(['date' => $request->date]);
@@ -96,7 +103,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
         }
 
-        return $this->getAll();
+        return true;
     }
 
     /**

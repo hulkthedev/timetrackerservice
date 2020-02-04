@@ -5,7 +5,6 @@ namespace App\Repository\Mapper;
 use App\Entity\Day;
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
-use App\Usecase\ResultCodes;
 use DateTime;
 use Exception;
 
@@ -22,8 +21,6 @@ class MariaDbToJsonMapper
      */
     public function map(array $list): array
     {
-        $this->validate($list);
-
         $mappedList = [];
         foreach ($list as $index => $entity) {
             $day = $this->createDayFromEntity($entity);
@@ -31,17 +28,6 @@ class MariaDbToJsonMapper
         }
 
         return $mappedList;
-    }
-
-    /**
-     * @param array $list
-     * @throws DatabaseException
-     */
-    private function validate(array $list): void
-    {
-        if (empty($list)) {
-            throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
-        }
     }
 
     /**

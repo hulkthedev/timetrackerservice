@@ -19,7 +19,7 @@ class AddEntityInteractor extends BaseInteractor
     public function execute(AddEntityRequest $request): BaseResponse
     {
         try {
-            $list = $this->repository->save($request);
+            $this->repository->save($request);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {
@@ -28,6 +28,6 @@ class AddEntityInteractor extends BaseInteractor
             return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }
 
-        return new AddEntityResponse(ResultCodes::SUCCESS, $list);
+        return new AddEntityResponse(ResultCodes::SUCCESS);
     }
 }

@@ -19,7 +19,7 @@ class DeleteEntityInteractor extends BaseInteractor
     public function execute(DeleteEntityRequest $request): BaseResponse
     {
         try {
-            $list = $this->repository->delete($request);
+            $this->repository->delete($request);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {
@@ -28,6 +28,6 @@ class DeleteEntityInteractor extends BaseInteractor
             return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }
 
-        return new DeleteEntityResponse(ResultCodes::SUCCESS, $list);
+        return new DeleteEntityResponse(ResultCodes::SUCCESS);
     }
 }

@@ -10,7 +10,7 @@ class ResultCodes
     /* exceptions */
     public const ENTITY_CAN_NOT_BE_DELETED = -14;
     public const ENTITY_CAN_NOT_BE_SAVED = -13;
-public const ENTITY_NOT_FOUND = -12;
+    public const ENTITY_NOT_FOUND = -12;
     public const DATABASE_IS_EMPTY = -11;
     public const PDO_EXCEPTION = -10;
 

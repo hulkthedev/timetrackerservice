@@ -28,22 +28,22 @@ interface RepositoryInterface
 
     /**
      * @param AddEntityRequest $request
-     * @return array
+     * @return bool
      * @throws DatabaseException
      */
-    public function save(AddEntityRequest $request): array;
+    public function save(AddEntityRequest $request): bool;
 
     /**
      * @param UpdateEntityRequest $request
-     * @return array
+     * @return bool
      * @throws DatabaseException
      */
-    public function update(UpdateEntityRequest $request): array;
+    public function update(UpdateEntityRequest $request): bool;
 
     /**
      * @param DeleteEntityRequest $request
-     * @return array
+     * @return bool
      * @throws DatabaseException
      */
-    public function delete(DeleteEntityRequest $request): array;
+    public function delete(DeleteEntityRequest $request): bool;
 }
