@@ -63,38 +63,42 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function save(AddEntityRequest $request): bool
+    public function save(AddEntityRequest $request): void
     {
-        $query = 'INSERT INTO timetracking (date, mode, begin_timestamp, end_timestamp, delta) VALUES (:date, :mode, :begin_timestamp, :end_timestamp, :delta)';
+        $query = 'INSERT INTO timetracking (date, mode, begin_timestamp) VALUES (:date, :mode, :begin_timestamp)';
         $statement = $this->getPdoDriver()->prepare($query);
 
         $result = $statement->execute([
             'date' => $request->date,
             'mode' => $request->mode,
-            'begin_timestamp' => $request->begin,
-            'end_timestamp' => 0,
-            'delta' => 0
+            'begin_timestamp' => $request->begin
         ]);
 
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
         }
-
-        return true;
     }
 
     /**
      * @inheritDoc
      */
-    public function update(UpdateEntityRequest $request): bool
+    public function update(UpdateEntityRequest $request): void
     {
-        return true;
+        /**
+         * @todo fix PATCH Bug && add logic
+         */
+
+        $result = true;
+
+        if (true !== $result) {
+            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
+        }
     }
 
     /**
      * @inheritDoc
      */
-    public function delete(DeleteEntityRequest $request): bool
+    public function delete(DeleteEntityRequest $request): void
     {
         $statement = $this->getPdoDriver()->prepare('DELETE FROM timetracking WHERE date = :date');
         $result = $statement->execute(['date' => $request->date]);
@@ -102,8 +106,6 @@ class MariaDbTrackingRepository implements RepositoryInterface
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
         }
-
-        return true;
     }
 
     /**
