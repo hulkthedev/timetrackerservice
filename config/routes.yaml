@@ -2,25 +2,30 @@
 
 api_entity_list:
   path: /tracking
-  controller: App\Controller\EntityController::getAllEntries
+  controller: App\Controller\EntityController::getAllEntities
   methods: [GET]
 
 api_get_entity:
   path: /tracking/{date}
-  controller: App\Controller\EntityController::getEntry
+  controller: App\Controller\EntityController::getEntity
   methods: [GET]
 
 api_delete_entity:
   path: /tracking/{date}
-  controller: App\Controller\EntityController::deleteEntry
+  controller: App\Controller\EntityController::deleteEntity
   methods: [DELETE]
 
 api_add_entity:
   path: /tracking/{date}
-  controller: App\Controller\EntityController::addEntry
+  controller: App\Controller\EntityController::addEntity
+  methods: [PUT]
+
+api_add_multi_entity:
+  path: /tracking/{fromDate}/{toDate}
+  controller: App\Controller\EntityController::addMultiEntities
   methods: [PUT]
 
 api_update_entry:
   path: /tracking/{date}
-  controller: App\Controller\MainController::updateEntry
+  controller: App\Controller\MainController::updateEntity
   methods: [PATCH]

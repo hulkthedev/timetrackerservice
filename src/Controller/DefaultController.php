@@ -62,7 +62,17 @@ class DefaultController extends AbstractController
             $json = json_decode($requestBody, true);
         }
 
-        $result = $this->validatePayload(array_merge(['date' => $request->get('date')], $json), $model);
+        $params = ['date' => $request->get('date')];
+
+        if (null !== $request->get('fromDate')) {
+            $params['fromDate'] = $request->get('fromDate');
+        }
+
+        if (null !== $request->get('toDate')) {
+            $params['toDate'] = $request->get('toDate');
+        }
+
+        $result = $this->validatePayload(array_merge($params, $json), $model);
         if ($result instanceof Response) {
             return $result;
         }

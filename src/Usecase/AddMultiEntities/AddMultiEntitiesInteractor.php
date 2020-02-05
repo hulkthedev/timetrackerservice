@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Usecase\AddEntity;
+namespace App\Usecase\AddMultiEntities;
 
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
@@ -11,16 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Alex Beirith <fatal.error.27@gmail.com>
  */
-class AddEntityInteractor extends BaseInteractor
+class AddMultiEntitiesInteractor extends BaseInteractor
 {
     /**
-     * @param AddEntityRequest $request
+     * @param AddMultiEntitiesRequest $request
      * @return BaseResponse
      */
-    public function execute(AddEntityRequest $request): BaseResponse
+    public function execute(AddMultiEntitiesRequest $request): BaseResponse
     {
         try {
-            $this->repository->save($request);
+//            foreach ($this->createRangeOfDays($request->fromDate, $request->toDate) as $entity) {
+//                $this->repository->save();
+//            }
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {
@@ -29,9 +31,19 @@ class AddEntityInteractor extends BaseInteractor
             return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }
 
-        $response = new AddEntityResponse(ResultCodes::SUCCESS);
+        $response = new AddMultiEntitiesResponse(ResultCodes::SUCCESS);
         $response->setHttpStatus(Response::HTTP_CREATED);;
 
         return $response;
+    }
+
+    /**
+     * @param string $from
+     * @param string $to
+     * @return array
+     */
+    private function createRangeOfDays(string $from, string $to): array
+    {
+
     }
 }

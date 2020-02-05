@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Usecase\AddEntity\AddEntityInteractor;
 use App\Usecase\AddEntity\AddEntityRequest;
+use App\Usecase\AddMultiEntities\AddMultiEntitiesInteractor;
+use App\Usecase\AddMultiEntities\AddMultiEntitiesRequest;
 use App\Usecase\UpdateEntity\UpdateEntityInteractor;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityInteractor;
@@ -23,7 +25,7 @@ class EntityController extends DefaultController
      * @param GetAllEntitiesInteractor $interactor
      * @return Response
      */
-    public function getAllEntries(GetAllEntitiesInteractor $interactor): Response
+    public function getAllEntities(GetAllEntitiesInteractor $interactor): Response
     {
         $response = $interactor->execute();
         return $this->createResponse($response->presentResponse());
@@ -34,7 +36,7 @@ class EntityController extends DefaultController
      * @param GetEntityInteractor $interactor
      * @return Response
      */
-    public function getEntry(Request $request, GetEntityInteractor $interactor): Response
+    public function getEntity(Request $request, GetEntityInteractor $interactor): Response
     {
         $result = $this->validateRequest($request, GetEntityRequest::class);
         if ($result instanceof Response) {
@@ -50,7 +52,7 @@ class EntityController extends DefaultController
      * @param DeleteEntityInteractor $interactor
      * @return Response
      */
-    public function deleteEntry(Request $request, DeleteEntityInteractor $interactor): Response
+    public function deleteEntity(Request $request, DeleteEntityInteractor $interactor): Response
     {
         $result = $this->validateRequest($request, DeleteEntityRequest::class);
         if ($result instanceof Response) {
@@ -66,7 +68,7 @@ class EntityController extends DefaultController
      * @param AddEntityInteractor $interactor
      * @return Response
      */
-    public function addEntry(Request $request, AddEntityInteractor $interactor): Response
+    public function addEntity(Request $request, AddEntityInteractor $interactor): Response
     {
         $result = $this->validateRequest($request, AddEntityRequest::class, true);
         if ($result instanceof Response) {
@@ -74,7 +76,26 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response->presentResponse(), Response::HTTP_CREATED);
+        return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
+    }
+
+    /**
+     * @param Request $request
+     * @param AddMultiEntitiesInteractor $interactor
+     * @return Response
+     */
+    public function addMultiEntities(Request $request, AddMultiEntitiesInteractor $interactor): Response
+    {
+        $result = $this->validateRequest($request, AddMultiEntitiesRequest::class, true);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        var_dump($result);
+        exit;
+
+        $response = $interactor->execute($result);
+        return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
     }
 
     /**
@@ -82,7 +103,7 @@ class EntityController extends DefaultController
      * @param UpdateEntityInteractor $interactor
      * @return Response
      */
-    public function updateEntry(Request $request, UpdateEntityInteractor $interactor): Response
+    public function updateEntity(Request $request, UpdateEntityInteractor $interactor): Response
     {
         $result = $this->validateRequest($request, UpdateEntityRequest::class, true);
         if ($result instanceof Response) {

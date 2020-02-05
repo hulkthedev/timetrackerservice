@@ -39,3 +39,28 @@ App\Usecase\AddEntity\AddEntityRequest:
       - Choice:
           message: 'Parameter mode have not a valid choice'
           choices: ['working', 'sick', 'overtime', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
+
+App\Usecase\AddMultiEntities\AddMultiEntitiesRequest:
+  properties:
+    fromDate:
+      - Date:
+          message: 'Parameter fromDate should be have the following format: YYYY-MM-TT'
+    toDate:
+      - Date:
+          message: 'Parameter toDate should be have the following format: YYYY-MM-TT'
+    begin:
+      - Type:
+          message: 'Parameter begin should be of type integer'
+          type: integer
+      - Length:
+          minMessage: 'Parameter begin should have the length of a valid timestamp'
+          maxMessage: 'Parameter begin should have the length of a valid timestamp'
+          min: 10
+          max: 13
+    mode:
+      - Type:
+          message: 'Parameter mode should be of type string'
+          type: string
+      - Choice:
+          message: 'Parameter mode have not a valid choice'
+          choices: ['working', 'sick', 'overtime', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
