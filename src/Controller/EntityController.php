@@ -91,9 +91,6 @@ class EntityController extends DefaultController
             return $result;
         }
 
-        var_dump($result);
-        exit;
-
         $response = $interactor->execute($result);
         return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
     }
