@@ -1,0 +1,30 @@
++-------------------------------------------------------------+         +------------------------------------------------------------+
+|                                                             |         |                                                            |
+| working_times                                               |         | time_account                                               |
+|                                                             |         |                                                            |
+|  id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,  |         |  id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, |
+|  employer_id SMALLINT UNSIGNED NOT NULL,                    |    +----+  employer_id SMALLINT UNSIGNED NULL,                       |
+|  date DATE NOT NULL,                                        |    |    |  enabled BIT NOT NULL DEFAULT  1,                          |
+|  mode VARCHAR(20) NOT NULL,                                 |    |    |  time SMALLINT NULL DEFAULT 0,                             |
+|  begin_timestamp INT UNSIGNED NOT NULL,                     |    |    |                                                            |
+|  end_timestamp INT UNSIGNED NOT NULL DEFAULT 0,             |    |    +------------------------------------------------------------+
+|  delta SMALLINT NOT NULL DEFAULT 0,                         |    |
+|                                                             |    |
++----------------------------+--------------------------------+    |    +------------------------------------------------------------+
+                             |                                     |    |                                                            |
+                             |                                     |    | employer_config                                            |
+ +---------------------------v--------------------------------+    |    |                                                            |
+ |                                                            |    |    |  id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, |
+ | employer                                                   |    |    |  employer_id SMALLINT UNSIGNED NOT NULL,                   |
+ |                                                            |    |    |  frontend_color VARCHAR(7) NOT NULL DEFAULT '#000000',     |
+ |  id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, |    |    |                                                            |
+ |  name VARCHAR(50) NOT NULL,                                |    |    +-------------------------------+----------------------------+
+ |  working_hours_half TINYINT UNSIGNED NOT NULL DEFAULT 6,   +<---+                                    |
+ |  working_break_half TINYINT UNSIGNED NOT NULL DEFAULT 0,   |                                         |
+ |  working_hours_full TINYINT UNSIGNED NOT NULL DEFAULT 8,   +<----------------------------------------+
+ |  working_break_full TINYINT UNSIGNED NOT NULL DEFAULT 30,  |
+ |  working_hours_extreme TINYINT UNSIGNED NULL,              |
+ |  working_break_extreme TINYINT UNSIGNED NULL,              |
+ |  vacation_days TINYINT UNSIGNED NOT NULL DEFAULT 30,       |
+ |                                                            |
+ +------------------------------------------------------------+
