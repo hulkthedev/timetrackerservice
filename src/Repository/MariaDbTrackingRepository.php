@@ -6,7 +6,6 @@ use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbToJsonMapper as Mapper;
 use App\Usecase\AddEntity\AddEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityRequest;
-use App\Usecase\GetEntity\GetEntityRequest;
 use App\Usecase\ResultCodes;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use PDO;
@@ -32,11 +31,12 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getAll(): array
+    public function getAll(int $employerId): array
     {
-        $statement = $this->getPdoDriver()->query('SELECT * FROM working_times');
-        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement = $this->getPdoDriver()->prepare('CALL GetAllEntities(:employerId)');
+        $statement->execute(['employerId' => $employerId]);
 
+        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
         if (empty($list)) {
             throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
         }
@@ -47,10 +47,14 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get(GetEntityRequest $request): array
+    public function get(string $date, int $employerId, int $employerWorkingTimeId): array
     {
-        $statement = $this->getPdoDriver()->prepare('SELECT * FROM working_times WHERE date = :date');
-        $statement->execute(['date' => $request->date]);
+        $statement = $this->getPdoDriver()->prepare('CALL GetEntity(:date, :employerId, :employerWorkingTimeId)');
+        $statement->execute([
+            'date' => $date,
+            'employerId' => $employerId,
+            'employerWorkingTimeId' => $employerWorkingTimeId
+        ]);
 
         $entity = $statement->fetchAll(PDO::FETCH_ASSOC);
         if (empty($entity)) {

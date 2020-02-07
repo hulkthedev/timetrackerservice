@@ -19,15 +19,7 @@ class GetAllEntitiesInteractor extends BaseInteractor
     public function execute(GetAllEntitiesRequest $request): BaseResponse
     {
         try {
-
-//            $request->employerId
-//                0 = alle
-//                >0 = nach id
-
-//            $list = $this->repository->getAll();
-            $list = [];
-
-
+            $list = $this->repository->getAll($request->employerId);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {

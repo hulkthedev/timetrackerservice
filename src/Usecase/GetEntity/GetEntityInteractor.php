@@ -19,11 +19,11 @@ class GetEntityInteractor extends BaseInteractor
     public function execute(GetEntityRequest $request): BaseResponse
     {
         try {
-
-
-//            $entity = $this->repository->get($request);
-            $entity = [];
-
+            $entity = $this->repository->get(
+                $request->date,
+                $request->employerId,
+                $request->employerWorkingTimeId
+            );
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {

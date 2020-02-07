@@ -15,19 +15,22 @@ use Exception;
 interface RepositoryInterface
 {
     /**
+     * @param int $employerId
      * @return array
      * @throws DatabaseException
      * @throws Exception
      */
-    public function getAll(): array;
+    public function getAll(int $employerId): array;
 
     /**
-     * @param GetEntityRequest $request
+     * @param string $date
+     * @param int $employerId
+     * @param int $employerWorkingTimeId
      * @return array
      * @throws DatabaseException
      * @throws Exception
      */
-    public function get(GetEntityRequest $request): array;
+    public function get(string $date, int $employerId, int $employerWorkingTimeId): array;
 
     /**
      * @param AddEntityRequest $request
