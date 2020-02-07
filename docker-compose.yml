@@ -32,6 +32,6 @@ services:
       MYSQL_DATABASE: timetracking
     volumes:
       - ./config/mariadb/migrate:/docker-entrypoint-initdb.d
-      - ./config/mariadb:/etc/mysql/conf.d
+      - ./config/mariadb/confd:/etc/mysql/conf.d
     ports:
       - "3306/tcp"
