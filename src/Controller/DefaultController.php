@@ -16,6 +16,7 @@ use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Throwable;
 
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
@@ -36,6 +37,18 @@ class DefaultController extends AbstractController
 
         $this->validator = $validator;
         $this->serializer =  $serializer;
+    }
+
+    /**
+     * @param mixed $content
+     * @param int $status
+     * @param array $header
+     * @return Response
+     */
+    protected function createResponse($content, int $status = Response::HTTP_OK, array $header = []): Response
+    {
+        $json = $this->serializer->serialize($content, self::SUPPORTED_FORMAT);
+        return new Response($json, $status, array_merge(['Content-Type' => 'application/json'], $header));
     }
 
     /**
@@ -80,7 +93,13 @@ class DefaultController extends AbstractController
             $params['toDate'] = $request->get('toDate');
         }
 
-        $result = $this->validatePayload(array_merge($params, $json), $model);
+        try {
+            $result = $this->validatePayload(array_merge($params, $json), $model);
+        } catch (Throwable $throwable) {
+            $response = new FaultyResponse('Invalid params transmitted');
+            $result = $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
+        }
+
         if ($result instanceof Response) {
             return $result;
         }
@@ -95,21 +114,16 @@ class DefaultController extends AbstractController
      */
     private function validatePayload(array $payload, $model)
     {
-        try {
-            /** @var BaseResponse $data */
-            $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
-            $violations = $this->validator->validate($data);
+        /** @var BaseResponse $data */
+        $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
+        $violations = $this->validator->validate($data);
 
-            if ($violations->count() > 0) {
-                $response = new FaultyResponse($violations->get(0)->getMessage());
-                return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
-            }
-
-            return $data;
-        } catch (\Throwable $throwable) {
-            $response = new FaultyResponse($throwable->getMessage());
+        if ($violations->count() > 0) {
+            $response = new FaultyResponse($violations->get(0)->getMessage());
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
+
+        return $data;
     }
 
     /**
@@ -136,17 +150,7 @@ class DefaultController extends AbstractController
             $response = new FaultyResponse('Invalid json', ResultCodes::INVALID_JSON_CONTENT);
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
-    }
 
-    /**
-     * @param mixed $content
-     * @param int $status
-     * @param array $header
-     * @return Response
-     */
-    protected function createResponse($content, int $status = Response::HTTP_OK, array $header = []): Response
-    {
-        $json = $this->serializer->serialize($content, self::SUPPORTED_FORMAT);
-        return new Response($json, $status, array_merge(['Content-Type' => 'application/json'], $header));
+        return null;
     }
 }

@@ -29,6 +29,7 @@ class EntityController extends DefaultController
      */
     public function getAllEntities(Request $request, GetAllEntitiesInteractor $interactor): Response
     {
+        /** @var GetAllEntitiesRequest $result */
         $result = $this->validateRequest($request, GetAllEntitiesRequest::class);
         if ($result instanceof Response) {
             return $result;
@@ -45,7 +46,7 @@ class EntityController extends DefaultController
      */
     public function getEntity(Request $request, GetEntityInteractor $interactor): Response
     {
-
+        /** @var GetEntityRequest $result */
         $result = $this->validateRequest($request, GetEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
@@ -62,6 +63,7 @@ class EntityController extends DefaultController
      */
     public function deleteEntity(Request $request, DeleteEntityInteractor $interactor): Response
     {
+        /** @var DeleteEntityRequest $result */
         $result = $this->validateRequest($request, DeleteEntityRequest::class);
         if ($result instanceof Response) {
             return $result;
@@ -78,6 +80,7 @@ class EntityController extends DefaultController
      */
     public function addEntity(Request $request, AddEntityInteractor $interactor): Response
     {
+        /** @var AddEntityRequest $result */
         $result = $this->validateRequest($request, AddEntityRequest::class, true);
         if ($result instanceof Response) {
             return $result;
@@ -94,6 +97,7 @@ class EntityController extends DefaultController
      */
     public function addMultiEntities(Request $request, AddMultiEntitiesInteractor $interactor): Response
     {
+        /** @var AddMultiEntitiesRequest $result */
         $result = $this->validateRequest($request, AddMultiEntitiesRequest::class, true);
         if ($result instanceof Response) {
             return $result;
@@ -110,6 +114,7 @@ class EntityController extends DefaultController
      */
     public function updateEntity(Request $request, UpdateEntityInteractor $interactor): Response
     {
+        /** @var UpdateEntityRequest $result */
         $result = $this->validateRequest($request, UpdateEntityRequest::class, true);
         if ($result instanceof Response) {
             return $result;
