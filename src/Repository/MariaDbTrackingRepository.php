@@ -12,7 +12,7 @@ use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use PDO;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepository implements RepositoryInterface
 {
@@ -34,7 +34,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function getAll(): array
     {
-        $statement = $this->getPdoDriver()->query('SELECT * FROM timetracking');
+        $statement = $this->getPdoDriver()->query('SELECT * FROM working_times');
         $list = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($list)) {
@@ -49,7 +49,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function get(GetEntityRequest $request): array
     {
-        $statement = $this->getPdoDriver()->prepare('SELECT * FROM timetracking WHERE date = :date');
+        $statement = $this->getPdoDriver()->prepare('SELECT * FROM working_times WHERE date = :date');
         $statement->execute(['date' => $request->date]);
 
         $entity = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -65,7 +65,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function save(AddEntityRequest $request): void
     {
-        $query = 'INSERT INTO timetracking (date, mode, begin_timestamp) VALUES (:date, :mode, :begin_timestamp)';
+        $query = 'INSERT INTO working_times (date, mode, begin_timestamp) VALUES (:date, :mode, :begin_timestamp)';
         $statement = $this->getPdoDriver()->prepare($query);
 
         $result = $statement->execute([
@@ -100,7 +100,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function delete(DeleteEntityRequest $request): void
     {
-        $statement = $this->getPdoDriver()->prepare('DELETE FROM timetracking WHERE date = :date');
+        $statement = $this->getPdoDriver()->prepare('DELETE FROM working_times WHERE date = :date');
         $result = $statement->execute(['date' => $request->date]);
 
         if (true !== $result) {

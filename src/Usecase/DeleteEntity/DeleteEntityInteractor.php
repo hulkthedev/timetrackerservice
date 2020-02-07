@@ -8,7 +8,7 @@ use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class DeleteEntityInteractor extends BaseInteractor
 {
@@ -19,7 +19,7 @@ class DeleteEntityInteractor extends BaseInteractor
     public function execute(DeleteEntityRequest $request): BaseResponse
     {
         try {
-            $this->repository->delete($request);
+//            $this->repository->delete($request);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {

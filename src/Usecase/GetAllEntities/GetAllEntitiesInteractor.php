@@ -8,17 +8,26 @@ use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class GetAllEntitiesInteractor extends BaseInteractor
 {
     /**
+     * @param GetAllEntitiesRequest $request
      * @return BaseResponse
      */
-    public function execute(): BaseResponse
+    public function execute(GetAllEntitiesRequest $request): BaseResponse
     {
         try {
-            $list = $this->repository->getAll();
+
+//            $request->employerId
+//                0 = alle
+//                >0 = nach id
+
+//            $list = $this->repository->getAll();
+            $list = [];
+
+
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {

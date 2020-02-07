@@ -8,7 +8,7 @@ use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class GetEntityInteractor extends BaseInteractor
 {
@@ -19,7 +19,11 @@ class GetEntityInteractor extends BaseInteractor
     public function execute(GetEntityRequest $request): BaseResponse
     {
         try {
-            $entity = $this->repository->get($request);
+
+
+//            $entity = $this->repository->get($request);
+            $entity = [];
+
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {

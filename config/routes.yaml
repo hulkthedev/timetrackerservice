@@ -1,31 +1,33 @@
 # https://symfony.com/doc/current/routing.html
 
 api_entity_list:
-  path: /tracking/{employerId}
+  path: /timetracking/{employerId}
   controller: App\Controller\EntityController::getAllEntities
+  defaults:
+    employerId: 0
   methods: [GET]
 
 api_get_entity:
-  path: /tracking/{employerId}/{date}
+  path: /timetracking/{date}/{employerId}/{employerWorkingTimeId}
   controller: App\Controller\EntityController::getEntity
   methods: [GET]
 
 api_delete_entity:
-  path: /tracking/{employerId}/{date}
+  path: /timetracking/{date}/{employerId}/{employerWorkingTimeId}
   controller: App\Controller\EntityController::deleteEntity
   methods: [DELETE]
 
 api_add_entity:
-  path: /tracking/{employerId}/{date}
+  path: /timetracking/{date}/{employerId}/{employerWorkingTimeId}
   controller: App\Controller\EntityController::addEntity
   methods: [PUT]
 
 api_add_multi_entity:
-  path: /tracking/{employerId}/{fromDate}/{toDate}
+  path: /timetracking/{date}/{toDate}/{employerId}/{employerWorkingTimeId}
   controller: App\Controller\EntityController::addMultiEntities
   methods: [PUT]
 
 api_update_entry:
-  path: /tracking/{employerId}/{date}
+  path: /timetracking/{date}/{employerId}/{employerWorkingTimeId}
   controller: App\Controller\MainController::updateEntity
   methods: [PATCH]

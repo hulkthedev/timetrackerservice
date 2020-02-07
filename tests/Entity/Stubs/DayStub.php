@@ -6,7 +6,7 @@ use App\Entity\Day;
 use App\Usecase\Modes;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class DayStub extends Day
 {

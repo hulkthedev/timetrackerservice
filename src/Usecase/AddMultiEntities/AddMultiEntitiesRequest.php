@@ -2,13 +2,15 @@
 
 namespace App\Usecase\AddMultiEntities;
 
+use App\Usecase\BaseRequest;
+
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
-class AddMultiEntitiesRequest
+class AddMultiEntitiesRequest extends BaseRequest
 {
-    public string $fromDate;
     public string $toDate;
     public string $mode;
     public int $begin;
+    public int $break;
 }

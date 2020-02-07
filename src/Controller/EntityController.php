@@ -6,6 +6,7 @@ use App\Usecase\AddEntity\AddEntityInteractor;
 use App\Usecase\AddEntity\AddEntityRequest;
 use App\Usecase\AddMultiEntities\AddMultiEntitiesInteractor;
 use App\Usecase\AddMultiEntities\AddMultiEntitiesRequest;
+use App\Usecase\GetAllEntities\GetAllEntitiesRequest;
 use App\Usecase\UpdateEntity\UpdateEntityInteractor;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityInteractor;
@@ -17,17 +18,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class EntityController extends DefaultController
 {
     /**
+     * @param Request $request
      * @param GetAllEntitiesInteractor $interactor
      * @return Response
      */
-    public function getAllEntities(GetAllEntitiesInteractor $interactor): Response
+    public function getAllEntities(Request $request, GetAllEntitiesInteractor $interactor): Response
     {
-        $response = $interactor->execute();
+        $result = $this->validateRequest($request, GetAllEntitiesRequest::class);
+        if ($result instanceof Response) {
+            return $result;
+        }
+
+        $response = $interactor->execute($result);
         return $this->createResponse($response->presentResponse());
     }
 
@@ -38,6 +45,7 @@ class EntityController extends DefaultController
      */
     public function getEntity(Request $request, GetEntityInteractor $interactor): Response
     {
+
         $result = $this->validateRequest($request, GetEntityRequest::class);
         if ($result instanceof Response) {
             return $result;

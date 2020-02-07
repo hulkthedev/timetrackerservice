@@ -9,7 +9,7 @@ use App\Usecase\ResultCodes;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class AddEntityInteractor extends BaseInteractor
 {
@@ -20,7 +20,7 @@ class AddEntityInteractor extends BaseInteractor
     public function execute(AddEntityRequest $request): BaseResponse
     {
         try {
-            $this->repository->save($request);
+//            $this->repository->save($request);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (\PDOException $exception) {

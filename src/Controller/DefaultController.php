@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class DefaultController extends AbstractController
 {
@@ -62,10 +62,18 @@ class DefaultController extends AbstractController
             $json = json_decode($requestBody, true);
         }
 
-        $params = ['date' => $request->get('date')];
+        $params = [];
 
-        if (null !== $request->get('fromDate')) {
-            $params['fromDate'] = $request->get('fromDate');
+        if (null !== $request->get('date')) {
+            $params['date'] = $request->get('date');
+        }
+
+        if (null !== $request->get('employerId')) {
+            $params['employerId'] = $request->get('employerId');
+        }
+
+        if (null !== $request->get('employerWorkingTimeId')) {
+            $params['employerWorkingTimeId'] = $request->get('employerWorkingTimeId');
         }
 
         if (null !== $request->get('toDate')) {
@@ -87,16 +95,21 @@ class DefaultController extends AbstractController
      */
     private function validatePayload(array $payload, $model)
     {
-        /** @var BaseResponse $data */
-        $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
-        $violations = $this->validator->validate($data);
+        try {
+            /** @var BaseResponse $data */
+            $data = $this->serializer->deserialize(json_encode($payload), $model, self::SUPPORTED_FORMAT);
+            $violations = $this->validator->validate($data);
 
-        if ($violations->count() > 0) {
-            $response = new FaultyResponse($violations->get(0)->getMessage());
+            if ($violations->count() > 0) {
+                $response = new FaultyResponse($violations->get(0)->getMessage());
+                return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
+            }
+
+            return $data;
+        } catch (\Throwable $throwable) {
+            $response = new FaultyResponse($throwable->getMessage());
             return $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
-
-        return $data;
     }
 
     /**

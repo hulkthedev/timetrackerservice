@@ -7,7 +7,7 @@ use App\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @author Alex Beirith <fatal.error.27@gmail.com>
+ * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class BaseInteractor
 {
