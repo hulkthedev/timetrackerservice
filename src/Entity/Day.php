@@ -5,12 +5,13 @@ namespace App\Entity;
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
-class Day
+class Day extends Employer
 {
-    public int $number;
+    public int $weekDay;
     public string $mode;
     public string $date;
     public string $begin;
     public string $end;
-    public int $delta = 0;
+    public int $delta;
+    public int $break;
 }

@@ -47,9 +47,28 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function get(string $date, int $employerId, int $employerWorkingTimeId): array
+    public function getByDate(string $date, int $employerId): array
     {
-        $statement = $this->getPdoDriver()->prepare('CALL GetEntity(:date, :employerId, :employerWorkingTimeId)');
+        $statement = $this->getPdoDriver()->prepare('CALL GetEntityByDate(:employerId, :date)');
+        $statement->execute([
+            'date' => $date,
+            'employerId' => $employerId
+        ]);
+
+        $entity = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($entity)) {
+            throw new DatabaseException(ResultCodes::ENTITY_NOT_FOUND);
+        }
+
+        return $this->mapper->mapToList($entity);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getById(string $date, int $employerId, int $employerWorkingTimeId): array
+    {
+        $statement = $this->getPdoDriver()->prepare('CALL GetEntityById(:employerId, :employerWorkingTimeId, :date)');
         $statement->execute([
             'date' => $date,
             'employerId' => $employerId,
@@ -61,7 +80,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::ENTITY_NOT_FOUND);
         }
 
-        return [$this->mapper->mapToDay(reset($entity))];
+        return [$this->mapper->mapEntityToDay(reset($entity))];
     }
 
     /**
@@ -69,7 +88,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function save(AddEntityRequest $request): void
     {
-        $query = 'INSERT INTO working_times (date, mode, begin_timestamp) VALUES (:date, :mode, :begin_timestamp)';
+        $query = '';
         $statement = $this->getPdoDriver()->prepare($query);
 
         $result = $statement->execute([
@@ -104,7 +123,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function delete(DeleteEntityRequest $request): void
     {
-        $statement = $this->getPdoDriver()->prepare('DELETE FROM working_times WHERE date = :date');
+        $statement = $this->getPdoDriver()->prepare('');
         $result = $statement->execute(['date' => $request->date]);
 
         if (true !== $result) {

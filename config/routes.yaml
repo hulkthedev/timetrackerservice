@@ -10,6 +10,8 @@ api_entity_list:
 api_get_entity:
   path: /timetracking/{date}/{employerId}/{employerWorkingTimeId}
   controller: App\Controller\EntityController::getEntity
+  defaults:
+    employerWorkingTimeId: 0
   methods: [GET]
 
 api_delete_entity:

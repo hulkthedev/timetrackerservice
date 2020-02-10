@@ -36,7 +36,7 @@ CREATE TABLE working_times (
     break TINYINT NOT NULL DEFAULT 0,
     delta SMALLINT NOT NULL DEFAULT 0,
 
-    CONSTRAINT unique_days UNIQUE (date, employer_id, mode),
+    CONSTRAINT unique_days UNIQUE (employer_id, employer_working_time_id, mode, date),
     CONSTRAINT fk_employer FOREIGN KEY (employer_id) REFERENCES employer (id),
     CONSTRAINT fk_employer_working_times FOREIGN KEY (employer_working_time_id) REFERENCES employer_working_time (id),
     INDEX idx_working_times (employer_id, date, mode)

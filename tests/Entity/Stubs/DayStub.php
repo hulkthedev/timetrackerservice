@@ -12,7 +12,7 @@ class DayStub extends Day
 {
     public function __construct()
     {
-        $this->number = 1;
+        $this->weekDay = 1;
         $this->mode = Modes::MODE_WORKING;
         $this->date = '2020-01-01';
         $this->begin = '09:48:43';

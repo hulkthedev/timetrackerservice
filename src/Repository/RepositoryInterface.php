@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\AddEntity\AddEntityRequest;
 use App\Usecase\DeleteEntity\DeleteEntityRequest;
-use App\Usecase\GetEntity\GetEntityRequest;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use Exception;
 
@@ -25,12 +24,21 @@ interface RepositoryInterface
     /**
      * @param string $date
      * @param int $employerId
+     * @return array
+     * @throws DatabaseException
+     * @throws Exception
+     */
+    public function getByDate(string $date, int $employerId): array;
+
+    /**
+     * @param string $date
+     * @param int $employerId
      * @param int $employerWorkingTimeId
      * @return array
      * @throws DatabaseException
      * @throws Exception
      */
-    public function get(string $date, int $employerId, int $employerWorkingTimeId): array;
+    public function getById(string $date, int $employerId, int $employerWorkingTimeId): array;
 
     /**
      * @param AddEntityRequest $request

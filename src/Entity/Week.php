@@ -9,5 +9,5 @@ class Week
 {
     public array $weekDays;
     public int $weekNo;
-    public int $weekDelta = 0;
+    public int $weekDelta;
 }

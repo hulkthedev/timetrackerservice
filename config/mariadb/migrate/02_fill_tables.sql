@@ -12,6 +12,7 @@ SET @employer_id = LAST_INSERT_ID();
 INSERT INTO employer_working_time
     (employer_id, description, working_time, working_break)
 VALUES
+    (@employer_id, 'Halbzeit', 240, 15),
     (@employer_id, 'Vollzeit', 462, 30);
 
 SET @working_time_id = LAST_INSERT_ID();
@@ -24,7 +25,7 @@ VALUES
     (@employer_id, 0);
 
 
-
+-- https://www.epochconverter.com/
 INSERT INTO working_times
     (employer_id, employer_working_time_id, date, mode, begin_timestamp, end_timestamp, break)
 VALUES
@@ -59,4 +60,6 @@ VALUES
     (@employer_id, @working_time_id, '2020-02-03', 'working', 1580721480, 1580756640, 30),
     (@employer_id, @working_time_id, '2020-02-04', 'working', 1580807880, 1580840220, 30),
     (@employer_id, @working_time_id, '2020-02-05', 'working', 1580881980, 1580929380, 30),
-    (@employer_id, @working_time_id, '2020-02-06', 'working', 1580979480, 1581006900, 30);
+    (@employer_id, @working_time_id, '2020-02-06', 'working', 1580979480, 1581006900, 30),
+    (@employer_id, @working_time_id, '2020-02-07', 'working', 1581066840, 1581096900, 30),
+    (@employer_id, 2,                '2020-02-07', 'working', 1581098400, 1581109200, 15);

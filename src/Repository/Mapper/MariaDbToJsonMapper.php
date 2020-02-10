@@ -22,8 +22,9 @@ class MariaDbToJsonMapper
     {
         $days = [];
         foreach ($list as $entity) {
-            $days[] = $this->createDayFromEntity($entity);
+            $days[] = $this->mapEntityToDay($entity);
         }
+
 
         return $this->sort($days);
     }
@@ -33,17 +34,7 @@ class MariaDbToJsonMapper
      * @return Day
      * @throws Exception
      */
-    public function mapToDay(array $entity): Day
-    {
-        return $this->createDayFromEntity($entity);
-    }
-
-    /**
-     * @param array $entity
-     * @return Day
-     * @throws Exception
-     */
-    private function createDayFromEntity(array $entity): Day
+    public function mapEntityToDay(array $entity): Day
     {
         $beginDateTime = new DateTime();
         $beginDateTime->setTimestamp($entity['begin_timestamp']);
@@ -54,35 +45,51 @@ class MariaDbToJsonMapper
         $day = new Day();
         $day->mode = $entity['mode'];
         $day->date = $entity['date'];
-        $day->number = $beginDateTime->format('N');
+        $day->weekDay = $beginDateTime->format('N');
         $day->begin = $beginDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
         $day->end = $endDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
+        $day->delta = $entity['delta'];
+        $day->break = $entity['break'];
+
+        $day->employerId = $entity['employer_id'];
+        $day->employerName = $entity['employer_name'];
+
+        $day->workingTimeId = $entity['employer_working_time_id'];
+        $day->workingTimeDescription = $entity['working_time_description'];
 
         return $day;
     }
 
     /**
-     * @param array $list
+     * @param array $dayList
      * @return array
      * @throws Exception
      */
-    private function sort(array $list): array
+    private function sort(array $dayList): array
     {
-        $groupedDays = [];
+        $daysByDate = [];
 
         /** @var Day $day */
-        foreach ($list as $day) {
-            $weekNo = (new DateTime($day->date))->format('W');
-            $groupedDays[(int)$weekNo][] = $day;
+        foreach ($dayList as $day) {
+            $daysByDate[$day->date][] = $day;
+        }
+
+        $daysByWeek = [];
+
+        /** @var Day $day */
+        foreach ($daysByDate as $date => $days) {
+            $weekNo = (int)(new DateTime($date))->format('W');
+            $daysByWeek[$weekNo][] = $days;
         }
 
         $result = [];
 
         /** @var Day $day */
-        foreach ($groupedDays as $weekNo => $week) {
+        foreach ($daysByWeek as $weekNo => $week) {
             $weekEntity = new Week();
             $weekEntity->weekNo = $weekNo;
             $weekEntity->weekDays = $week;
+            $weekEntity->weekDelta = 0;
 
             $result[] = $weekEntity;
         }
