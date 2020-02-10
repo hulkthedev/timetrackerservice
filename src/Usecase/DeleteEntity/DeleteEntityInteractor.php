@@ -21,7 +21,7 @@ class DeleteEntityInteractor extends BaseInteractor
     public function execute(DeleteEntityRequest $request): BaseResponse
     {
         try {
-//            $this->repository->delete($request);
+            $this->repository->delete($request->date, $request->employerId, $request->employerWorkingTimeId);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (PDOException $exception) {

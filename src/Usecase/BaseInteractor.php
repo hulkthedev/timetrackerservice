@@ -18,9 +18,9 @@ class BaseInteractor
     protected RepositoryInterface $repository;
 
     /**
-     * @param MariaDbTrackingRepository $repository
+     * @param RepositoryInterface $repository
      */
-    public function __construct(MariaDbTrackingRepository $repository)
+    public function __construct(RepositoryInterface $repository)
     {
         $this->repository = $repository;
     }

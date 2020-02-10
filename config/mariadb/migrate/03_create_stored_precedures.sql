@@ -94,3 +94,18 @@ BEGIN
         AND wrk_tms.employer_working_time_id = _employerWorkingTimeId;
 END //
 DELIMITER ;
+
+/**********************************************************************************************************************/
+DELIMITER //
+CREATE PROCEDURE DeleteEntity (
+    IN _employerId SMALLINT,
+    IN _employerWorkingTimeId SMALLINT,
+    IN _date DATE
+)
+BEGIN
+    DELETE FROM working_times
+    WHERE date = _date
+        AND employer_id = _employerId
+        AND employer_working_time_id = _employerWorkingTimeId;
+END //
+DELIMITER ;

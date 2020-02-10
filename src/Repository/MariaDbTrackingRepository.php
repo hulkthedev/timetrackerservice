@@ -121,10 +121,14 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function delete(DeleteEntityRequest $request): void
+    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void
     {
-        $statement = $this->getPdoDriver()->prepare('');
-        $result = $statement->execute(['date' => $request->date]);
+        $statement = $this->getPdoDriver()->prepare('CALL DeleteEntity(:employerId, :employerWorkingTimeId, :date)');
+        $result = $statement->execute([
+            'date' => $date,
+            'employerId' => $employerId,
+            'employerWorkingTimeId' => $employerWorkingTimeId
+        ]);
 
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);

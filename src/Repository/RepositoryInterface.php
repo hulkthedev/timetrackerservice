@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\AddEntity\AddEntityRequest;
-use App\Usecase\DeleteEntity\DeleteEntityRequest;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use Exception;
 
@@ -53,8 +52,10 @@ interface RepositoryInterface
     public function update(UpdateEntityRequest $request): void;
 
     /**
-     * @param DeleteEntityRequest $request
+     * @param string $date
+     * @param int $employerId
+     * @param int $employerWorkingTimeId
      * @throws DatabaseException
      */
-    public function delete(DeleteEntityRequest $request): void;
+    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void;
 }
