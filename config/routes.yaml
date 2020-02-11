@@ -4,7 +4,7 @@ api_entity_list:
   path: /timetracking/{employerId}
   controller: App\Controller\EntityController::getAllEntities
   defaults:
-    employerId: 0
+    employerId: 1
   methods: [GET]
 
 api_get_entity:
@@ -31,5 +31,5 @@ api_add_multi_entity:
 
 api_update_entry:
   path: /timetracking/{date}/{employerId}/{employerWorkingTimeId}
-  controller: App\Controller\MainController::updateEntity
+  controller: App\Controller\EntityController::updateEntity
   methods: [PATCH]

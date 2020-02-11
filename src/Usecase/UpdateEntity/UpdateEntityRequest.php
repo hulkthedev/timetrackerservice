@@ -12,4 +12,5 @@ class UpdateEntityRequest extends BaseRequest
     public string $mode;
     public int $begin;
     public int $end;
+    public int $break;
 }

@@ -41,6 +41,14 @@ interface RepositoryInterface
      * @param string $date
      * @param int $employerId
      * @param int $employerWorkingTimeId
+     * @throws DatabaseException
+     */
+    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void;
+
+    /**
+     * @param string $date
+     * @param int $employerId
+     * @param int $employerWorkingTimeId
      * @param string $mode
      * @param int $beginTimestamp
      * @throws DatabaseException
@@ -48,15 +56,15 @@ interface RepositoryInterface
     public function save(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp): void;
 
     /**
-     * @throws DatabaseException
-     */
-    public function update(): void;
-
-    /**
      * @param string $date
      * @param int $employerId
      * @param int $employerWorkingTimeId
+     * @param string $mode
+     * @param int $beginTimestamp
+     * @param int $endTimestamp
+     * @param int $break
+     * @param int $delta
      * @throws DatabaseException
      */
-    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void;
+    public function update(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp, int $endTimestamp, int $break, int $delta): void;
 }

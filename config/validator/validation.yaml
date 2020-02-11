@@ -35,11 +35,48 @@ App\Usecase\DeleteEntity\DeleteEntityRequest:
           message: 'Parameter employerWorkingTimeId should be of type integer'
           type: integer
 
-App\Usecase\ChangeEntity\ChangeEntityRequest:
+App\Usecase\UpdateEntity\UpdateEntityRequest:
   properties:
     date:
       - Date:
           message: 'Parameter date should be have the following format: YYYY-MM-TT'
+    employerId:
+      - Type:
+          message: 'Parameter employerId should be of type integer'
+          type: integer
+    employerWorkingTimeId:
+      - Type:
+          message: 'Parameter employerWorkingTimeId should be of type integer'
+          type: integer
+    begin:
+      - Type:
+          message: 'Parameter begin should be of type integer'
+          type: integer
+      - Length:
+          minMessage: 'Parameter begin should have the length of a valid timestamp'
+          maxMessage: 'Parameter begin should have the length of a valid timestamp'
+          min: 10
+          max: 13
+    end:
+      - Type:
+          message: 'Parameter end should be of type integer'
+          type: integer
+      - Length:
+          minMessage: 'Parameter end should have the length of a valid timestamp'
+          maxMessage: 'Parameter end should have the length of a valid timestamp'
+          min: 10
+          max: 13
+    break:
+      - Type:
+          message: 'Parameter break should be of type integer'
+          type: integer
+    mode:
+      - Type:
+          message: 'Parameter mode should be of type string'
+          type: string
+      - Choice:
+          message: 'Parameter mode have not a valid choice'
+          choices: ['working', 'sick', 'overtime', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
 
 App\Usecase\AddEntity\AddEntityRequest:
   properties:

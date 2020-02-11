@@ -21,7 +21,17 @@ class UpdateEntityInteractor extends BaseInteractor
     public function execute(UpdateEntityRequest $request): BaseResponse
     {
         try {
-//            $this->repository->update($request);
+            $delta = $this->calculateDelta($request->begin, $request->end, $request->break);
+            $this->repository->update(
+                $request->date,
+                $request->employerId,
+                $request->employerWorkingTimeId,
+                $request->mode,
+                $request->begin,
+                $request->end,
+                $request->break,
+                $delta
+            );
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (PDOException $exception) {
@@ -31,5 +41,16 @@ class UpdateEntityInteractor extends BaseInteractor
         }
 
         return new UpdateEntityResponse(ResultCodes::SUCCESS);
+    }
+
+    /**
+     * @param int $beginTimestamp
+     * @param int $endTimestamp
+     * @param int $break
+     * @return int
+     */
+    private function calculateDelta(int $beginTimestamp, int $endTimestamp, int $break): int
+    {
+        return 0;
     }
 }

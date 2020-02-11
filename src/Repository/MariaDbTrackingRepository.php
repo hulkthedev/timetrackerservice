@@ -12,6 +12,13 @@ use PDO;
  */
 class MariaDbTrackingRepository implements RepositoryInterface
 {
+    private const STORED_PROCEDURE_SAVE = 'CALL SaveEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp)';
+    private const STORED_PROCEDURE_UPDATE = 'CALL UpdateEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp, :end_timestamp, :break, :delta)';
+    private const STORED_PROCEDURE_DELETE = 'CALL DeleteEntity(:employerId, :employerWorkingTimeId, :date)';
+    private const STORED_PROCEDURE_GET_ALL = 'CALL GetAllEntities(:employerId)';
+    private const STORED_PROCEDURE_GET_BY_ID = 'CALL GetEntityById(:employerId, :employerWorkingTimeId, :date)';
+    private const STORED_PROCEDURE_GET_BY_DATE = 'CALL GetEntityByDate(:employerId, :date)';
+
     private const DATABASE_CONNECTION_TIMEOUT = 30;
 
     private ?PDO $pdo = null;
@@ -30,7 +37,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function getAll(int $employerId): array
     {
-        $statement = $this->getPdoDriver()->prepare('CALL GetAllEntities(:employerId)');
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_ALL);
         $statement->execute(['employerId' => $employerId]);
 
         $list = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -46,7 +53,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function getByDate(string $date, int $employerId): array
     {
-        $statement = $this->getPdoDriver()->prepare('CALL GetEntityByDate(:employerId, :date)');
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_BY_DATE);
         $statement->execute([
             'date' => $date,
             'employerId' => $employerId
@@ -65,7 +72,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
      */
     public function getById(string $date, int $employerId, int $employerWorkingTimeId): array
     {
-        $statement = $this->getPdoDriver()->prepare('CALL GetEntityById(:employerId, :employerWorkingTimeId, :date)');
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_BY_ID);
         $statement->execute([
             'date' => $date,
             'employerId' => $employerId,
@@ -83,9 +90,26 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
+    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void
+    {
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_DELETE);
+        $result = $statement->execute([
+            'date' => $date,
+            'employerId' => $employerId,
+            'employerWorkingTimeId' => $employerWorkingTimeId
+        ]);
+
+        if (true !== $result) {
+            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function save(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp): void
     {
-        $statement = $this->getPdoDriver()->prepare('CALL SaveEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp)');
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_SAVE);
         $result = $statement->execute([
             'date' => $date,
             'employerId' => $employerId,
@@ -102,29 +126,22 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function update(): void
+    public function update(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp, int $endTimestamp, int $break, int $delta): void
     {
-//        $result = true;
-//
-//        if (true !== $result) {
-//            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
-//        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void
-    {
-        $statement = $this->getPdoDriver()->prepare('CALL DeleteEntity(:employerId, :employerWorkingTimeId, :date)');
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_UPDATE);
         $result = $statement->execute([
             'date' => $date,
             'employerId' => $employerId,
-            'employerWorkingTimeId' => $employerWorkingTimeId
+            'employerWorkingTimeId' => $employerWorkingTimeId,
+            'mode' => $mode,
+            'begin_timestamp' => $beginTimestamp,
+            'end_timestamp' => $endTimestamp,
+            'break' => $break,
+            'delta' => $delta
         ]);
 
         if (true !== $result) {
-            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
+            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
         }
     }
 

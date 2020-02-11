@@ -6,10 +6,6 @@ CREATE PROCEDURE GetAllEntities (
     IN _employerId SMALLINT
 )
 BEGIN
-    IF(_employerId = 0) THEN
-        SET _employerId = 1;
-    END IF;
-
     SELECT
          wrk_tms.id
         ,wrk_tms.employer_id
@@ -134,5 +130,30 @@ BEGIN
         ,_mode
         ,_begin_timestamp
    );
+END //
+DELIMITER ;
+
+/**********************************************************************************************************************/
+DELIMITER //
+CREATE PROCEDURE UpdateEntity (
+    IN _employer_id SMALLINT,
+    IN _employer_working_time_id SMALLINT,
+    IN _date DATE,
+    IN _mode VARCHAR(20),
+    IN _begin_timestamp INT,
+    IN _end_timestamp INT,
+    IN _break TINYINT,
+    IN _delta SMALLINT
+)
+BEGIN
+    UPDATE working_times
+    SET mode = _mode,
+        begin_timestamp = _begin_timestamp,
+        end_timestamp = _end_timestamp,
+        break = _break,
+        delta = _delta
+    WHERE date = _date
+        AND employer_id = _employer_id
+        AND employer_working_time_id = _employer_working_time_id;
 END //
 DELIMITER ;
