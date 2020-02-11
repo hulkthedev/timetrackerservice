@@ -22,7 +22,13 @@ class AddEntityInteractor extends BaseInteractor
     public function execute(AddEntityRequest $request): BaseResponse
     {
         try {
-//            $this->repository->save($request);
+            $this->repository->save(
+                $request->date,
+                $request->employerId,
+                $request->employerWorkingTimeId,
+                $request->mode,
+                $request->begin
+            );
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (PDOException $exception) {

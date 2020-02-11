@@ -4,10 +4,7 @@ namespace App\Repository;
 
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbToJsonMapper as Mapper;
-use App\Usecase\AddEntity\AddEntityRequest;
-use App\Usecase\DeleteEntity\DeleteEntityRequest;
 use App\Usecase\ResultCodes;
-use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use PDO;
 
 /**
@@ -86,15 +83,15 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function save(AddEntityRequest $request): void
+    public function save(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp): void
     {
-        $query = '';
-        $statement = $this->getPdoDriver()->prepare($query);
-
+        $statement = $this->getPdoDriver()->prepare('CALL SaveEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp)');
         $result = $statement->execute([
-            'date' => $request->date,
-            'mode' => $request->mode,
-            'begin_timestamp' => $request->begin
+            'date' => $date,
+            'employerId' => $employerId,
+            'employerWorkingTimeId' => $employerWorkingTimeId,
+            'mode' => $mode,
+            'begin_timestamp' => $beginTimestamp
         ]);
 
         if (true !== $result) {
@@ -105,17 +102,13 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function update(UpdateEntityRequest $request): void
+    public function update(): void
     {
-        /**
-         * @todo fix PATCH Bug && add logic
-         */
-
-        $result = true;
-
-        if (true !== $result) {
-            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
-        }
+//        $result = true;
+//
+//        if (true !== $result) {
+//            throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
+//        }
     }
 
     /**

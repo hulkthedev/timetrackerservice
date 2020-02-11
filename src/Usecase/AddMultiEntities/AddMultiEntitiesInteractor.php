@@ -2,12 +2,14 @@
 
 namespace App\Usecase\AddMultiEntities;
 
-use App\Entity\Day;
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
 use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
+use DateInterval;
+use DatePeriod;
 use DateTime;
+use Exception;
 use PDOException;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
@@ -24,14 +26,15 @@ class AddMultiEntitiesInteractor extends BaseInteractor
     public function execute(AddMultiEntitiesRequest $request): BaseResponse
     {
         try {
-
-//            var_dump($this->createRangeOfDays($request));
-//            exit;
-
-
-//            foreach ($this->createRangeOfDays($request->fromDate, $request->toDate) as $entity) {
-//                $this->repository->save();
-//            }
+            foreach ($this->createRangeOfDays($request) as $entity) {
+                $this->repository->save(
+                    $entity['date'],
+                    $entity['employerId'],
+                    $entity['employerWorkingTimeId'],
+                    $entity['mode'],
+                    $entity['begin']
+                );
+            }
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (PDOException $exception) {
@@ -49,22 +52,25 @@ class AddMultiEntitiesInteractor extends BaseInteractor
     /**
      * @param AddMultiEntitiesRequest $request
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function createRangeOfDays(AddMultiEntitiesRequest $request): array
     {
         $toDate = new DateTime($request->toDate);
         $toDate = $toDate->modify('+1 day');
 
-        $range = new \DatePeriod(new DateTime($request->date), new \DateInterval('P1D'), $toDate);
+        $range = new DatePeriod(new DateTime($request->date), new DateInterval('P1D'), $toDate);
         $days = [];
 
         /** @var $date DateTime */
         foreach ($range as $date) {
-            $day = new Day();
-            $day->date = $date->format(self::DEFAULT_DATE_FORMAT);
-            $day->mode = $request->mode;
-            $day->begin = '';
+            $day = [
+                'date' => $date->format(self::DEFAULT_DATE_FORMAT),
+                'employerId' => $request->employerId,
+                'employerWorkingTimeId' => $request->employerWorkingTimeId,
+                'mode' => $request->mode,
+                'begin' => 0
+            ];
 
             $days[] = $day;
         }

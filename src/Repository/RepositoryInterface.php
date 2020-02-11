@@ -3,8 +3,6 @@
 namespace App\Repository;
 
 use App\Repository\Exception\DatabaseException;
-use App\Usecase\AddEntity\AddEntityRequest;
-use App\Usecase\UpdateEntity\UpdateEntityRequest;
 use Exception;
 
 /**
@@ -40,16 +38,19 @@ interface RepositoryInterface
     public function getById(string $date, int $employerId, int $employerWorkingTimeId): array;
 
     /**
-     * @param AddEntityRequest $request
+     * @param string $date
+     * @param int $employerId
+     * @param int $employerWorkingTimeId
+     * @param string $mode
+     * @param int $beginTimestamp
      * @throws DatabaseException
      */
-    public function save(AddEntityRequest $request): void;
+    public function save(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp): void;
 
     /**
-     * @param UpdateEntityRequest $request
      * @throws DatabaseException
      */
-    public function update(UpdateEntityRequest $request): void;
+    public function update(): void;
 
     /**
      * @param string $date

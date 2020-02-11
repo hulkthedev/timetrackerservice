@@ -109,3 +109,30 @@ BEGIN
         AND employer_working_time_id = _employerWorkingTimeId;
 END //
 DELIMITER ;
+
+/**********************************************************************************************************************/
+DELIMITER //
+CREATE PROCEDURE SaveEntity (
+    IN _employer_id SMALLINT,
+    IN _employer_working_time_id SMALLINT,
+    IN _date DATE,
+    IN _mode VARCHAR(20),
+    IN _begin_timestamp INT
+)
+BEGIN
+    INSERT INTO working_times (
+         employer_id
+        ,employer_working_time_id
+        ,date
+        ,mode
+        ,begin_timestamp
+    )
+    VALUES (
+         _employer_id
+        ,_employer_working_time_id
+        ,_date
+        ,_mode
+        ,_begin_timestamp
+   );
+END //
+DELIMITER ;
