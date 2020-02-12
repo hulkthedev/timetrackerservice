@@ -1,0 +1,434 @@
+openapi: 3.0.1
+
+info:
+  title: REST based TimeTracker Service
+  contact:
+    name: Alexej Beirith
+    url: https://www.KOMMT-NOCH.de
+    email: A-SCM-CP-IT-ESP-SCRUM7-OPC@Arvato.com
+  version: "1.0"
+
+servers:
+  - url: https://www.KOMMT-NOCH.de/tracking
+
+paths:
+  /timetracking/{employerId}:
+    get:
+      description: load all entities
+      parameters:
+        - name: employerId
+          in: path
+          description: employer id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: loading entities was successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessEntityResponse'
+        400:
+          description: invalid parameter / syntax
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        415:
+          description: invalid media type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        500:
+          description: Internal Server Error  / PHP Error / PDO Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+  /timetracking/{date}/{employerId}/{employerWorkingTimeId}:
+    get:
+      description: load single entity
+      parameters:
+        - name: date
+          in: path
+          description: date (format YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+        - name: employerId
+          in: path
+          description: employer id
+          required: true
+          schema:
+            type: integer
+        - name: employerWorkingTimeId
+          in: path
+          description: employer working time id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: loading entity was successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessEntityResponse'
+        400:
+          description: invalid parameter / syntax
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        415:
+          description: invalid media type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        500:
+          description: Internal Server Error  / PHP Error / PDO Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+    put:
+      description: add single entity
+      parameters:
+        - name: date
+          in: path
+          description: date (format YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+        - name: employerId
+          in: path
+          description: employer id
+          required: true
+          schema:
+            type: integer
+        - name: employerWorkingTimeId
+          in: path
+          description: employer working time id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: working mode
+        content:
+          'json':
+            schema:
+              type: string
+        required: false
+      responses:
+        201:
+          description: adding entity was successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessEntityResponse'
+        400:
+          description: invalid parameter / syntax
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        415:
+          description: invalid media type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        500:
+          description: Internal Server Error  / PHP Error / PDO Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+      x-codegen-request-body-name: mode
+    delete:
+      description: delete single entity
+      parameters:
+        - name: date
+          in: path
+          description: date (format YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+        - name: employerId
+          in: path
+          description: employer id
+          required: true
+          schema:
+            type: integer
+        - name: employerWorkingTimeId
+          in: path
+          description: employer working time id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: deleting entity was successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessEntityResponse'
+        400:
+          description: invalid parameter / syntax
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        415:
+          description: invalid media type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        500:
+          description: Internal Server Error  / PHP Error / PDO Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+    patch:
+      description: update single entity
+      parameters:
+        - name: date
+          in: path
+          description: date (format YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+        - name: employerId
+          in: path
+          description: employer id
+          required: true
+          schema:
+            type: integer
+        - name: employerWorkingTimeId
+          in: path
+          description: employer working time id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: working mode
+        content:
+          'json':
+            schema:
+              type: string
+        required: false
+      responses:
+        200:
+          description: entity updating was successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessEntityResponse'
+        400:
+          description: invalid parameter / syntax
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        415:
+          description: invalid media type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        500:
+          description: Internal Server Error  / PHP Error / PDO Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+      x-codegen-request-body-name: mode
+  /timetracking/{date}/{toDate}/{employerId}/{employerWorkingTimeId}:
+    put:
+      description: adding many entities was sucessful
+      parameters:
+        - name: date
+          in: path
+          description: date (format YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+        - name: toDate
+          in: path
+          description: date (format YYYY-MM-DD)
+          required: true
+          schema:
+            type: string
+        - name: employerId
+          in: path
+          description: employer id
+          required: true
+          schema:
+            type: integer
+        - name: employerWorkingTimeId
+          in: path
+          description: employer working time id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: working mode
+        content:
+          'json':
+            schema:
+              type: string
+        required: false
+      responses:
+        201:
+          description: adding entity was successful
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SuccessEntityResponse'
+        400:
+          description: invalid parameter / syntax
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        415:
+          description: invalid media type
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientErrorResponse'
+        500:
+          description: Internal Server Error  / PHP Error / PDO Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ServerErrorResponse'
+      x-codegen-request-body-name: mode
+components:
+  schemas:
+    ClientErrorResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          description: |
+            | Code | Description
+            +------+------------
+            |  -1  | Invalid parameter
+            |  -2  | Invalid media type
+            |  -3  | Invalid json content
+        message:
+          type: string
+    ServerErrorResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          description: |
+            | Code | Description
+            +------+------------
+            | -10  | PDO Exception
+            | -11  | PDO Exception no login data
+            | -12  | DB is empty
+            | -13  | Entity not found
+            | -14  | Entity can not be saved
+            | -15  | Entity can not be deleted
+            | -16  | Entity can not be updated
+            | -99  | Unknown error
+        entities:
+          type: array
+          items:
+            type: object
+            properties: {}
+            description: always empty array on error
+    SuccessEntityResponse:
+      type: object
+      properties:
+        code:
+          type: number
+          description: |
+            | Code | Description
+            +------+------------
+            |   1  | Success
+        entities:
+          type: array
+          description: only filled on get methods
+          items:
+            type: object
+            properties:
+              weekDays:
+                type: array
+                items:
+                  type: object
+                  properties: {}
+              weekNo:
+                type: integer
+              weekDelta:
+                type: integer
+  parameters:
+    employerId:
+      name: employerId
+      in: path
+      description: employer id
+      required: true
+      schema:
+        type: integer
+      example: 1
+    employerWorkingTimeId:
+      name: employerWorkingTimeId
+      in: path
+      description: employer working time id
+      required: true
+      schema:
+        type: integer
+      example: 1
+    date:
+      name: date
+      in: path
+      description: date (format YYYY-MM-DD)
+      required: true
+      schema:
+        type: string
+      example: 2020-01-01
+    toDate:
+      name: toDate
+      in: path
+      description: date (format YYYY-MM-DD)
+      required: true
+      schema:
+        type: string
+      example: 2020-01-01
+  requestBodies:
+    begin:
+      description: timestamp of beginning working
+      content:
+        '*/*':
+          schema:
+            type: integer
+      required: false
+    end:
+      description: timestamp of ending working
+      content:
+        '*/*':
+          schema:
+            type: integer
+      required: false
+    break:
+      description: break in minutes
+      content:
+        '*/*':
+          schema:
+            type: integer
+      required: false
+    mode:
+      description: working mode
+      content:
+        '*/*':
+          schema:
+            type: string
+      required: false
