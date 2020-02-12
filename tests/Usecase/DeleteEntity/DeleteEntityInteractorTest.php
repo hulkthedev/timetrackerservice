@@ -2,9 +2,12 @@
 
 namespace App\Tests\Usecase\DeleteEntity;
 
+use App\Repository\Mapper\MariaDbMapper;
+use App\Repository\MariaDbTrackingRepository;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
+use App\Tests\Repository\PdoStub;
 use App\Usecase\DeleteEntity\DeleteEntityInteractor;
 use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
@@ -45,8 +48,19 @@ class DeleteEntityInteractorTest extends TestCase
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }
 
-//    public function test_execute_expectNoError(): void
-//    {
-//
-//    }
+    public function test_execute_expectNoError(): void
+    {
+        $pdo = new PdoStub();
+        $pdo->setExecuteReturnValue(true);
+
+        $repo = new MariaDbTrackingRepository(new MariaDbMapper());
+        $repo->setPdoDriver($pdo);
+
+        $interactor = new DeleteEntityInteractor($repo);
+        $response = $interactor->execute(new DeleteEntityRequestStub());
+
+        TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);
+        TestCase::assertEquals(Response::HTTP_OK, $response->getHttpStatus());
+        TestCase::assertEmpty($response->presentResponse()['entities']);
+    }
 }

@@ -11,11 +11,9 @@ use Exception;
 class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
 {
     /**
-     * @param $name
-     * @param $arguments
-     * @throws Exception
+     * @inheritDoc
      */
-    public function __call($name, $arguments)
+    public function getAll(int $employerId): array
     {
         throw new Exception('UnitTests');
     }
@@ -23,15 +21,9 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function getAll(int $employerId): array
-    {
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getByDate(string $date, int $employerId): array
     {
+        throw new Exception('UnitTests');
     }
 
     /**
@@ -39,6 +31,7 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
      */
     public function getById(string $date, int $employerId, int $employerWorkingTimeId): array
     {
+        throw new Exception('UnitTests');
     }
 
     /**
@@ -46,6 +39,7 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
      */
     public function delete(string $date, int $employerId, int $employerWorkingTimeId): bool
     {
+        throw new Exception('UnitTests');
     }
 
     /**
@@ -58,6 +52,7 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
         string $mode,
         int $beginTimestamp
     ): bool {
+        throw new Exception('UnitTests');
     }
 
     /**
@@ -73,5 +68,6 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
         int $break,
         int $delta
     ): bool {
+        throw new Exception('UnitTests');
     }
 }

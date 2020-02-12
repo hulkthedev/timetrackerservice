@@ -2,9 +2,12 @@
 
 namespace App\Tests\Usecase\AddEntity;
 
+use App\Repository\Mapper\MariaDbMapper;
+use App\Repository\MariaDbTrackingRepository;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
+use App\Tests\Repository\PdoStub;
 use App\Usecase\AddEntity\AddEntityInteractor;
 use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
@@ -45,8 +48,19 @@ class AddEntityInteractorTest extends TestCase
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }
 
-//    public function test_execute_expectNoError(): void
-//    {
-//
-//    }
+    public function test_execute_expectNoError(): void
+    {
+        $pdo = new PdoStub();
+        $pdo->setExecuteReturnValue(true);
+
+        $repo = new MariaDbTrackingRepository(new MariaDbMapper());
+        $repo->setPdoDriver($pdo);
+
+        $interactor = new AddEntityInteractor($repo);
+        $response = $interactor->execute(new AddEntityRequestStub());
+
+        TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);
+        TestCase::assertEquals(Response::HTTP_CREATED, $response->getHttpStatus());
+        TestCase::assertEmpty($response->presentResponse()['entities']);
+    }
 }
