@@ -10,8 +10,8 @@ use PDOStatement;
  */
 class PdoStub extends PDO
 {
-    /** @var array|bool  */
-    private $returnValue;
+    private array $fetchAllReturnValue = [];
+    private bool $executeReturnValue = true;
 
     /**
      * @inheritdoc
@@ -21,12 +21,22 @@ class PdoStub extends PDO
     }
 
     /**
-     * @param array|bool $returnValue
+     * @param array $fetchAllReturnValue
      * @return PDO
      */
-    public function setReturnValue($returnValue): PDO
+    public function setFetchAllReturnValue(array $fetchAllReturnValue): PDO
     {
-        $this->returnValue = $returnValue;
+        $this->fetchAllReturnValue = $fetchAllReturnValue;
+        return $this;
+    }
+
+    /**
+     * @param bool $executeReturnValue
+     * @return PDO
+     */
+    public function setExecuteReturnValue(bool $executeReturnValue): PDO
+    {
+        $this->executeReturnValue = $executeReturnValue;
         return $this;
     }
 
@@ -35,21 +45,34 @@ class PdoStub extends PDO
      */
     public function prepare($statement, $options = null)
     {
-        return new PDOStatementStub($this->returnValue);
+        return new PDOStatementStub(
+            $this->fetchAllReturnValue,
+            $this->executeReturnValue
+        );
     }
 }
 
 class PDOStatementStub extends PDOStatement
 {
-    /** @var array|bool */
-    private $returnValue;
+    private array $fetchAllReturnValue;
+    private bool $executeReturnValue;
 
     /**
-     * @param array|bool $returnValue
+     * @param array $fetchAllReturnValue
+     * @param bool $executeReturnValue
      */
-    public function __construct($returnValue)
+    public function __construct(array $fetchAllReturnValue, bool $executeReturnValue)
     {
-        $this->returnValue = $returnValue;
+        $this->fetchAllReturnValue = $fetchAllReturnValue;
+        $this->executeReturnValue = $executeReturnValue;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function execute($input_parameters = null)
+    {
+        return $this->executeReturnValue;
     }
 
     /**
@@ -57,6 +80,6 @@ class PDOStatementStub extends PDOStatement
      */
     public function fetchAll($fetchMode = null, $fetchArgument = null, $ctorArgs = null)
     {
-        return $this->returnValue;
+        return $this->fetchAllReturnValue;
     }
 }

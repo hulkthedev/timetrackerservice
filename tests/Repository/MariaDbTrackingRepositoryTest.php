@@ -42,7 +42,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_getAll_NoDataStored_ExpectException(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue([]);
+        $pdo->setFetchAllReturnValue([]);
 
         $this->repo->setPdoDriver($pdo);
 
@@ -58,7 +58,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_getAll_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue(MariaDbFetcher::getAll());
+        $pdo->setFetchAllReturnValue(MariaDbFetcher::getAll());
 
         $this->repo->setPdoDriver($pdo);
 
@@ -78,7 +78,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_getByDate_ExpectException(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue([]);
+        $pdo->setFetchAllReturnValue([]);
 
         $this->repo->setPdoDriver($pdo);
 
@@ -94,7 +94,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_getByDate_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue(MariaDbFetcher::get());
+        $pdo->setFetchAllReturnValue(MariaDbFetcher::get());
 
         $this->repo->setPdoDriver($pdo);
 
@@ -114,7 +114,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_getById_ExpectException(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue([]);
+        $pdo->setFetchAllReturnValue([]);
 
         $this->repo->setPdoDriver($pdo);
 
@@ -130,7 +130,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_getById_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue(MariaDbFetcher::get());
+        $pdo->setFetchAllReturnValue(MariaDbFetcher::get());
 
         $this->repo->setPdoDriver($pdo);
 
@@ -156,7 +156,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_delete_ExpectException(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue(false);
+        $pdo->setExecuteReturnValue(false);
 
         $this->repo->setPdoDriver($pdo);
 
@@ -166,18 +166,19 @@ class MariaDbTrackingRepositoryTest extends TestCase
         $this->repo->delete('2020-01-01', 1, 1);
     }
 
-//    /**
-//     * @throws DatabaseException
-//     */
-//    public function test_delete_ExpectRightMapping(): void
-//    {
-//        $pdo = new PdoStub();
-//        $pdo->setReturnValue(true);
-//
-//        $this->repo->setPdoDriver($pdo);
-//
-//        $this->repo->delete('2020-01-01', 1, 1);
-//    }
+    /**
+     * @throws DatabaseException
+     */
+    public function test_delete_ExpectNoError(): void
+    {
+        $pdo = new PdoStub();
+        $pdo->setExecuteReturnValue(true);
+
+        $this->repo->setPdoDriver($pdo);
+
+        $result = $this->repo->delete('2020-01-01', 1, 1);
+        TestCase::assertTrue($result);
+    }
 
     /**
      * @throws DatabaseException
@@ -185,7 +186,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_save_ExpectException(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue(false);
+        $pdo->setExecuteReturnValue(false);
 
         $this->repo->setPdoDriver($pdo);
 
@@ -195,13 +196,19 @@ class MariaDbTrackingRepositoryTest extends TestCase
         $this->repo->save('2020-01-01', 1, 1, Modes::MODE_WORKING, 1579080900);
     }
 
-//    /**
-//     * @throws DatabaseException
-//     */
-//    public function test_save_ExpectRightMapping(): void
-//    {
-//
-//    }
+    /**
+     * @throws DatabaseException
+     */
+    public function test_save_ExpectNoError(): void
+    {
+        $pdo = new PdoStub();
+        $pdo->setExecuteReturnValue(true);
+
+        $this->repo->setPdoDriver($pdo);
+
+        $result = $this->repo->save('2020-01-01', 1, 1, Modes::MODE_WORKING, 1579080900);
+        TestCase::assertTrue($result);
+    }
 
     /**
      * @throws DatabaseException
@@ -209,7 +216,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     public function test_update_ExpectException(): void
     {
         $pdo = new PdoStub();
-        $pdo->setReturnValue(false);
+        $pdo->setExecuteReturnValue(false);
 
         $this->repo->setPdoDriver($pdo);
 
@@ -219,13 +226,19 @@ class MariaDbTrackingRepositoryTest extends TestCase
         $this->repo->update('2020-01-01', 1, 1, Modes::MODE_WORKING, 1579080900, 1579108500, 30, 0);
     }
 
-//    /**
-//     * @throws DatabaseException
-//     */
-//    public function test_update_ExpectRightMapping(): void
-//    {
-//
-//    }
+    /**
+     * @throws DatabaseException
+     */
+    public function test_update_ExpectRightMapping(): void
+    {
+        $pdo = new PdoStub();
+        $pdo->setExecuteReturnValue(true);
+
+        $this->repo->setPdoDriver($pdo);
+
+        $result = $this->repo->update('2020-01-01', 1, 1, Modes::MODE_WORKING, 1579080900, 1579108500, 30, 0);
+        TestCase::assertTrue($result);
+    }
 
     private function clearEnv(): void
     {

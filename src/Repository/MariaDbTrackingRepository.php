@@ -90,7 +90,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
     /**
      * @inheritDoc
      */
-    public function delete(string $date, int $employerId, int $employerWorkingTimeId): void
+    public function delete(string $date, int $employerId, int $employerWorkingTimeId): bool
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_DELETE);
         $result = $statement->execute([
@@ -102,12 +102,14 @@ class MariaDbTrackingRepository implements RepositoryInterface
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
         }
+
+        return true;
     }
 
     /**
      * @inheritDoc
      */
-    public function save(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp): void
+    public function save(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp): bool
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_SAVE);
         $result = $statement->execute([
@@ -121,12 +123,14 @@ class MariaDbTrackingRepository implements RepositoryInterface
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
         }
+
+        return true;
     }
 
     /**
      * @inheritDoc
      */
-    public function update(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp, int $endTimestamp, int $break, int $delta): void
+    public function update(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp, int $endTimestamp, int $break, int $delta): bool
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_UPDATE);
         $result = $statement->execute([
@@ -143,6 +147,8 @@ class MariaDbTrackingRepository implements RepositoryInterface
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
         }
+
+        return true;
     }
 
     /**
