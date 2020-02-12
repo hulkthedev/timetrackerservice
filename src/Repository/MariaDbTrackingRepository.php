@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Repository\Exception\DatabaseException;
-use App\Repository\Mapper\MariaDbToJsonMapper as Mapper;
+use App\Repository\Mapper\MariaDbMapper as Mapper;
 use App\Usecase\ResultCodes;
 use PDO;
 
@@ -159,7 +159,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             $port = getenv('MARIADB_PORT');
 
             if (empty($host) || empty($user) || empty($password) || empty($name) || empty($port)) {
-                throw new DatabaseException(ResultCodes::PDO_EXCEPTION);
+                throw new DatabaseException(ResultCodes::PDO_EXCEPTION_NO_LOGIN_DATA);
             }
 
             $this->pdo = new PDO("mysql:dbname=$name;host=$host;port=$port;charset=utf8mb4", $user, $password, [
@@ -168,5 +168,13 @@ class MariaDbTrackingRepository implements RepositoryInterface
         }
 
         return $this->pdo;
+    }
+
+    /**
+     * @param PDO $pdo
+     */
+    public function setPdoDriver(PDO $pdo): void
+    {
+        $this->pdo = $pdo;
     }
 }

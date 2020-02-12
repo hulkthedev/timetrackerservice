@@ -11,7 +11,7 @@ use Exception;
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
-class MariaDbToJsonMapper
+class MariaDbMapper
 {
     /**
      * @param array $list
