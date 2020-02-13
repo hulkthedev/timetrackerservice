@@ -5,6 +5,7 @@
 **/.git*
 **/tests
 **/bin
+**/api
 
 junit.xml
 clover.xml
