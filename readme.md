@@ -1,22 +1,23 @@
 # [REST] TimeTracker Service
 
-This Service is a PHP Symfony5 time tracker for your working times.
+Time tracking Service made with Symfony5
 
 ## Installation
 
-Use Docker to setup the application.
+Just run docker
 
 ```bash
 ./build.sh
 ```
 
+## Testing
 
-
-
+```bash
+./phpunit.sh
+```
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 ## Creator
 [Makereadme](https://www.makeareadme.com/)

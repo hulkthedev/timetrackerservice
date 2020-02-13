@@ -2,7 +2,7 @@
   "name": "sym5/timetrackerservice",
   "version": "1.0.0",
   "type": "project",
-  "license": "proprietary",
+  "license": "MIT",
   "description": "REST based TimeTracker Service",
   "authors": [{
       "name": "Alexej Beirith",
