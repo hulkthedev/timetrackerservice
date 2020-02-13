@@ -1,6 +1,6 @@
 # [REST] TimeTracker Service
 
-Time tracking Service made with Symfony5
+Time tracking service made with Symfony5
 
 ## Installation
 
