@@ -6,6 +6,7 @@ use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
 use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
+use DateTime;
 use PDOException;
 use Throwable;
 
@@ -21,7 +22,10 @@ class UpdateEntityInteractor extends BaseInteractor
     public function execute(UpdateEntityRequest $request): BaseResponse
     {
         try {
-            $delta = $this->calculateDelta($request->begin, $request->end, $request->break);
+            $config = $this->configRepository->getConfig($request->employerId, $request->employerWorkingTimeId);
+            $delta = $this->calculationService->setConfig($config)
+                ->calculateDelta($request->begin, $request->end, $request->break);
+
             $this->repository->update(
                 $request->date,
                 $request->employerId,
@@ -41,16 +45,5 @@ class UpdateEntityInteractor extends BaseInteractor
         }
 
         return new UpdateEntityResponse(ResultCodes::SUCCESS);
-    }
-
-    /**
-     * @param int $beginTimestamp
-     * @param int $endTimestamp
-     * @param int $break
-     * @return int
-     */
-    private function calculateDelta(int $beginTimestamp, int $endTimestamp, int $break): int
-    {
-        return 0;
     }
 }

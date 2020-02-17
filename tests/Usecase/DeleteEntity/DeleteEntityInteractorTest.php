@@ -3,7 +3,9 @@
 namespace App\Tests\Usecase\DeleteEntity;
 
 use App\Repository\Mapper\MariaDbMapper;
+use App\Repository\MariaDbConfigRepositoryStub;
 use App\Repository\MariaDbTrackingRepository;
+use App\Service\CalculationService;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
@@ -20,7 +22,12 @@ class DeleteEntityInteractorTest extends TestCase
 {
     public function test_execute_expectDatabaseExceptionHandling(): void
     {
-        $interactor = new DeleteEntityInteractor(new MariaDbTrackingRepositoryDatabaseExceptionStub());
+        $interactor = new DeleteEntityInteractor(
+            new MariaDbTrackingRepositoryDatabaseExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new DeleteEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::ENTITY_CAN_NOT_BE_DELETED, $response->presentResponse()['code']);
@@ -30,7 +37,12 @@ class DeleteEntityInteractorTest extends TestCase
 
     public function test_execute_expectPDOExceptionHandling(): void
     {
-        $interactor = new DeleteEntityInteractor(new MariaDbTrackingRepositoryPDOExceptionStub());
+        $interactor = new DeleteEntityInteractor(
+            new MariaDbTrackingRepositoryPDOExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new DeleteEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::PDO_EXCEPTION, $response->presentResponse()['code']);
@@ -40,7 +52,12 @@ class DeleteEntityInteractorTest extends TestCase
 
     public function test_execute_expectExceptionHandling(): void
     {
-        $interactor = new DeleteEntityInteractor(new MariaDbTrackingRepositoryExceptionStub());
+        $interactor = new DeleteEntityInteractor(
+            new MariaDbTrackingRepositoryExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new DeleteEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::UNKNOWN_ERROR, $response->presentResponse()['code']);
@@ -56,7 +73,7 @@ class DeleteEntityInteractorTest extends TestCase
         $repo = new MariaDbTrackingRepository(new MariaDbMapper());
         $repo->setPdoDriver($pdo);
 
-        $interactor = new DeleteEntityInteractor($repo);
+        $interactor = new DeleteEntityInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());
         $response = $interactor->execute(new DeleteEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);

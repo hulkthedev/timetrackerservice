@@ -11,5 +11,4 @@ class AddEntityRequest extends BaseRequest
 {
     public string $mode;
     public int $begin;
-    public int $break;
 }

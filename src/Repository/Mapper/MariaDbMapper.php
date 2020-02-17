@@ -2,6 +2,7 @@
 
 namespace App\Repository\Mapper;
 
+use App\Entity\Config;
 use App\Entity\Day;
 use App\Entity\Week;
 use App\Usecase\BaseInteractor;
@@ -13,6 +14,21 @@ use Exception;
  */
 class MariaDbMapper
 {
+    /**
+     * @param array $list
+     * @return Config
+     */
+    public function mapToConfig(array $list): Config
+    {
+        $config = new Config();
+        $config->vacationDays = $list['vacation_days'];
+        $config->workingTime = $list['working_time'];
+        $config->workingBreak = $list['working_break'];
+        $config->timeAccount = $list['time_account'];
+
+        return $config;
+    }
+
     /**
      * @param array $list
      * @return array

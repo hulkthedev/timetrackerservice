@@ -76,7 +76,7 @@ App\Usecase\UpdateEntity\UpdateEntityRequest:
           type: string
       - Choice:
           message: 'Parameter mode have not a valid choice'
-          choices: ['working', 'sick', 'overtime', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
+          choices: ['working', 'sick', 'overtime', 'home_office', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
 
 App\Usecase\AddEntity\AddEntityRequest:
   properties:
@@ -106,7 +106,7 @@ App\Usecase\AddEntity\AddEntityRequest:
           type: string
       - Choice:
           message: 'Parameter mode have not a valid choice'
-          choices: ['working', 'sick', 'overtime', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
+          choices: ['working', 'sick', 'overtime', 'home_office', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
 
 App\Usecase\AddMultiEntities\AddMultiEntitiesRequest:
   properties:
@@ -143,4 +143,4 @@ App\Usecase\AddMultiEntities\AddMultiEntitiesRequest:
           type: string
       - Choice:
           message: 'Parameter mode have not a valid choice'
-          choices: ['working', 'sick', 'overtime', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']
+          choices: ['working', 'sick', 'overtime', 'home_office', 'vacation', 'unpaid_vacation', 'holiday', 'half_day_holiday']

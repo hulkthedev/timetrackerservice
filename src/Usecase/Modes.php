@@ -10,6 +10,7 @@ class Modes
     public const MODE_WORKING = 'working';
     public const MODE_SICK = 'sick';
     public const MODE_OVERTIME = 'overtime';
+    public const MODE_HOME_OFFICE = 'home_office';
 
     public const MODE_VACATION = 'vacation';
     public const MODE_UNPAID_VACATION = 'unpaid_vacation';

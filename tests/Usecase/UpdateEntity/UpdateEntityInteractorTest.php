@@ -3,7 +3,9 @@
 namespace App\Tests\Usecase\UpdateEntity;
 
 use App\Repository\Mapper\MariaDbMapper;
+use App\Repository\MariaDbConfigRepositoryStub;
 use App\Repository\MariaDbTrackingRepository;
+use App\Service\CalculationService;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
@@ -20,7 +22,12 @@ class UpdateEntityInteractorTest extends TestCase
 {
     public function test_execute_expectDatabaseExceptionHandling(): void
     {
-        $interactor = new UpdateEntityInteractor(new MariaDbTrackingRepositoryDatabaseExceptionStub());
+        $interactor = new UpdateEntityInteractor(
+            new MariaDbTrackingRepositoryDatabaseExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new UpdateEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED, $response->presentResponse()['code']);
@@ -30,7 +37,12 @@ class UpdateEntityInteractorTest extends TestCase
 
     public function test_execute_expectPDOExceptionHandling(): void
     {
-        $interactor = new UpdateEntityInteractor(new MariaDbTrackingRepositoryPDOExceptionStub());
+        $interactor = new UpdateEntityInteractor(
+            new MariaDbTrackingRepositoryPDOExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new UpdateEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::PDO_EXCEPTION, $response->presentResponse()['code']);
@@ -40,7 +52,12 @@ class UpdateEntityInteractorTest extends TestCase
 
     public function test_execute_expectExceptionHandling(): void
     {
-        $interactor = new UpdateEntityInteractor(new MariaDbTrackingRepositoryExceptionStub());
+        $interactor = new UpdateEntityInteractor(
+            new MariaDbTrackingRepositoryExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new UpdateEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::UNKNOWN_ERROR, $response->presentResponse()['code']);
@@ -56,7 +73,7 @@ class UpdateEntityInteractorTest extends TestCase
         $repo = new MariaDbTrackingRepository(new MariaDbMapper());
         $repo->setPdoDriver($pdo);
 
-        $interactor = new UpdateEntityInteractor($repo);
+        $interactor = new UpdateEntityInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());
         $response = $interactor->execute(new UpdateEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);

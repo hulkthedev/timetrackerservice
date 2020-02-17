@@ -2,8 +2,9 @@
 
 namespace App\Usecase;
 
-use App\Repository\MariaDbTrackingRepository;
+use App\Repository\MariaDbConfigRepository;
 use App\Repository\RepositoryInterface;
+use App\Service\CalculationService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -16,13 +17,22 @@ class BaseInteractor
     public const DEFAULT_DATE_TIME_FORMAT = self::DEFAULT_DATE_FORMAT . ' ' . self::DEFAULT_TIME_FORMAT;
 
     protected RepositoryInterface $repository;
+    protected MariaDbConfigRepository $configRepository;
+    protected CalculationService $calculationService;
 
     /**
      * @param RepositoryInterface $repository
+     * @param MariaDbConfigRepository $configRepository
+     * @param CalculationService $calculationService
      */
-    public function __construct(RepositoryInterface $repository)
-    {
+    public function __construct(
+        RepositoryInterface $repository,
+        MariaDbConfigRepository $configRepository,
+        CalculationService $calculationService
+    ) {
         $this->repository = $repository;
+        $this->configRepository = $configRepository;
+        $this->calculationService = $calculationService;
     }
 
     /**

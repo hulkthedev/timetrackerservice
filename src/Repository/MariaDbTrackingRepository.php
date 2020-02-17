@@ -3,14 +3,13 @@
 namespace App\Repository;
 
 use App\Repository\Exception\DatabaseException;
-use App\Repository\Mapper\MariaDbMapper as Mapper;
 use App\Usecase\ResultCodes;
 use PDO;
 
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
-class MariaDbTrackingRepository implements RepositoryInterface
+class MariaDbTrackingRepository extends MariaDbBaseRepository implements RepositoryInterface
 {
     private const STORED_PROCEDURE_SAVE = 'CALL SaveEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp)';
     private const STORED_PROCEDURE_UPDATE = 'CALL UpdateEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp, :end_timestamp, :break, :delta)';
@@ -18,19 +17,6 @@ class MariaDbTrackingRepository implements RepositoryInterface
     private const STORED_PROCEDURE_GET_ALL = 'CALL GetAllEntities(:employerId)';
     private const STORED_PROCEDURE_GET_BY_ID = 'CALL GetEntityById(:employerId, :employerWorkingTimeId, :date)';
     private const STORED_PROCEDURE_GET_BY_DATE = 'CALL GetEntityByDate(:employerId, :date)';
-
-    private const DATABASE_CONNECTION_TIMEOUT = 30;
-
-    private ?PDO $pdo = null;
-    private Mapper $mapper;
-
-    /**
-     * @param Mapper $mapper
-     */
-    public function __construct(Mapper $mapper)
-    {
-        $this->mapper = $mapper;
-    }
 
     /**
      * @inheritDoc
@@ -45,7 +31,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
         }
 
-        return $this->mapper->mapToList($list);
+        return $this->getMapper()->mapToList($list);
     }
 
     /**
@@ -64,7 +50,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::ENTITY_NOT_FOUND);
         }
 
-        return $this->mapper->mapToList($entity);
+        return $this->getMapper()->mapToList($entity);
     }
 
     /**
@@ -84,7 +70,7 @@ class MariaDbTrackingRepository implements RepositoryInterface
             throw new DatabaseException(ResultCodes::ENTITY_NOT_FOUND);
         }
 
-        return [$this->mapper->mapEntityToDay(reset($entity))];
+        return [$this->getMapper()->mapEntityToDay(reset($entity))];
     }
 
     /**
@@ -149,38 +135,5 @@ class MariaDbTrackingRepository implements RepositoryInterface
         }
 
         return true;
-    }
-
-    /**
-     * @return PDO
-     * @throws DatabaseException
-     */
-    private function getPdoDriver(): PDO
-    {
-        if (null === $this->pdo) {
-            $host = getenv('MARIADB_HOST');
-            $user = getenv('MARIADB_USER');
-            $password = getenv('MARIADB_PASSWORD');
-            $name = getenv('MARIADB_NAME');
-            $port = getenv('MARIADB_PORT');
-
-            if (empty($host) || empty($user) || empty($password) || empty($name) || empty($port)) {
-                throw new DatabaseException(ResultCodes::PDO_EXCEPTION_NO_LOGIN_DATA);
-            }
-
-            $this->pdo = new PDO("mysql:dbname=$name;host=$host;port=$port;charset=utf8mb4", $user, $password, [
-                PDO::ATTR_TIMEOUT => self::DATABASE_CONNECTION_TIMEOUT
-            ]);
-        }
-
-        return $this->pdo;
-    }
-
-    /**
-     * @param PDO $pdo
-     */
-    public function setPdoDriver(PDO $pdo): void
-    {
-        $this->pdo = $pdo;
     }
 }

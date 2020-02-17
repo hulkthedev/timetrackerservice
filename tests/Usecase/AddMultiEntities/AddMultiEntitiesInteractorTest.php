@@ -3,7 +3,9 @@
 namespace App\Tests\Usecase\AddMultiEntities;
 
 use App\Repository\Mapper\MariaDbMapper;
+use App\Repository\MariaDbConfigRepositoryStub;
 use App\Repository\MariaDbTrackingRepository;
+use App\Service\CalculationService;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
@@ -20,7 +22,12 @@ class AddMultiEntitiesInteractorTest extends TestCase
 {
     public function test_execute_expectDatabaseExceptionHandling(): void
     {
-        $interactor = new AddMultiEntitiesInteractor(new MariaDbTrackingRepositoryDatabaseExceptionStub());
+        $interactor = new AddMultiEntitiesInteractor(
+            new MariaDbTrackingRepositoryDatabaseExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new AddMultiEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::ENTITY_CAN_NOT_BE_SAVED, $response->presentResponse()['code']);
@@ -30,7 +37,12 @@ class AddMultiEntitiesInteractorTest extends TestCase
 
     public function test_execute_expectPDOExceptionHandling(): void
     {
-        $interactor = new AddMultiEntitiesInteractor(new MariaDbTrackingRepositoryPDOExceptionStub());
+        $interactor = new AddMultiEntitiesInteractor(
+            new MariaDbTrackingRepositoryPDOExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new AddMultiEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::PDO_EXCEPTION, $response->presentResponse()['code']);
@@ -40,7 +52,12 @@ class AddMultiEntitiesInteractorTest extends TestCase
 
     public function test_execute_expectExceptionHandling(): void
     {
-        $interactor = new AddMultiEntitiesInteractor(new MariaDbTrackingRepositoryExceptionStub());
+        $interactor = new AddMultiEntitiesInteractor(
+            new MariaDbTrackingRepositoryExceptionStub(),
+            new MariaDbConfigRepositoryStub(),
+            new CalculationService()
+        );
+
         $response = $interactor->execute(new AddMultiEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::UNKNOWN_ERROR, $response->presentResponse()['code']);
@@ -56,7 +73,7 @@ class AddMultiEntitiesInteractorTest extends TestCase
         $repo = new MariaDbTrackingRepository(new MariaDbMapper());
         $repo->setPdoDriver($pdo);
 
-        $interactor = new AddMultiEntitiesInteractor($repo);
+        $interactor = new AddMultiEntitiesInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());
         $response = $interactor->execute(new AddMultiEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);
