@@ -19,11 +19,11 @@ BEGIN
         ,empl.name AS employer_name
         ,empl_wrktm.description AS working_time_description
     FROM employer AS empl
-            INNER JOIN working_times AS wrk_tms
-                ON empl.id = wrk_tms.employer_id
-            INNER JOIN employer_working_time AS empl_wrktm
-                ON empl.id = empl_wrktm.employer_id
-                    AND wrk_tms.employer_working_time_id = empl_wrktm.id
+        INNER JOIN working_times AS wrk_tms
+            ON empl.id = wrk_tms.employer_id
+        INNER JOIN employer_working_time AS empl_wrktm
+            ON empl.id = empl_wrktm.employer_id
+            AND wrk_tms.employer_working_time_id = empl_wrktm.id
     WHERE wrk_tms.employer_id = _employerId
     LIMIT 100;
 END //
@@ -49,11 +49,11 @@ BEGIN
         ,empl.name AS employer_name
         ,empl_wrktm.description AS working_time_description
     FROM employer AS empl
-             INNER JOIN working_times AS wrk_tms
-                ON empl.id = wrk_tms.employer_id
-             INNER JOIN employer_working_time AS empl_wrktm
-                ON empl.id = empl_wrktm.employer_id
-                    AND wrk_tms.employer_working_time_id = empl_wrktm.id
+        INNER JOIN working_times AS wrk_tms
+            ON empl.id = wrk_tms.employer_id
+        INNER JOIN employer_working_time AS empl_wrktm
+            ON empl.id = empl_wrktm.employer_id
+            AND wrk_tms.employer_working_time_id = empl_wrktm.id
     WHERE empl.id = _employerId
         AND wrk_tms.date = _date;
 END //
@@ -80,11 +80,11 @@ BEGIN
         ,empl.name AS employer_name
         ,empl_wrktm.description AS working_time_description
     FROM employer AS empl
-             INNER JOIN working_times AS wrk_tms
-                ON empl.id = wrk_tms.employer_id
-             INNER JOIN employer_working_time AS empl_wrktm
-                ON empl.id = empl_wrktm.employer_id
-                    AND wrk_tms.employer_working_time_id = empl_wrktm.id
+        INNER JOIN working_times AS wrk_tms
+            ON empl.id = wrk_tms.employer_id
+        INNER JOIN employer_working_time AS empl_wrktm
+            ON empl.id = empl_wrktm.employer_id
+            AND wrk_tms.employer_working_time_id = empl_wrktm.id
     WHERE empl.id = _employerId
         AND wrk_tms.date = _date
         AND wrk_tms.employer_working_time_id = _employerWorkingTimeId;
@@ -94,14 +94,14 @@ DELIMITER ;
 /**********************************************************************************************************************/
 DELIMITER //
 CREATE PROCEDURE DeleteEntity (
-    IN _employerId SMALLINT,
+    IN _employer_id SMALLINT,
     IN _employerWorkingTimeId SMALLINT,
     IN _date DATE
 )
 BEGIN
     DELETE FROM working_times
     WHERE date = _date
-        AND employer_id = _employerId
+        AND employer_id = _employer_id
         AND employer_working_time_id = _employerWorkingTimeId;
 END //
 DELIMITER ;
@@ -109,11 +109,11 @@ DELIMITER ;
 /**********************************************************************************************************************/
 DELIMITER //
 CREATE PROCEDURE SaveEntity (
-    IN _employer_id SMALLINT,
-    IN _employer_working_time_id SMALLINT,
+    IN _employerId SMALLINT,
+    IN _employerWorkingTimeId SMALLINT,
     IN _date DATE,
     IN _mode VARCHAR(20),
-    IN _begin_timestamp INT
+    IN _beginTimestamp INT
 )
 BEGIN
     INSERT INTO working_times (
@@ -124,11 +124,11 @@ BEGIN
         ,begin_timestamp
     )
     VALUES (
-         _employer_id
-        ,_employer_working_time_id
+         _employerId
+        ,_employerWorkingTimeId
         ,_date
         ,_mode
-        ,_begin_timestamp
+        ,_beginTimestamp
    );
 END //
 DELIMITER ;
@@ -136,24 +136,46 @@ DELIMITER ;
 /**********************************************************************************************************************/
 DELIMITER //
 CREATE PROCEDURE UpdateEntity (
-    IN _employer_id SMALLINT,
-    IN _employer_working_time_id SMALLINT,
+    IN _employerId SMALLINT,
+    IN _employerWorkingTimeId SMALLINT,
     IN _date DATE,
     IN _mode VARCHAR(20),
-    IN _begin_timestamp INT,
-    IN _end_timestamp INT,
+    IN _beginTimestamp INT,
+    IN _endTimestamp INT,
     IN _break TINYINT,
     IN _delta SMALLINT
 )
 BEGIN
     UPDATE working_times
     SET mode = _mode,
-        begin_timestamp = _begin_timestamp,
-        end_timestamp = _end_timestamp,
+        begin_timestamp = _beginTimestamp,
+        end_timestamp = _endTimestamp,
         break = _break,
         delta = _delta
     WHERE date = _date
-        AND employer_id = _employer_id
-        AND employer_working_time_id = _employer_working_time_id;
+        AND employer_id = _employerId
+        AND employer_working_time_id = _employerWorkingTimeId;
+END //
+DELIMITER ;
+
+/**********************************************************************************************************************/
+DELIMITER //
+CREATE PROCEDURE GetEmployerConfig (
+    IN _employerId SMALLINT,
+    IN _employerWorkingTimeId SMALLINT
+)
+BEGIN
+    SELECT
+         empl.vacation_days
+        ,empl_wrktm.working_time
+        ,empl_wrktm.working_break
+        ,empl_timeacc.time_account
+    FROM employer AS empl
+        INNER JOIN employer_working_time AS empl_wrktm
+            ON empl.id = empl_wrktm.employer_id
+        INNER JOIN employer_time_account AS empl_timeacc
+            ON empl.id = empl_timeacc.employer_id
+    WHERE empl.id = _employerId
+    AND empl_wrktm.id = _employerWorkingTimeId;
 END //
 DELIMITER ;
