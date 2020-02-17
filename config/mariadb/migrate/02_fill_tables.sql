@@ -62,5 +62,9 @@ VALUES
     (@employer_id, @working_time_id, '2020-02-05', 'working', 1580881980, 1580929380, 30),
     (@employer_id, @working_time_id, '2020-02-06', 'working', 1580979480, 1581006900, 30),
     (@employer_id, @working_time_id, '2020-02-07', 'working', 1581066840, 1581096900, 30),
-    (@employer_id, 2,                '2020-02-07', 'working', 1581098400, 1581109200, 15),
-    (@employer_id, @working_time_id, '2020-02-10', 'working', 1581325620, 1581356100, 30);
+
+    (@employer_id, @working_time_id, '2020-02-10', 'working', 1581325620, 1581356100, 30),
+    (@employer_id, @working_time_id, '2020-02-11', 'working', 1581412560, 1581441420, 30),
+    (@employer_id, @working_time_id, '2020-02-12', 'working', 1581500340, 1581535440, 30),
+    (@employer_id, @working_time_id, '2020-02-13', 'working', 1581584640, 1581609900, 30),
+    (@employer_id, @working_time_id, '2020-02-14', 'working', 1581671880, 1581694620, 30);

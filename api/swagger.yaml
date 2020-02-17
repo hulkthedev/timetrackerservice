@@ -30,7 +30,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessEntityResponse'
         400:
-          description: invalid parameter syntax
+          description: invalid parameter
           content:
             'application/json':
               schema:
@@ -78,7 +78,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessEntityResponse'
         400:
-          description: invalid parameter syntax
+          description: invalid parameter
           content:
             'application/json':
               schema:
@@ -130,7 +130,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessEntityResponse'
         400:
-          description: invalid parameter / syntax
+          description: invalid parameter
           content:
             'application/json':
               schema:
@@ -176,7 +176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessEntityResponse'
         400:
-          description: invalid parameter syntax
+          description: invalid parameter
           content:
             'application/json':
               schema:
@@ -290,7 +290,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SuccessEntityResponse'
         400:
-          description: invalid parameter syntax
+          description: invalid parameter
           content:
             'application/json':
               schema:
@@ -357,7 +357,7 @@ components:
             |   1  | Success
         entities:
           type: array
-          description: only filled on get methods
+          description: filled on get methods, else empty object
           items:
             type: object
             properties:
@@ -415,10 +415,9 @@ components:
             properties:
               begin:
                 $ref: '#/components/requestBodies/begin'
-              break:
-                $ref: '#/components/requestBodies/break'
               mode:
                 $ref: '#/components/requestBodies/mode'
+
     UpdateEntityBody:
       required: true
       description: required parameter for update
@@ -435,6 +434,7 @@ components:
                 $ref: '#/components/requestBodies/break'
               mode:
                 $ref: '#/components/requestBodies/mode'
+
     begin:
       required: true
       description: timestamp of beginning working
