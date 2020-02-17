@@ -100,10 +100,6 @@ App\Usecase\AddEntity\AddEntityRequest:
           maxMessage: 'Parameter begin should have the length of a valid timestamp'
           min: 10
           max: 13
-    break:
-      - Type:
-          message: 'Parameter break should be of type integer'
-          type: integer
     mode:
       - Type:
           message: 'Parameter mode should be of type string'
