@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 class BaseInteractor
 {
     public const DEFAULT_DATE_FORMAT = 'Y-m-d';
-    public const DEFAULT_TIME_FORMAT = 'H:i:s';
+    public const DEFAULT_TIME_FORMAT = 'H:i';
     public const DEFAULT_DATE_TIME_FORMAT = self::DEFAULT_DATE_FORMAT . ' ' . self::DEFAULT_TIME_FORMAT;
 
     protected RepositoryInterface $repository;

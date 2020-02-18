@@ -105,11 +105,44 @@ class MariaDbMapper
             $weekEntity = new Week();
             $weekEntity->weekNo = $weekNo;
             $weekEntity->weekDays = $week;
-            $weekEntity->weekDelta = 0;
+            $weekEntity->weekDelta = $this->calculateWeekDelta($week);
+            $weekEntity->weekDeltaFormatted = $this->getFormattedWeekDelta($weekEntity->weekDelta);
 
             $result[] = $weekEntity;
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $week
+     * @return int
+     */
+    private function calculateWeekDelta(array $week): int
+    {
+        $delta = 0;
+        foreach ($week as $day) {
+            $delta += reset($day)->delta;
+        }
+
+        return $delta;
+    }
+
+    /**
+     * @param int $delta
+     * @return string
+     */
+    private function getFormattedWeekDelta(int $delta): string
+    {
+        $operator = '';
+        if ($delta < 0) {
+            $operator = '-';
+            $delta *= -1;
+        }
+
+        $hours = str_pad(floor($delta / 60), 2, '0', STR_PAD_LEFT);
+        $minutes = str_pad(($delta % 60), 2, '0', STR_PAD_LEFT);
+
+        return "{$operator}{$hours}:{$minutes}";
     }
 }

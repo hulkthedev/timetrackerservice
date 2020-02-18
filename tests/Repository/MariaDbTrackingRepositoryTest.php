@@ -141,9 +141,9 @@ class MariaDbTrackingRepositoryTest extends TestCase
         TestCase::assertInstanceOf(Day::class, $day);
         TestCase::assertEquals('2020-01-06', $day->date);
         TestCase::assertEquals(Modes::MODE_WORKING, $day->mode);
-        TestCase::assertEquals('09:08:00', $day->begin);
-        TestCase::assertEquals('16:52:00', $day->end);
-        TestCase::assertEquals(0, $day->delta);
+        TestCase::assertEquals('09:08', $day->begin);
+        TestCase::assertEquals('16:52', $day->end);
+        TestCase::assertEquals(30, $day->delta);
         TestCase::assertEquals(1, $day->employerId);
         TestCase::assertEquals('Google', $day->employerName);
         TestCase::assertEquals(1, $day->workingTimeId);

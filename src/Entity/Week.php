@@ -10,4 +10,5 @@ class Week
     public array $weekDays;
     public int $weekNo;
     public int $weekDelta;
+    public string $weekDeltaFormatted;
 }
