@@ -9,11 +9,14 @@ use App\Entity\Config;
  */
 class ConfigStub extends Config
 {
-    public function __construct()
+    /**
+     * @param array $override
+     */
+    public function __construct(array $override = [])
     {
-        $this->vacationDays = 30;
-        $this->workingTime = 480;
-        $this->workingBreak = 30;
-        $this->timeAccount = 0;
+        $this->vacationDays = $override['vacationDays'] ?? 30;
+        $this->workingTime = $override['workingTime'] ?? 462;
+        $this->workingBreak = $override['workingBreak'] ?? 30;
+        $this->timeAccount = $override['timeAccount'] ?? 0;
     }
 }

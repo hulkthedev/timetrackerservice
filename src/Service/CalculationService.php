@@ -4,13 +4,18 @@ namespace App\Service;
 
 use App\Entity\Config;
 use DateTime;
-use Exception;
 
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class CalculationService
 {
+    private const SHORT_WORKING_DAY_IN_MINUTES = 360;
+    private const SHORT_WORKING_DAY_BREAK = 0;
+
+    private const LONG_WORKING_DAY_IN_MINUTES = 540;
+    private const LONG_WORKING_DAY_BREAK = 45;
+
     private Config $config;
 
     /**
@@ -28,7 +33,6 @@ class CalculationService
      * @param int $endTimestamp
      * @param int $break
      * @return int
-     * @throws Exception
      */
     public function calculateDelta(int $beginTimestamp, int $endTimestamp, int $break): int
     {
@@ -44,10 +48,7 @@ class CalculationService
             $deltaInMinutes = ($timeInterval->h * 60) + $timeInterval->i;
 
             /** subtract breaking time from delta */
-            $break = ($this->config->workingBreak >= $break)
-                ? $this->config->workingBreak
-                : $break;
-
+            $break = $this->getBreakTimeByDuration($deltaInMinutes, $break);
             $deltaInMinutes -= $break;
 
             /** calculate overtime */
@@ -57,5 +58,27 @@ class CalculationService
         }
 
         return $deltaInMinutes;
+    }
+
+    /**
+     * @param int $break
+     * @param int $workingTime
+     * @return int
+     */
+    private function getBreakTimeByDuration(int $workingTime, int $break): int
+    {
+        if ($workingTime < self::SHORT_WORKING_DAY_IN_MINUTES) {
+            return $break > self::SHORT_WORKING_DAY_BREAK ? $break : self::SHORT_WORKING_DAY_BREAK;
+        }
+
+        if ($workingTime > self::LONG_WORKING_DAY_IN_MINUTES) {
+            return $break > self::LONG_WORKING_DAY_BREAK ? $break : self::LONG_WORKING_DAY_BREAK;
+        }
+
+        if ($this->config->workingBreak > $break) {
+            return $this->config->workingBreak;
+        }
+
+        return $break;
     }
 }
