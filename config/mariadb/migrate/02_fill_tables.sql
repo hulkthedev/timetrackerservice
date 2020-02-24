@@ -12,6 +12,7 @@ SET @employer_id = LAST_INSERT_ID();
 INSERT INTO employer_working_time
     (employer_id, description, working_time, working_break)
 VALUES
+    (@employer_id, 'Kurzarbeit', 240,  0),
     (@employer_id, 'Vollzeit', 462, 30);
 
 SET @working_time_id = LAST_INSERT_ID();
@@ -68,4 +69,8 @@ VALUES
     (@employer_id, @working_time_id, '2020-02-13', 'working', 1581584640, 1581609900, 30, -71),
     (@employer_id, @working_time_id, '2020-02-14', 'working', 1581671880, 1581694620, 30, -98),
 
-    (@employer_id, @working_time_id, '2020-02-17', 'working', 1581930360, 1581962700, 30, 0);
+    (@employer_id, @working_time_id, '2020-02-17', 'working', 1581930360, 1581962700, 30, 0),
+    (@employer_id, @working_time_id, '2020-02-18', 'working', 0, 0, 0, 0),
+    (@employer_id, @working_time_id, '2020-02-19', 'sick', 0, 0, 0, 0),
+    (@employer_id, @working_time_id, '2020-02-20', 'sick', 0, 0, 0, 0),
+    (@employer_id, @working_time_id, '2020-02-21', 'working', 1581930360, 1581962700, 30, 0);

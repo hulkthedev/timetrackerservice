@@ -7,8 +7,8 @@ namespace App\Entity;
  */
 class Week
 {
-    public array $weekDays;
-    public int $weekNo;
-    public int $weekDelta;
-    public string $weekDeltaFormatted;
+    public int $no;
+    public int $delta;
+    public string $deltaFormatted;
+    public array $days;
 }

@@ -7,11 +7,11 @@ namespace App\Entity;
  */
 class Day extends Employer
 {
-    public int $weekDay;
-    public string $mode;
+    public int $weekday;
     public string $date;
     public string $begin;
     public string $end;
+    public string $mode;
     public int $delta;
     public int $break;
 }

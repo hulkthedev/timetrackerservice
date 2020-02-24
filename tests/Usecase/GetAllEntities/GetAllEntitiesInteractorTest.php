@@ -85,8 +85,8 @@ class GetAllEntitiesInteractorTest extends TestCase
         /** @var Week $week */
         $week = reset($response->presentResponse()['entities']);
         TestCase::assertInstanceOf(Week::class, $week);
-        TestCase::assertInstanceOf(Day::class, reset($week->weekDays[0]));
-        TestCase::assertEquals(1, count($week->weekDays));
-        TestCase::assertEquals(2, $week->weekNo);
+        TestCase::assertInstanceOf(Day::class, reset($week->days[0]));
+        TestCase::assertEquals(1, count($week->days));
+        TestCase::assertEquals(2, $week->no);
     }
 }

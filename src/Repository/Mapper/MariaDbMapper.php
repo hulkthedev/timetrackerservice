@@ -41,7 +41,6 @@ class MariaDbMapper
             $days[] = $this->mapEntityToDay($entity);
         }
 
-
         return $this->sort($days);
     }
 
@@ -52,8 +51,12 @@ class MariaDbMapper
      */
     public function mapEntityToDay(array $entity): Day
     {
-        $beginDateTime = new DateTime();
-        $beginDateTime->setTimestamp($entity['begin_timestamp']);
+        if ($entity['begin_timestamp'] === '0') {
+            $beginDateTime = new DateTime($entity['date']);
+        } else {
+            $beginDateTime = new DateTime();
+            $beginDateTime->setTimestamp($entity['begin_timestamp']);
+        }
 
         $endDateTime = new DateTime();
         $endDateTime->setTimestamp($entity['end_timestamp']);
@@ -61,7 +64,7 @@ class MariaDbMapper
         $day = new Day();
         $day->mode = $entity['mode'];
         $day->date = $entity['date'];
-        $day->weekDay = $beginDateTime->format('N');
+        $day->weekday = $beginDateTime->format('N');
         $day->begin = $beginDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
         $day->end = $endDateTime->format(BaseInteractor::DEFAULT_TIME_FORMAT);
         $day->delta = $entity['delta'];
@@ -83,19 +86,12 @@ class MariaDbMapper
      */
     private function sort(array $dayList): array
     {
-        $daysByDate = [];
-
-        /** @var Day $day */
-        foreach ($dayList as $day) {
-            $daysByDate[$day->date][] = $day;
-        }
-
         $daysByWeek = [];
 
         /** @var Day $day */
-        foreach ($daysByDate as $date => $days) {
-            $weekNo = (int)(new DateTime($date))->format('W');
-            $daysByWeek[$weekNo][] = $days;
+        foreach ($dayList as $day) {
+            $weekNo = (int)(new DateTime($day->date))->format('W');
+            $daysByWeek[$weekNo][] = $day;
         }
 
         $result = [];
@@ -103,10 +99,10 @@ class MariaDbMapper
         /** @var Day $day */
         foreach ($daysByWeek as $weekNo => $week) {
             $weekEntity = new Week();
-            $weekEntity->weekNo = $weekNo;
-            $weekEntity->weekDays = $week;
-            $weekEntity->weekDelta = $this->calculateWeekDelta($week);
-            $weekEntity->weekDeltaFormatted = $this->getFormattedWeekDelta($weekEntity->weekDelta);
+            $weekEntity->no = $weekNo;
+            $weekEntity->days = $week;
+//            $weekEntity->delta = $this->calculateWeekDelta($week);
+//            $weekEntity->deltaFormatted = $this->getFormattedWeekDelta($weekEntity->delta); FEHLER HIER
 
             $result[] = $weekEntity;
         }

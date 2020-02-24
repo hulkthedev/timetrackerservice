@@ -67,9 +67,9 @@ class MariaDbTrackingRepositoryTest extends TestCase
         /** @var Week $week */
         $week = reset($result);
         TestCase::assertInstanceOf(Week::class, $week);
-        TestCase::assertInstanceOf(Day::class, reset($week->weekDays[0]));
-        TestCase::assertEquals(5, count($week->weekDays));
-        TestCase::assertEquals(2, $week->weekNo);
+        TestCase::assertInstanceOf(Day::class, reset($week->days[0]));
+        TestCase::assertEquals(5, count($week->days));
+        TestCase::assertEquals(2, $week->no);
     }
 
     /**
@@ -103,9 +103,9 @@ class MariaDbTrackingRepositoryTest extends TestCase
         /** @var Week $week */
         $week = reset($result);
         TestCase::assertInstanceOf(Week::class, $week);
-        TestCase::assertInstanceOf(Day::class, reset($week->weekDays[0]));
-        TestCase::assertEquals(1, count($week->weekDays));
-        TestCase::assertEquals(2, $week->weekNo);
+        TestCase::assertInstanceOf(Day::class, reset($week->days[0]));
+        TestCase::assertEquals(1, count($week->days));
+        TestCase::assertEquals(2, $week->no);
     }
 
     /**
