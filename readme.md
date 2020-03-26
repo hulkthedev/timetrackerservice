@@ -4,16 +4,14 @@ Time tracking service made with Symfony5
 
 ## Installation
 
-Just run docker
-
 ```bash
-./build.sh
+./build/build.sh
 ```
 
 ## Testing
 
 ```bash
-./phpunit.sh
+./build/phpunit.sh
 ```
 
 ## License
