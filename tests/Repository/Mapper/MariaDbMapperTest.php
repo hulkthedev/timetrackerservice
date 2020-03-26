@@ -31,7 +31,7 @@ class MariaDbMapperTest extends TestCase
         /** @var Week $week */
         $week = reset($result);
         TestCase::assertInstanceOf(Week::class, $week);
-        TestCase::assertInstanceOf(Day::class, reset($week->days[0]));
+        TestCase::assertInstanceOf(Day::class, $week->days[0]);
         TestCase::assertEquals(5, count($week->days));
         TestCase::assertEquals(2, $week->no);
         TestCase::assertEquals(63, $week->delta);
