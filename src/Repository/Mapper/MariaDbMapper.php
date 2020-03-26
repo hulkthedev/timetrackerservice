@@ -112,7 +112,7 @@ class MariaDbMapper
 
     /**
      * @param array $week
-     * @return int
+     * @return intd
      */
     private function calculateWeekDelta(array $week): int
     {
