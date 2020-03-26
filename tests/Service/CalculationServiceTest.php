@@ -27,7 +27,7 @@ class CalculationServiceTest extends TestCase
             /** 08:00-13:59 = 359min (under 6h working time = 0min break!!!) - 0min break = 359min - 462min should work time = -103min overtime */
             [1582012800, 1582034340, 0, -103],
             /** 08:00-14:01 = 361min (over 6h working time = 30min break!!!) - 30min break = 331min - 462min should work time = -131 Minutes overtime */
-            [1582012800, 1582034460, 15, -131],
+            [1582012800, 1582034460, 155, -131],
 
             /** 08:00-18:00 = 600min (over 9h working time = 45min break!!!) - 45min = 555min - 462min should work time = 93min overtime */
             [1582012800, 1582048800, 30, 93],
