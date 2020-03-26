@@ -13,5 +13,5 @@ chmod +x phpunit.sh
 ./phpunit.sh
 
 # add push hook
-#chmod +x hook.sh
-#./hook.sh
+chmod +x hook.sh
+./hook.sh
