@@ -12,7 +12,6 @@ SET @employer_id = LAST_INSERT_ID();
 INSERT INTO employer_working_time
     (employer_id, description, working_time, working_break)
 VALUES
-    (@employer_id, 'Kurzarbeit', 240,  0),
     (@employer_id, 'Vollzeit', 462, 30);
 
 SET @working_time_id = LAST_INSERT_ID();
@@ -69,8 +68,38 @@ VALUES
     (@employer_id, @working_time_id, '2020-02-13', 'working', 1581584640, 1581609900, 30, -71),
     (@employer_id, @working_time_id, '2020-02-14', 'working', 1581671880, 1581694620, 30, -98),
 
-    (@employer_id, @working_time_id, '2020-02-17', 'working', 1581930360, 1581962700, 30, 0),
-    (@employer_id, @working_time_id, '2020-02-18', 'working', 0, 0, 0, 0),
+    (@employer_id, @working_time_id, '2020-02-17', 'working', 1581930360, 1581962700, 30, 47),
+    (@employer_id, @working_time_id, '2020-02-18', 'working', 1582018680, 1582052640, 30, 59),
     (@employer_id, @working_time_id, '2020-02-19', 'sick', 0, 0, 0, 0),
     (@employer_id, @working_time_id, '2020-02-20', 'sick', 0, 0, 0, 0),
-    (@employer_id, @working_time_id, '2020-02-21', 'working', 1581930360, 1581962700, 30, 0);
+    (@employer_id, @working_time_id, '2020-02-21', 'working', 1582277880, 1582310280, 30, 48),
+
+    (@employer_id, @working_time_id, '2020-02-24', 'working', 1582540140, 1582567020, 30, -44),
+    (@employer_id, @working_time_id, '2020-02-25', 'working', 1582624140, 1582652640, 30, -17),
+    (@employer_id, @working_time_id, '2020-02-26', 'working', 1582704000, 1582737480, 30, 51),
+    (@employer_id, @working_time_id, '2020-02-27', 'working', 1582795080, 1582819140, 30, -91),
+    (@employer_id, @working_time_id, '2020-02-28', 'working', 1582883280, 1582907160, 30, -94),
+
+    (@employer_id, @working_time_id, '2020-03-02', 'working', 1583140920, 1583170980, 30, 9),
+    (@employer_id, @working_time_id, '2020-03-03', 'working', 1583227080, 1583258700, 30, 35),
+    (@employer_id, @working_time_id, '2020-03-04', 'working', 1583314440, 1583345040, 30, 18),
+    (@employer_id, @working_time_id, '2020-03-05', 'working', 1583400540, 1583426100, 30, -66),
+    (@employer_id, @working_time_id, '2020-03-06', 'working', 1583486880, 1583510880, 30, -92),
+
+    (@employer_id, @working_time_id, '2020-03-09', 'working', 1583745180, 1583777220, 30, 42),
+    (@employer_id, @working_time_id, '2020-03-10', 'working', 1583831940, 1583863560, 30, 35),
+    (@employer_id, @working_time_id, '2020-03-11', 'working', 1583919480, 1583952240, 30, 39),
+    (@employer_id, @working_time_id, '2020-03-12', 'working', 1584005940, 1584029100, 30, -106),
+    (@employer_id, @working_time_id, '2020-03-13', 'vacation', 0, 0, 0, 0),
+
+    (@employer_id, @working_time_id, '2020-03-16', 'working', 1584348840, 1584379440, 30, 18),
+    (@employer_id, @working_time_id, '2020-03-17', 'home_office', 1584437400, 1584468000, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-18', 'home_office', 1584523800, 1584554400, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-19', 'home_office', 1584610200, 1584640800, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-20', 'home_office', 1584696600, 1584727200, 30, 0),
+
+    (@employer_id, @working_time_id, '2020-03-23', 'home_office', 1584955800, 1584986100, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-24', 'home_office', 1585042200, 1585072500, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-25', 'home_office', 1585128600, 1585158900, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-26', 'home_office', 1585211400, 1585241700, 30, 0),
+    (@employer_id, @working_time_id, '2020-03-27', 'home_office', 1585301400, 1585331700, 30, 0);

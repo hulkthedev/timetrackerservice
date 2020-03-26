@@ -101,8 +101,8 @@ class MariaDbMapper
             $weekEntity = new Week();
             $weekEntity->no = $weekNo;
             $weekEntity->days = $week;
-//            $weekEntity->delta = $this->calculateWeekDelta($week);
-//            $weekEntity->deltaFormatted = $this->getFormattedWeekDelta($weekEntity->delta); FEHLER HIER
+            $weekEntity->delta = $this->calculateWeekDelta($week);
+            $weekEntity->deltaFormatted = $this->getFormattedWeekDelta($weekEntity->delta);
 
             $result[] = $weekEntity;
         }
@@ -118,7 +118,7 @@ class MariaDbMapper
     {
         $delta = 0;
         foreach ($week as $day) {
-            $delta += reset($day)->delta;
+            $delta += $day->delta;
         }
 
         return $delta;
