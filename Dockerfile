@@ -1,4 +1,5 @@
 FROM php:7.4.1-fpm-alpine3.10
+
 LABEL maintainer="fatal.error.27@gmail.com"
 
 RUN apk update && \
@@ -8,22 +9,14 @@ RUN apk update && \
         bash \
         php7-dev
 
+RUN pecl install xdebug-2.9.4 && \
+    docker-php-ext-enable xdebug
+
+RUN docker-php-ext-install pdo_mysql
+
 RUN echo Europe/Berlin > /etc/timezone
 
-RUN pecl install \
-        xdebug-2.9.4 \
-    && \
-    docker-php-ext-enable \
-        xdebug \
-    && \
-    docker-php-ext-install \
-        pdo_mysql \
-    && \
-    echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-    echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-    echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-    echo "xdebug.remote_host=localhost" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
-    echo "xdebug.idekey=phpstorm" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
+COPY ./config/xdebug/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 COPY . /var/www/html
 
