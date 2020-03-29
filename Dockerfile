@@ -16,8 +16,6 @@ RUN docker-php-ext-install pdo_mysql
 
 RUN echo Europe/Berlin > /etc/timezone
 
-COPY ./config/xdebug/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
-
 COPY . /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html && \
