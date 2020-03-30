@@ -1,0 +1,11 @@
+version: "3"
+services:
+  php-timetrackerservice:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    image: php-timetrackerservice:latest
+    restart: "always"
+    env_file:
+      - config/environment/prod/common.env
+      - config/environment/prod/mariadb.env
