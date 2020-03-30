@@ -1,15 +1,5 @@
-version: "3"
+version: "3.7"
 services:
-  timetrackerservice-nginx:
-    image: nginx:latest
-    ports:
-      - "3699:80"
-    volumes:
-      - .:/var/www/html
-      - ./infrastructure/nginx/dev/conf.d-default.conf:/etc/nginx/conf.d/default.conf
-    links:
-      - timetrackerservice-php
-
   timetrackerservice-php:
     build:
       context: .
@@ -22,6 +12,16 @@ services:
       - .:/var/www/html
     links:
       - timetrackerservice-mariadb
+
+  timetrackerservice-nginx:
+    image: nginx:latest
+    ports:
+      - "3699:80"
+    volumes:
+      - .:/var/www/html
+      - ./infrastructure/nginx/dev/conf.d-default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - timetrackerservice-php
 
   timetrackerservice-mariadb:
     image: mariadb
