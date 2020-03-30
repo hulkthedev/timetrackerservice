@@ -12,6 +12,7 @@ class BaseResponse
     private int $code = ResultCodes::SUCCESS;
     private int $httpStatus = Response::HTTP_OK;
     private array $entities;
+    private array $headers = [];
 
     /**
      * @param int $code
@@ -37,6 +38,22 @@ class BaseResponse
     public function setHttpStatus(int $httpStatus): void
     {
         $this->httpStatus = $httpStatus;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * @param array $headers
+     */
+    public function setHeaders(array $headers): void
+    {
+        $this->headers = $headers;
     }
 
     /**

@@ -87,7 +87,7 @@ class EntityController extends DefaultController
         }
 
         $response = $interactor->execute($result);
-        return $this->createResponse($response->presentResponse(), $response->getHttpStatus());
+        return $this->createResponse($response->presentResponse(), $response->getHttpStatus(), $response->getHeaders());
     }
 
     /**

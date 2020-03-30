@@ -39,6 +39,7 @@ class AddEntityInteractor extends BaseInteractor
 
         $response = new AddEntityResponse(ResultCodes::SUCCESS);
         $response->setHttpStatus(Response::HTTP_CREATED);
+        $response->setHeaders(['Location' => "/{$request->date}"]);
 
         return $response;
     }
