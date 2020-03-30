@@ -1,23 +1,23 @@
-.idea
-*.properties
-*.sh
-
-**/.git*
+**/api
 **/tests
 **/bin
-**/api
+**/build
 
-junit.xml
-clover.xml
+**/.git*
+**/.idea*
+
+*.sh
+*.xml
+*.md
+*.dockerignore
 
 composer.json
 composer.lock
 
 symfony.lock
 
-Dockerfile
+Dockerfile*
+docker-compose*
 
 package-lock.json
 package.json
-
-README.md
