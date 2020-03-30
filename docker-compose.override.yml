@@ -10,6 +10,8 @@ services:
       - infrastructure/environment/dev/mariadb.env
     volumes:
       - .:/var/www/html
+    expose:
+      - "9000"
     links:
       - timetrackerservice-mariadb
 
