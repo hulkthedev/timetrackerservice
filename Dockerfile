@@ -1,4 +1,4 @@
-FROM php-fpm-alpine:7.4.4-prod
+FROM php-fpm-alpine:prod
 
 LABEL maintainer="fatal.error.27@gmail.com"
 

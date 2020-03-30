@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: php-fpm-alpine:7.4.4-prod
+    image: php-fpm-alpine:prod
     restart: "always"
     env_file:
       - infrastructure/environment/prod/common.env
