@@ -1,0 +1,23 @@
+version: "3"
+services:
+   timetrackerservice-php-base:
+    image: php-fpm-alpine:7.4.4-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+   timetrackerservice-php-dev:
+     image: php-fpm-alpine:7.4.4-dev
+     build:
+       context: .
+       dockerfile: dockerfiles/dev/Dockerfile
+     depends_on:
+       - timetrackerservice-php-base
+
+   timetrackerservice-php-prod:
+     image: php-fpm-alpine:7.4.4-prod
+     build:
+       context: .
+       dockerfile: dockerfiles/prod/Dockerfile
+     depends_on:
+       - timetrackerservice-php-base

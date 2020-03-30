@@ -5,7 +5,7 @@ set -eo pipefail
 BUILD_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 PROJECT_DIR="$(dirname "${BUILD_DIR}")";
 
-SERVICE=timetrackerservice_php-timetrackerservice_1
+SERVICE=timetrackerservice_timetrackerservice-php_1
 CONTAINER=$(docker ps -qf "name=${SERVICE}")
 
 if [[ $CONTAINER == '' ]]; then

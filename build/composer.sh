@@ -5,7 +5,7 @@ set -eo pipefail
 BUILD_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 PROJECT_DIR="$(dirname "${BUILD_DIR}")";
 
-CACHE_VOLUME=composer-cache-timetrackerservice
+CACHE_VOLUME=timetrackerservice-composer-cache
 
 IMAGE="composer"
 TAG="1.10.1"

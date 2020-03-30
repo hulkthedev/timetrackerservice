@@ -23,10 +23,22 @@ chmod +x composer.sh
     --apcu-autoloader \
     --optimize-autoloader
 
+# build images
+cd "${PROJECT_DIR}/infrastructure" || exit
+docker-compose -f docker-compose.yml build
+
+# run container
+cd "${PROJECT_DIR}" || exit
+docker-compose up -d
+
 # run unit tests
+cd "${BUILD_DIR}" || exit
 chmod +x phpunit.sh
 ./phpunit.sh
 
 # add push hook
 chmod +x hook.sh
 ./hook.sh
+
+# list images
+docker images
