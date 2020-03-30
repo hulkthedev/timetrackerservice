@@ -44,7 +44,7 @@ class AddMultiEntitiesInteractor extends BaseInteractor
         }
 
         $response = new AddMultiEntitiesResponse(ResultCodes::SUCCESS);
-        $response->setHttpStatus(Response::HTTP_CREATED);;
+        $response->setHttpStatus(Response::HTTP_CREATED);
 
         return $response;
     }

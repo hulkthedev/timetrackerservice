@@ -38,7 +38,7 @@ class AddEntityInteractor extends BaseInteractor
         }
 
         $response = new AddEntityResponse(ResultCodes::SUCCESS);
-        $response->setHttpStatus(Response::HTTP_CREATED);;
+        $response->setHttpStatus(Response::HTTP_CREATED);
 
         return $response;
     }
