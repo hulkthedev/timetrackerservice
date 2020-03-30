@@ -21,3 +21,9 @@ docker-compose*
 
 package-lock.json
 package.json
+
+config/environment
+config/mariadb
+config/nginx
+config/routes
+config/xdebug
