@@ -13,6 +13,6 @@ RUN pecl install xdebug-2.9.4 && \
 
 COPY . /tmp/infrastructure
 
-RUN cp /tmp/infrastructure/xdebug/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+RUN cp /tmp/infrastructure/ini/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
     cp /tmp/infrastructure/nginx/dev/logging.conf /etc/nginx/conf.d/logging.conf && \
     rm -rf /tmp/*

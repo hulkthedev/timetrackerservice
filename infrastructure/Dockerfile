@@ -7,9 +7,15 @@ RUN apk update && \
     apk add --no-cache \
         bash
 
-RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install pdo_mysql \
+    opcache
 
 RUN echo Europe/Berlin > /etc/timezone
 
 RUN mkdir /etc/nginx && \
     mkdir /etc/nginx/conf.d
+
+COPY . /tmp/infrastructure
+
+RUN cp /tmp/infrastructure/ini/opcache.ini /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
+    rm -rf /tmp/*
