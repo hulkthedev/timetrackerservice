@@ -8,11 +8,15 @@ RUN apk update && \
         $PHPIZE_DEPS \
         php7-dev
 
-RUN pecl install xdebug-2.9.4 && \
-    docker-php-ext-enable xdebug
+RUN pecl install apcu-5.1.18 \
+    xdebug-2.9.4
+
+RUN docker-php-ext-enable apcu \
+    xdebug
 
 COPY . /tmp/infrastructure
 
-RUN cp /tmp/infrastructure/ini/xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+RUN cp /tmp/infrastructure/ini/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    cp /tmp/infrastructure/ini/docker-php-ext-apcu.ini /usr/local/etc/php/conf.d/docker-php-ext-apcu.ini && \
     cp /tmp/infrastructure/nginx/dev/logging.conf /etc/nginx/conf.d/logging.conf && \
     rm -rf /tmp/*

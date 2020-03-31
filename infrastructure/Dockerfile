@@ -17,5 +17,5 @@ RUN mkdir /etc/nginx && \
 
 COPY . /tmp/infrastructure
 
-RUN cp /tmp/infrastructure/ini/opcache.ini /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
+RUN cp /tmp/infrastructure/ini/docker-php-ext-opcache.ini /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini && \
     rm -rf /tmp/*
