@@ -11,6 +11,7 @@ use PDO;
  */
 class MariaDbTrackingRepository extends MariaDbBaseRepository implements RepositoryInterface
 {
+    private const CACHE_KEY_PREFIX = 'working_times_';
     private const STORED_PROCEDURE_SAVE = 'CALL SaveEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp)';
     private const STORED_PROCEDURE_UPDATE = 'CALL UpdateEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp, :end_timestamp, :break, :delta)';
     private const STORED_PROCEDURE_DELETE = 'CALL DeleteEntity(:employerId, :employerWorkingTimeId, :date)';
@@ -23,15 +24,23 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
      */
     public function getAll(int $employerId): array
     {
+        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
+        if (false !== $list = $this->getFromCache($key)) {
+            return $list;
+        }
+
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_ALL);
         $statement->execute(['employerId' => $employerId]);
 
-        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
-        if (empty($list)) {
+        $unmappedList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($unmappedList)) {
             throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
         }
 
-        return $this->getMapper()->mapToList($list);
+        $list = $this->getMapper()->mapToList($unmappedList);
+        $this->storeInCache($key, $list);
+
+        return $list;
     }
 
     /**
@@ -89,6 +98,9 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
         }
 
+        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
+        $this->clearCacheByKey($key);
+
         return true;
     }
 
@@ -109,6 +121,9 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
         }
+
+        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
+        $this->clearCacheByKey($key);
 
         return true;
     }
@@ -133,6 +148,9 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
         }
+
+        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
+        $this->clearCacheByKey($key);
 
         return true;
     }

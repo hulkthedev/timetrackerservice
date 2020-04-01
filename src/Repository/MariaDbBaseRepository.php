@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper as Mapper;
+use App\Service\CacheService;
 use App\Usecase\ResultCodes;
 use PDO;
 
@@ -16,21 +17,54 @@ class MariaDbBaseRepository
 
     private ?PDO $pdo = null;
     private Mapper $mapper;
+    private CacheService $cache;
 
     /**
      * @param Mapper $mapper
+     * @param CacheService $cache
      */
-    public function __construct(Mapper $mapper)
+    public function __construct(Mapper $mapper, CacheService $cache)
     {
         $this->mapper = $mapper;
+        $this->cache = $cache;
     }
 
     /**
+     * @info for unittests only
      * @param PDO $pdo
      */
     public function setPdoDriver(PDO $pdo): void
     {
         $this->pdo = $pdo;
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @param bool $overwrite
+     * @return bool
+     */
+    protected function storeInCache(string $key, $value, bool $overwrite = true): bool
+    {
+        return $this->cache->set($key, $value, $overwrite);
+    }
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
+    protected function getFromCache(string $key)
+    {
+        return $this->cache->get($key);
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    protected function clearCacheByKey(string $key): bool
+    {
+        return $this->cache->delete($key);
     }
 
     /**

@@ -7,6 +7,7 @@ use App\Entity\Week;
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper;
 use App\Repository\MariaDbTrackingRepository;
+use App\Tests\Service\ApcuCacheServiceStub;
 use App\Usecase\Modes;
 use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +21,10 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repo = new MariaDbTrackingRepository(new MariaDbMapper());
+        $this->repo = new MariaDbTrackingRepository(
+            new MariaDbMapper(),
+            new ApcuCacheServiceStub()
+        );
     }
 
     /**

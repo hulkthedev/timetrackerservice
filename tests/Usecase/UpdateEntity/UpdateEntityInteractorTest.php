@@ -10,6 +10,7 @@ use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
 use App\Tests\Repository\PdoStub;
+use App\Tests\Service\ApcuCacheServiceStub;
 use App\Usecase\ResultCodes;
 use App\Usecase\UpdateEntity\UpdateEntityInteractor;
 use PHPUnit\Framework\TestCase;
@@ -70,7 +71,8 @@ class UpdateEntityInteractorTest extends TestCase
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(true);
 
-        $repo = new MariaDbTrackingRepository(new MariaDbMapper());
+        $cache = new ApcuCacheServiceStub();
+        $repo = new MariaDbTrackingRepository(new MariaDbMapper(), $cache);
         $repo->setPdoDriver($pdo);
 
         $interactor = new UpdateEntityInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());
@@ -79,5 +81,7 @@ class UpdateEntityInteractorTest extends TestCase
         TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);
         TestCase::assertEquals(Response::HTTP_OK, $response->getHttpStatus());
         TestCase::assertEmpty($response->presentResponse()['entities']);
+
+        TestCase::assertEmpty($cache->getAll());
     }
 }

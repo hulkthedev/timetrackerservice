@@ -12,6 +12,7 @@ use PDO;
  */
 class MariaDbConfigRepository extends MariaDbBaseRepository
 {
+    private const CACHE_KEY_PREFIX = 'config_';
     private const STORED_PROCEDURE_GET_CONFIG = 'CALL GetEmployerConfig(:employerId, :employerWorkingTimeId)';
 
     /**
@@ -21,6 +22,25 @@ class MariaDbConfigRepository extends MariaDbBaseRepository
      * @throws DatabaseException
      */
     public function getConfig(int $employerId, int $employerWorkingTimeId): Config
+    {
+        $key = self::CACHE_KEY_PREFIX . "{$employerId}_{$employerWorkingTimeId}";
+        if (false !== $config = $this->getFromCache($key)) {
+            return $config;
+        }
+
+        $config = $this->getFromRepo($employerId, $employerWorkingTimeId);
+        $this->storeInCache($key, $config);
+
+        return $config;
+    }
+
+    /**
+     * @param int $employerId
+     * @param int $employerWorkingTimeId
+     * @return Config
+     * @throws DatabaseException
+     */
+    private function getFromRepo(int $employerId, int $employerWorkingTimeId): Config
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_CONFIG);
         $result = $statement->execute([

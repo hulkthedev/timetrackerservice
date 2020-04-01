@@ -13,6 +13,7 @@ use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
 use App\Tests\Repository\PdoStub;
+use App\Tests\Service\ApcuCacheServiceStub;
 use App\Usecase\GetAllEntities\GetAllEntitiesInteractor;
 use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
@@ -73,7 +74,8 @@ class GetAllEntitiesInteractorTest extends TestCase
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue(MariaDbFetcher::get());
 
-        $repo = new MariaDbTrackingRepository(new MariaDbMapper());
+        $cache = new ApcuCacheServiceStub();
+        $repo = new MariaDbTrackingRepository(new MariaDbMapper(), $cache);
         $repo->setPdoDriver($pdo);
 
         $interactor = new GetAllEntitiesInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());
@@ -88,5 +90,6 @@ class GetAllEntitiesInteractorTest extends TestCase
         TestCase::assertInstanceOf(Day::class, $week->days[0]);
         TestCase::assertEquals(1, count($week->days));
         TestCase::assertEquals(2, $week->no);
+        TestCase::assertCount(1, $cache->getAll());
     }
 }
