@@ -7,12 +7,12 @@ use App\Repository\Mapper\MariaDbMapper;
 use App\Repository\MariaDbConfigRepositoryStub;
 use App\Repository\MariaDbTrackingRepository;
 use App\Service\CalculationService;
+use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Tests\Repository\MariaDbFetcher;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
 use App\Tests\Repository\PdoStub;
-use App\Tests\Service\ApcuCacheServiceStub;
 use App\Usecase\GetEntity\GetEntityInteractor;
 use App\Usecase\Modes;
 use App\Usecase\ResultCodes;
@@ -74,7 +74,7 @@ class GetEntityInteractorTest extends TestCase
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue(MariaDbFetcher::get());
 
-        $repo = new MariaDbTrackingRepository(new MariaDbMapper(), new ApcuCacheServiceStub());
+        $repo = new MariaDbTrackingRepository(new MariaDbMapper(), new ApcuCacheItemPoolStub());
         $repo->setPdoDriver($pdo);
 
         $interactor = new GetEntityInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());

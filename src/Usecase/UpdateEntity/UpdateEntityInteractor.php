@@ -8,6 +8,7 @@ use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
 use DateTime;
 use PDOException;
+use Psr\Cache\InvalidArgumentException;
 use Throwable;
 
 /**

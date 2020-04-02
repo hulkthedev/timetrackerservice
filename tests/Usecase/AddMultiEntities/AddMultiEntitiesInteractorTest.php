@@ -6,6 +6,7 @@ use App\Repository\Mapper\MariaDbMapper;
 use App\Repository\MariaDbConfigRepositoryStub;
 use App\Repository\MariaDbTrackingRepository;
 use App\Service\CalculationService;
+use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
@@ -71,7 +72,7 @@ class AddMultiEntitiesInteractorTest extends TestCase
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(true);
 
-        $cache = new ApcuCacheServiceStub();
+        $cache = new ApcuCacheItemPoolStub();
         $repo = new MariaDbTrackingRepository(new MariaDbMapper(), $cache);
         $repo->setPdoDriver($pdo);
 

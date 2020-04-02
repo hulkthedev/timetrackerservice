@@ -2,11 +2,14 @@
 
 namespace App\Repository;
 
+use App\Cache\ApcuCacheItemPool;
+use App\Cache\CacheItem;
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper as Mapper;
-use App\Service\CacheService;
 use App\Usecase\ResultCodes;
 use PDO;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Cache\InvalidArgumentException as CacheInvalidArgumentException;
 
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
@@ -14,19 +17,20 @@ use PDO;
 class MariaDbBaseRepository
 {
     private const DATABASE_CONNECTION_TIMEOUT = 30;
+    private const CACHE_TTL_IN_SECONDS = 86400; // 24h
 
     private ?PDO $pdo = null;
     private Mapper $mapper;
-    private CacheService $cache;
+    private ApcuCacheItemPool $cachePool;
 
     /**
      * @param Mapper $mapper
-     * @param CacheService $cache
+     * @param ApcuCacheItemPool $cachePool
      */
-    public function __construct(Mapper $mapper, CacheService $cache)
+    public function __construct(Mapper $mapper, ApcuCacheItemPool $cachePool)
     {
         $this->mapper = $mapper;
-        $this->cache = $cache;
+        $this->cachePool = $cachePool;
     }
 
     /**
@@ -41,30 +45,54 @@ class MariaDbBaseRepository
     /**
      * @param string $key
      * @param mixed $value
-     * @param bool $overwrite
+     * @param int $expireAt
      * @return bool
      */
-    protected function storeInCache(string $key, $value, bool $overwrite = true): bool
+    protected function saveInCachePool(string $key, $value, int $expireAt = self::CACHE_TTL_IN_SECONDS): bool
     {
-        return $this->cache->set($key, $value, $overwrite);
+        $item = new CacheItem($key);
+        $item->set($value)
+            ->expiresAfter($expireAt);
+
+        return $this->getCache()->save($item);
     }
 
     /**
      * @param string $key
      * @return mixed
      */
-    protected function getFromCache(string $key)
+    protected function getFromCachePool(string $key)
     {
-        return $this->cache->get($key);
+        try {
+            /** @var CacheItem $item */
+            if (false !== $item = $this->getCache()->getItem($key)) {
+                return $item->get();
+            }
+        } catch (CacheInvalidArgumentException $exception) {
+        }
+
+        return false;
     }
 
     /**
      * @param string $key
      * @return bool
      */
-    protected function clearCacheByKey(string $key): bool
+    protected function deleteFromCachePool(string $key): bool
     {
-        return $this->cache->delete($key);
+        try {
+            return $this->getCache()->deleteItem($key);
+        } catch (CacheInvalidArgumentException $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * @return CacheItemPoolInterface
+     */
+    protected function getCache(): CacheItemPoolInterface
+    {
+        return $this->cachePool;
     }
 
     /**

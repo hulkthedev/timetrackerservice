@@ -7,10 +7,11 @@ use App\Entity\Week;
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper;
 use App\Repository\MariaDbTrackingRepository;
-use App\Tests\Service\ApcuCacheServiceStub;
+use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Usecase\Modes;
 use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
@@ -23,12 +24,13 @@ class MariaDbTrackingRepositoryTest extends TestCase
     {
         $this->repo = new MariaDbTrackingRepository(
             new MariaDbMapper(),
-            new ApcuCacheServiceStub()
+            new ApcuCacheItemPoolStub()
         );
     }
 
     /**
      * @throws DatabaseException
+     * @throws InvalidArgumentException
      */
     public function test_getPdoDriver_NoLoginDataIsset_ExpectException(): void
     {
@@ -42,6 +44,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     /**
      * @throws DatabaseException
+     * @throws InvalidArgumentException
      */
     public function test_getAll_NoDataStored_ExpectException(): void
     {
@@ -58,6 +61,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     /**
      * @throws DatabaseException
+     * @throws InvalidArgumentException
      */
     public function test_getAll_ExpectRightMapping(): void
     {

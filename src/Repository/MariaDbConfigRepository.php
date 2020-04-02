@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Cache\CacheItem;
 use App\Entity\Config;
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\ResultCodes;
@@ -12,7 +13,6 @@ use PDO;
  */
 class MariaDbConfigRepository extends MariaDbBaseRepository
 {
-    private const CACHE_KEY_PREFIX = 'config_';
     private const STORED_PROCEDURE_GET_CONFIG = 'CALL GetEmployerConfig(:employerId, :employerWorkingTimeId)';
 
     /**
@@ -23,13 +23,13 @@ class MariaDbConfigRepository extends MariaDbBaseRepository
      */
     public function getConfig(int $employerId, int $employerWorkingTimeId): Config
     {
-        $key = self::CACHE_KEY_PREFIX . "{$employerId}_{$employerWorkingTimeId}";
-        if (false !== $config = $this->getFromCache($key)) {
+        $key = CacheItem::PREFIX_CONFIG . "{$employerId}_{$employerWorkingTimeId}";
+        if (false !== $config = $this->getFromCachePool($key)) {
             return $config;
         }
 
         $config = $this->getFromRepo($employerId, $employerWorkingTimeId);
-        $this->storeInCache($key, $config);
+        $this->saveInCachePool($key, $config, (86400*7)); // 1w
 
         return $config;
     }
@@ -40,7 +40,7 @@ class MariaDbConfigRepository extends MariaDbBaseRepository
      * @return Config
      * @throws DatabaseException
      */
-    private function getFromRepo(int $employerId, int $employerWorkingTimeId): Config
+    protected function getFromRepo(int $employerId, int $employerWorkingTimeId): Config
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_CONFIG);
         $result = $statement->execute([

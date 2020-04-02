@@ -2,16 +2,17 @@
 
 namespace App\Repository;
 
+use App\Cache\CacheItem;
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\ResultCodes;
 use PDO;
+use Psr\Cache\InvalidArgumentException;
 
 /**
  * @author Alexej Beirith <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepository extends MariaDbBaseRepository implements RepositoryInterface
 {
-    private const CACHE_KEY_PREFIX = 'working_times_';
     private const STORED_PROCEDURE_SAVE = 'CALL SaveEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp)';
     private const STORED_PROCEDURE_UPDATE = 'CALL UpdateEntity(:employerId, :employerWorkingTimeId, :date, :mode, :begin_timestamp, :end_timestamp, :break, :delta)';
     private const STORED_PROCEDURE_DELETE = 'CALL DeleteEntity(:employerId, :employerWorkingTimeId, :date)';
@@ -21,11 +22,12 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
 
     /**
      * @inheritDoc
+     * @throws InvalidArgumentException
      */
     public function getAll(int $employerId): array
     {
-        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
-        if (false !== $list = $this->getFromCache($key)) {
+        $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+        if (false !== $list = $this->getFromCachePool($key)) {
             return $list;
         }
 
@@ -38,7 +40,7 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
         }
 
         $list = $this->getMapper()->mapToList($unmappedList);
-        $this->storeInCache($key, $list);
+        $this->saveInCachePool($key, $list);
 
         return $list;
     }
@@ -98,8 +100,11 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
         }
 
-        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
-        $this->clearCacheByKey($key);
+        try {
+            $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+            $this->deleteFromCachePool($key);
+        } catch (InvalidArgumentException $exception) {
+        }
 
         return true;
     }
@@ -122,8 +127,11 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
         }
 
-        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
-        $this->clearCacheByKey($key);
+        try {
+            $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+            $this->deleteFromCachePool($key);
+        } catch (InvalidArgumentException $exception) {
+        }
 
         return true;
     }
@@ -149,8 +157,11 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
         }
 
-        $key = self::CACHE_KEY_PREFIX . "{$employerId}";
-        $this->clearCacheByKey($key);
+        try {
+            $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+            $this->deleteFromCachePool($key);
+        } catch (InvalidArgumentException $exception) {
+        }
 
         return true;
     }
