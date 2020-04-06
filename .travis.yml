@@ -18,7 +18,7 @@ addons:
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+  - travis_retry composer install --no-progress --no-interaction --no-suggest  --prefer-dist --apcu-autoloader --optimize-autoloader
 
 script:
   - phpunit -c tests --coverage-clover=clover.xml --log-junit junit.xml
