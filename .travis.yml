@@ -1,0 +1,25 @@
+language: php
+dist: trusty
+php:
+  - 7.4
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.sonar/cache
+
+git:
+  depth: false
+
+addons:
+  sonarcloud:
+    organization: "hulkthedev"
+    token: ${SONAR_TOKEN}
+
+before_script:
+  - travis_retry composer self-update
+  - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
+
+script:
+  - phpunit -c tests --coverage-clover=clover.xml --log-junit junit.xml
+  - sonar-scanner -Dsonar.login=${SONAR_TOKEN} -Dsonar.verbose=true -X
