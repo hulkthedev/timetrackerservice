@@ -18,9 +18,7 @@ echo "Starting PHPUnit Tests..."
 
 docker exec -i ${SERVICE} ./vendor/bin/phpunit \
     --colors=always \
-    --configuration tests \
-    --coverage-clover=clover.xml \
-    --log-junit junit.xml
+    --configuration tests
 
 exit $?
 
