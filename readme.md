@@ -1,6 +1,14 @@
 # [REST] TimeTracker Service
 
-Time tracking service made with Symfony5
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
+@todo
+add build badge
+add sonar cloud badge
+
+@todo
+add description
+
 
 ## Installation
 
@@ -13,12 +21,3 @@ Time tracking service made with Symfony5
 ```bash
 ./build/phpunit.sh
 ```
-
-## License
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-
-## Creator
-[Makereadme](https://www.makeareadme.com/)
-
-
-
