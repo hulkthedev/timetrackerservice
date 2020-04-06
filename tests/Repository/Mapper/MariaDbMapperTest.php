@@ -5,6 +5,7 @@ namespace App\Tests\Repository\Mapper;
 use App\Entity\Day;
 use App\Entity\Week;
 use App\Repository\Mapper\MariaDbMapper;
+use App\Tests\Entity\ConfigStub;
 use App\Tests\Repository\MariaDbFetcher;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -36,5 +37,16 @@ class MariaDbMapperTest extends TestCase
         TestCase::assertEquals(2, $week->no);
         TestCase::assertEquals(63, $week->delta);
         TestCase::assertEquals('01:03', $week->deltaFormatted);
+    }
+
+    public function test_mapToConfig_expectRightDataMapping(): void
+    {
+        $result = $this->mapper->mapToConfig(MariaDbFetcher::getConfig());
+
+        $config = new ConfigStub();
+        TestCase::assertEquals($result->timeAccount, $config->timeAccount);
+        TestCase::assertEquals($result->workingTime, $config->workingTime);
+        TestCase::assertEquals($result->workingBreak, $config->workingBreak);
+        TestCase::assertEquals($result->vacationDays, $config->vacationDays);
     }
 }
