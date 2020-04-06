@@ -34,7 +34,6 @@
     "ext-iconv": "*",
     "ext-json": "*",
     "ext-pdo": "*",
-    "ext-apcu": "*",
     "symfony/serializer": "^5",
     "symfony/property-access": "^5",
     "symfony/dependency-injection": "^5",
