@@ -9,6 +9,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 /**
  * @author ~albei <fatal.error.27@gmail.com>
+ * @codeCoverageIgnore
  */
 class ApcuCacheItemPool implements CacheItemPoolInterface
 {
@@ -119,6 +120,6 @@ class ApcuCacheItemPool implements CacheItemPoolInterface
      */
     protected function isKeyValid(string $key): bool
     {
-        return preg_match('/[a-z0-9_-]/i', $key) ? true : false;
+        return (bool) preg_match('/[a-z0-9_-]{4,30}/i', $key);
     }
 }

@@ -76,4 +76,12 @@ class ApcuCacheItemPoolStub extends ApcuCacheItemPool
     {
         return $this->pool;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function isKeyValid(string $key): bool
+    {
+        return parent::isKeyValid($key);
+    }
 }

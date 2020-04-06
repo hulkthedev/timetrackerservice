@@ -106,6 +106,7 @@ class MariaDbBaseRepository
     /**
      * @return PDO
      * @throws DatabaseException
+     * @codeCoverageIgnore
      */
     protected function getPdoDriver(): PDO
     {

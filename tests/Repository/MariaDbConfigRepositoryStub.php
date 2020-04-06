@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Config;
 use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Tests\Entity\ConfigStub;
+use Exception;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
@@ -26,7 +27,7 @@ class MariaDbConfigRepositoryStub extends MariaDbConfigRepository
 
     /**
      * @return CacheItemPoolInterface
-     * @throws \Exception
+     * @throws Exception
      */
     public function getCache(): CacheItemPoolInterface
     {
