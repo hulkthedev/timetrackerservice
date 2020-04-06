@@ -2,7 +2,7 @@
 
 namespace App\Cache;
 
-use Exception;
+use App\Cache\Exception\ExtensionNotFoundException;
 use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
@@ -14,12 +14,12 @@ use Psr\Cache\CacheItemPoolInterface;
 class ApcuCacheItemPool implements CacheItemPoolInterface
 {
     /**
-     * @throws Exception
+     * @throws ExtensionNotFoundException
      */
     public function __construct()
     {
         if (!extension_loaded('apcu')) {
-            throw new Exception();
+            throw new ExtensionNotFoundException();
         }
     }
 

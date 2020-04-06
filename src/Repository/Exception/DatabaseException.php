@@ -6,6 +6,7 @@ use Exception;
 
 /**
  * @author ~albei <fatal.error.27@gmail.com>
+ * @codeCoverageIgnore
  */
 class DatabaseException extends Exception
 {

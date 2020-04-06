@@ -9,7 +9,6 @@ use App\Service\CalculationService;
 use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
-use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
 use App\Tests\Repository\PdoStub;
 use App\Usecase\AddMultiEntities\AddMultiEntitiesInteractor;
 use App\Usecase\ResultCodes;
@@ -32,21 +31,6 @@ class AddMultiEntitiesInteractorTest extends TestCase
         $response = $interactor->execute(new AddMultiEntityRequestStub());
 
         TestCase::assertEquals(ResultCodes::ENTITY_CAN_NOT_BE_SAVED, $response->presentResponse()['code']);
-        TestCase::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getHttpStatus());
-        TestCase::assertEmpty($response->presentResponse()['entities']);
-    }
-
-    public function test_execute_expectPDOExceptionHandling(): void
-    {
-        $interactor = new AddMultiEntitiesInteractor(
-            new MariaDbTrackingRepositoryPDOExceptionStub(),
-            new MariaDbConfigRepositoryStub(),
-            new CalculationService()
-        );
-
-        $response = $interactor->execute(new AddMultiEntityRequestStub());
-
-        TestCase::assertEquals(ResultCodes::PDO_EXCEPTION, $response->presentResponse()['code']);
         TestCase::assertEquals(Response::HTTP_INTERNAL_SERVER_ERROR, $response->getHttpStatus());
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }

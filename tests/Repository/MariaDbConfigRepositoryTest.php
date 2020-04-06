@@ -8,6 +8,7 @@ use App\Repository\Mapper\MariaDbMapper;
 use App\Repository\MariaDbConfigRepository;
 use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Tests\Entity\ConfigStub;
+use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -58,6 +59,8 @@ class MariaDbConfigRepositoryTest extends TestCase
         $repo = new MariaDbConfigRepository($this->mapper, $this->pool);
         $repo->setPdoDriver($pdo);
 
+
+
         $result = $repo->getConfig(self::EMPLOYER_ID, self::EMPLOYER_WORKING_TIME_ID);
 
         $config = new ConfigStub();
@@ -65,5 +68,22 @@ class MariaDbConfigRepositoryTest extends TestCase
         TestCase::assertEquals($result->workingTime, $config->workingTime);
         TestCase::assertEquals($result->workingBreak, $config->workingBreak);
         TestCase::assertEquals($result->vacationDays, $config->vacationDays);
+    }
+
+    /**
+     * @throws DatabaseException
+     */
+    public function test_getConfig_ExpectPDOException(): void
+    {
+        $pdo = new PdoStub();
+        $pdo->setExecuteReturnValue(false);
+
+        $repo = new MariaDbConfigRepository($this->mapper, $this->pool);
+        $repo->setPdoDriver($pdo);
+
+        $this->expectException(DatabaseException::class);
+        $this->expectExceptionCode(ResultCodes::PDO_EXCEPTION);
+
+        $repo->getConfig(self::EMPLOYER_ID, self::EMPLOYER_WORKING_TIME_ID);
     }
 }
