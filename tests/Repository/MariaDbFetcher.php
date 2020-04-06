@@ -46,7 +46,7 @@ class MariaDbFetcher
                 'begin_timestamp' => '1578390420',
                 'end_timestamp' => '1578419940',
                 'break' => '30',
-                'delta' => '-12',
+                'delta' => '-120',
                 'employer_name' => 'Google',
                 'working_time_description' => 'Fulltime',
             ],

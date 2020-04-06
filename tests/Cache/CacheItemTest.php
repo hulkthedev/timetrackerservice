@@ -19,6 +19,7 @@ class CacheItemTest extends TestCase
         TestCase::assertEquals('unittest', $item->getKey());
         TestCase::assertEquals(['foor' => 'bar'], $item->get());
         TestCase::assertEquals(112233, $item->getExpiry());
+        TestCase::assertFalse($item->isHit());
 
         $item->expiresAt(new \DateTime()); // no effect
         TestCase::assertEquals(112233, $item->getExpiry());

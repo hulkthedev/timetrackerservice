@@ -51,12 +51,12 @@ class MariaDbMapper
      */
     public function mapEntityToDay(array $entity): Day
     {
-        if ($entity['begin_timestamp'] === '0') {
-            $beginDateTime = new DateTime($entity['date']);
-        } else {
+//        if ($entity['begin_timestamp'] === '0') {
+//            $beginDateTime = new DateTime($entity['date']);
+//        } else {
             $beginDateTime = new DateTime();
             $beginDateTime->setTimestamp($entity['begin_timestamp']);
-        }
+//        }
 
         $endDateTime = new DateTime();
         $endDateTime->setTimestamp($entity['end_timestamp']);

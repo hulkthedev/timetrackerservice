@@ -35,8 +35,8 @@ class MariaDbMapperTest extends TestCase
         TestCase::assertInstanceOf(Day::class, $week->days[0]);
         TestCase::assertEquals(5, count($week->days));
         TestCase::assertEquals(2, $week->no);
-        TestCase::assertEquals(63, $week->delta);
-        TestCase::assertEquals('01:03', $week->deltaFormatted);
+        TestCase::assertEquals(-45, $week->delta);
+        TestCase::assertEquals('-00:45', $week->deltaFormatted);
     }
 
     public function test_mapToConfig_expectRightDataMapping(): void
