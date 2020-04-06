@@ -5,7 +5,7 @@ namespace App\Cache;
 use Psr\Cache\CacheItemInterface;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class CacheItem implements CacheItemInterface
 {

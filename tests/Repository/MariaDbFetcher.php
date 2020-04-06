@@ -3,16 +3,17 @@
 namespace App\Tests\Repository;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbFetcher
 {
     /**
+     * @param int $index
      * @return array
      */
-    public static function get(): array
+    public static function get(int $index = 0): array
     {
-        return [static::getAll()[0]];
+        return [static::getAll()[$index]];
     }
 
     /**

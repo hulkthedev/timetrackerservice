@@ -8,7 +8,7 @@ use App\Tests\Entity\ConfigStub;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbConfigRepositoryStub extends MariaDbConfigRepository
 {

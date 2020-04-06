@@ -5,7 +5,7 @@
   "license": "MIT",
   "description": "REST based TimeTracker Service",
   "authors": [{
-      "name": "Alexej Beirith",
+      "name": "~albei",
       "email": "fatal.error.27@gmail.com",
       "role": "developer"
   }],

@@ -3,10 +3,11 @@
 namespace App\Tests\Cache;
 
 use App\Cache\ApcuCacheItemPool;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class ApcuCacheItemPoolStub extends ApcuCacheItemPool
 {
@@ -31,7 +32,7 @@ class ApcuCacheItemPoolStub extends ApcuCacheItemPool
     public function getItem($key)
     {
         if (!$this->isKeyValid($key)) {
-            throw new \InvalidArgumentException('Cache Key contains unsupported character!');
+            throw new InvalidArgumentException('Cache Key contains unsupported character!');
         }
 
         return $this->hasItem($key)
@@ -61,7 +62,7 @@ class ApcuCacheItemPoolStub extends ApcuCacheItemPool
     public function deleteItem($key)
     {
         if (!$this->isKeyValid($key)) {
-            throw new \InvalidArgumentException('Cache Key contains unsupported character!');
+            throw new InvalidArgumentException('Cache Key contains unsupported character!');
         }
 
         unset($this->pool[$key]);

@@ -3,11 +3,12 @@
 namespace App\Cache;
 
 use Exception;
+use InvalidArgumentException;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class ApcuCacheItemPool implements CacheItemPoolInterface
 {
@@ -27,7 +28,7 @@ class ApcuCacheItemPool implements CacheItemPoolInterface
     public function getItem($key)
     {
         if (!$this->isKeyValid($key)) {
-            throw new \InvalidArgumentException('Cache Key contains unsupported character!');
+            throw new InvalidArgumentException('Cache Key contains unsupported character!');
         }
 
         return apcu_fetch($key);
@@ -68,7 +69,7 @@ class ApcuCacheItemPool implements CacheItemPoolInterface
     public function deleteItem($key)
     {
         if (!$this->isKeyValid($key)) {
-            throw new \InvalidArgumentException('Cache Key contains unsupported character!');
+            throw new InvalidArgumentException('Cache Key contains unsupported character!');
         }
 
         return apcu_delete($key);

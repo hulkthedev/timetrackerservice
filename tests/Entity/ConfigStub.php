@@ -5,7 +5,7 @@ namespace App\Tests\Entity;
 use App\Entity\Config;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class ConfigStub extends Config
 {

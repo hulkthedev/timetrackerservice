@@ -11,14 +11,13 @@ use App\Tests\Repository\MariaDbTrackingRepositoryDatabaseExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryExceptionStub;
 use App\Tests\Repository\MariaDbTrackingRepositoryPDOExceptionStub;
 use App\Tests\Repository\PdoStub;
-use App\Tests\Service\ApcuCacheServiceStub;
 use App\Usecase\AddMultiEntities\AddMultiEntitiesInteractor;
 use App\Usecase\ResultCodes;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class AddMultiEntitiesInteractorTest extends TestCase
 {

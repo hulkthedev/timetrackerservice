@@ -7,7 +7,7 @@ use App\Repository\RepositoryInterface;
 use App\Usecase\ResultCodes;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepositoryDatabaseExceptionStub implements RepositoryInterface
 {

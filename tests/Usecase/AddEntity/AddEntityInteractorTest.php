@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class AddEntityInteractorTest extends TestCase
 {
@@ -75,11 +75,13 @@ class AddEntityInteractorTest extends TestCase
         $repo = new MariaDbTrackingRepository(new MariaDbMapper(), $cache);
         $repo->setPdoDriver($pdo);
 
+        $request = new AddEntityRequestStub();
         $interactor = new AddEntityInteractor($repo, new MariaDbConfigRepositoryStub(), new CalculationService());
-        $response = $interactor->execute(new AddEntityRequestStub());
+        $response = $interactor->execute($request);
 
         TestCase::assertEquals(ResultCodes::SUCCESS, $response->presentResponse()['code']);
         TestCase::assertEquals(Response::HTTP_CREATED, $response->getHttpStatus());
+        TestCase::assertEquals(['Location' => '/' . $request->date],$response->getHeaders());
         TestCase::assertEmpty($response->presentResponse()['entities']);
 
         TestCase::assertEmpty($cache->getAll());

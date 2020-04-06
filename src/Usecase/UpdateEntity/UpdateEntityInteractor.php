@@ -6,13 +6,11 @@ use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
 use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
-use DateTime;
 use PDOException;
-use Psr\Cache\InvalidArgumentException;
 use Throwable;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class UpdateEntityInteractor extends BaseInteractor
 {

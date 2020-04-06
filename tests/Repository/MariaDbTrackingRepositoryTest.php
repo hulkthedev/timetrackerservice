@@ -2,6 +2,7 @@
 
 namespace App\Tests\Repository;
 
+use App\Cache\CacheItem;
 use App\Entity\Day;
 use App\Entity\Week;
 use App\Repository\Exception\DatabaseException;
@@ -10,11 +11,11 @@ use App\Repository\MariaDbTrackingRepository;
 use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Usecase\Modes;
 use App\Usecase\ResultCodes;
+use Exception;
 use PHPUnit\Framework\TestCase;
-use Psr\Cache\InvalidArgumentException;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepositoryTest extends TestCase
 {
@@ -22,15 +23,11 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repo = new MariaDbTrackingRepository(
-            new MariaDbMapper(),
-            new ApcuCacheItemPoolStub()
-        );
+        $this->repo = new MariaDbTrackingRepository(new MariaDbMapper(), new ApcuCacheItemPoolStub());
     }
 
     /**
      * @throws DatabaseException
-     * @throws InvalidArgumentException
      */
     public function test_getPdoDriver_NoLoginDataIsset_ExpectException(): void
     {
@@ -44,7 +41,6 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     /**
      * @throws DatabaseException
-     * @throws InvalidArgumentException
      */
     public function test_getAll_NoDataStored_ExpectException(): void
     {
@@ -61,7 +57,6 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     /**
      * @throws DatabaseException
-     * @throws InvalidArgumentException
      */
     public function test_getAll_ExpectRightMapping(): void
     {
@@ -71,6 +66,34 @@ class MariaDbTrackingRepositoryTest extends TestCase
         $this->repo->setPdoDriver($pdo);
 
         $result = $this->repo->getAll(1);
+
+        /** @var Week $week */
+        $week = reset($result);
+        TestCase::assertInstanceOf(Week::class, $week);
+        TestCase::assertInstanceOf(Day::class, $week->days[0]);
+        TestCase::assertEquals(5, count($week->days));
+        TestCase::assertEquals(2, $week->no);
+    }
+
+    /**
+     * @throws DatabaseException
+     * @throws Exception
+     */
+    public function test_getAllFromCache_ExpectRightMapping(): void
+    {
+        $employerId = 1122;
+
+        $item = new CacheItem(CacheItem::PREFIX_WORKING_TIME . $employerId);
+        $item->set(MariaDbFetcher::getAll());
+
+        $pool = new ApcuCacheItemPoolStub();
+        $pool->save($item);
+
+        $mapper = new MariaDbMapper();
+        $repo = new MariaDbTrackingRepository($mapper, $pool);
+        $dbOutput= $repo->getAll($employerId);
+
+        $result = $mapper->mapToList($dbOutput);
 
         /** @var Week $week */
         $week = reset($result);
