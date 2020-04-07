@@ -7,23 +7,48 @@ use App\Tests\Usecase\GetAllEntities\GetAllEntitiesInteractorStub;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use function dirname;
 
 /**
  * @author ~albei <fatal.error.27@gmail.com>
  */
 class EntityControllerGetAllEntitiesTest extends TestCase
 {
+    private Request $request;
+    private EntityController $controller;
+
+    protected function setUp(): void
+    {
+        $_SERVER['DOCUMENT_ROOT'] = \dirname(__DIR__);
+
+        $this->controller = new EntityController();
+        $this->request = new Request();
+    }
+
+    public function test_GetAllEntities_GivenWrongContentType_Expect_Http415(): void
+    {
+        $response = $this->controller->getAllEntities($this->request, new GetAllEntitiesInteractorStub());
+
+        TestCase::assertEquals(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, $response->getStatusCode());
+        TestCase::assertEquals('{"code":-2,"message":"Invalid content-type"}', $response->getContent());
+    }
+
+    public function test_GetAllEntities_GivenEmptyEmployerId_Expect_Http400(): void
+    {
+        $this->request->headers->set('CONTENT_TYPE', 'application/json');
+        $this->request->query->set('employerId', 'abc');
+
+        $response = $this->controller->getAllEntities($this->request, new GetAllEntitiesInteractorStub());
+
+        TestCase::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        TestCase::assertEquals('{"code":-1,"message":"Invalid params transmitted"}', $response->getContent());
+    }
+
     public function test_GetAllEntities_Expect_Http200(): void
     {
-        $_SERVER['DOCUMENT_ROOT'] = dirname(__DIR__);
+        $this->request->headers->set('CONTENT_TYPE', 'application/json');
+        $this->request->query->set('employerId', 1);
 
-        $request = new Request();
-        $request->headers->set('CONTENT_TYPE', 'application/json');
-        $request->query->set('employerId', 1);
-
-        $controller = new EntityController();
-        $response = $controller->getAllEntities($request, new GetAllEntitiesInteractorStub());
+        $response = $this->controller->getAllEntities($this->request, new GetAllEntitiesInteractorStub());
 
         TestCase::assertEquals(Response::HTTP_OK, $response->getStatusCode());
         TestCase::assertEquals(
