@@ -3,8 +3,12 @@
 namespace App\Tests\Controller;
 
 use App\Controller\EntityController;
+use App\Tests\Usecase\AddEntity\AddEntityInteractorStub;
+use App\Tests\Usecase\AddMultiEntities\AddMultiEntitiesInteractorStub;
+use App\Tests\Usecase\DeleteEntity\DeleteEntityInteractorStub;
 use App\Tests\Usecase\GetAllEntities\GetAllEntitiesInteractorStub;
 use App\Tests\Usecase\GetEntity\GetEntityInteractorStub;
+use App\Tests\Usecase\UpdateEntity\UpdateEntityInteractorStub;
 use App\Usecase\BaseInteractor;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +39,10 @@ class EntityControllerErrorHandlingTest extends TestCase
         return [
             [new GetAllEntitiesInteractorStub(), 'getAllEntities'],
             [new GetEntityInteractorStub(), 'getEntity'],
+            [new DeleteEntityInteractorStub(), 'deleteEntity'],
+            [new UpdateEntityInteractorStub(), 'updateEntity'],
+            [new AddEntityInteractorStub(), 'addEntity'],
+            [new AddMultiEntitiesInteractorStub(), 'addMultiEntities'],
         ];
     }
 
@@ -42,7 +50,7 @@ class EntityControllerErrorHandlingTest extends TestCase
      * @dataProvider methodsDataProvider
      * @param BaseInteractor $interactor
      */
-    public function test_GetEntity_GivenWrongContentType_Expect_Http415(BaseInteractor $interactor, string $method): void
+    public function test_GivenWrongContentType_Expect_Http415(BaseInteractor $interactor, string $method): void
     {
         /** @var Response $response */
         $response = $this->controller->$method($this->request, $interactor);
