@@ -1,33 +1,31 @@
 <?php
 
-namespace App\Tests\Usecase\GetAllEntities;
+namespace App\Tests\Usecase\GetEntity;
 
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper;
 use App\Tests\Repository\MariaDbFetcher;
 use App\Usecase\BaseResponse;
-use App\Usecase\GetAllEntities\GetAllEntitiesInteractor;
-use App\Usecase\GetAllEntities\GetAllEntitiesRequest;
-use App\Usecase\GetAllEntities\GetAllEntitiesResponse;
+use App\Usecase\GetEntity\GetEntityInteractor;
+use App\Usecase\GetEntity\GetEntityRequest;
+use App\Usecase\GetEntity\GetEntityResponse;
 use App\Usecase\ResultCodes;
 use Exception;
 use Throwable;
 
-class GetAllEntitiesInteractorStub extends GetAllEntitiesInteractor
+/**
+ * @author ~albei <fatal.error.27@gmail.com>
+ */
+class GetEntityInteractorStub extends GetEntityInteractor
 {
     public function __construct()
     {
     }
 
-    /**
-     * @param GetAllEntitiesRequest $request
-     * @return BaseResponse
-     * @throws Exception
-     */
-    public function execute(GetAllEntitiesRequest $request): BaseResponse
+    public function execute(GetEntityRequest $request): BaseResponse
     {
         try {
-            return new GetAllEntitiesResponse(ResultCodes::SUCCESS, $this->getList());
+            return new GetEntityResponse(ResultCodes::SUCCESS, $this->getEntity());
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
         } catch (Throwable $throwable) {
@@ -39,9 +37,11 @@ class GetAllEntitiesInteractorStub extends GetAllEntitiesInteractor
      * @return array
      * @throws Exception
      */
-    private function getList()
+    private function getEntity()
     {
+        $entity = MariaDbFetcher::get();
+
         $mapper = new MariaDbMapper();
-        return $mapper->mapToList(MariaDbFetcher::getAll());
+        return [$mapper->mapEntityToDay(reset($entity))];
     }
 }
