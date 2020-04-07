@@ -3,7 +3,8 @@
 namespace App\Tests\Controller;
 
 use App\Controller\EntityController;
-use App\Tests\Usecase\UpdateEntity\UpdateEntityInteractorStub;
+use App\Tests\Usecase\AddEntity\AddEntityInteractorStub;
+use App\Tests\Usecase\AddMultiEntities\AddMultiEntitiesInteractorStub;
 use App\Usecase\Modes;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author ~albei <fatal.error.27@gmail.com>
  */
-class EntityControllerUpdateEntityTest extends TestCase
+class EntityControllerAddMultiEntitiesTest extends TestCase
 {
     private Request $request;
     private EntityController $controller;
@@ -25,9 +26,9 @@ class EntityControllerUpdateEntityTest extends TestCase
         $this->request = new Request();
     }
 
-    public function test_UpdateEntity_GivenWrongContentType_Expect_Http415(): void
+    public function test_AddEntity_GivenWrongContentType_Expect_Http415(): void
     {
-        $response = $this->controller->updateEntity($this->request, new UpdateEntityInteractorStub());
+        $response = $this->controller->addMultiEntities($this->request, new AddMultiEntitiesInteractorStub());
 
         TestCase::assertEquals(Response::HTTP_UNSUPPORTED_MEDIA_TYPE, $response->getStatusCode());
         TestCase::assertEquals('{"code":-2,"message":"Invalid content-type"}', $response->getContent());
@@ -42,13 +43,7 @@ class EntityControllerUpdateEntityTest extends TestCase
             [['begin' => 'abc'], '{"code":-3,"message":"Invalid json"}'],
             [['begin' => 'abcdefghi'], '{"code":-3,"message":"Invalid json"}'],         // to short
             [['begin' => 'abcdefghijklmnop'], '{"code":-3,"message":"Invalid json"}'],  // to long
-
-            [['end' => 'abc'], '{"code":-3,"message":"Invalid json"}'],
-            [['end' => 'abcdefghi'], '{"code":-3,"message":"Invalid json"}'],           // to short
-            [['end' => 'abcdefghijklmnop'], '{"code":-3,"message":"Invalid json"}'],    // to long
-
             [['break' => 'abc'], '{"code":-3,"message":"Invalid json"}'],
-
             [['mode' => 1], '{"code":-3,"message":"Invalid json"}'],
             [['mode' => 'party'], '{"code":-3,"message":"Invalid json"}'],
         ];
@@ -59,7 +54,7 @@ class EntityControllerUpdateEntityTest extends TestCase
      * @param array $params
      * @param string $json
      */
-    public function test_UpdateEntity_GivenInvalidJsonParams_Expect_Http400(array $params, string $json): void
+    public function test_AddEntity_GivenInvalidJsonParams_Expect_Http400(array $params, string $json): void
     {
         $this->request->headers->set('CONTENT_TYPE', 'application/json');
 
@@ -67,7 +62,7 @@ class EntityControllerUpdateEntityTest extends TestCase
             $this->request->query->set($name, $value);
         }
 
-        $response = $this->controller->updateEntity($this->request, new UpdateEntityInteractorStub());
+        $response = $this->controller->addMultiEntities($this->request, new AddMultiEntitiesInteractorStub());
 
         TestCase::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         TestCase::assertEquals($json, $response->getContent());
@@ -88,6 +83,15 @@ class EntityControllerUpdateEntityTest extends TestCase
             [['date' => '20-01-1'], '{"code":-1,"message":"Parameter date should be have the following format: YYYY-MM-TT"}'],
             [['date' => '20-1-01'], '{"code":-1,"message":"Parameter date should be have the following format: YYYY-MM-TT"}'],
 
+            [['toDate' => '31-12-2020'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '12-31-2020'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '2020-1-1'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '2020-1-01'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '2020-01-1'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '20-1-1'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '20-01-1'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+            [['toDate' => '20-1-01'], '{"code":-1,"message":"Parameter toDate should be have the following format: YYYY-MM-TT"}'],
+
             [['employerId' => 'abc'], '{"code":-1,"message":"Invalid params transmitted"}'],
             [['employerWorkingTimeId' => 'abc'], '{"code":-1,"message":"Invalid params transmitted"}']
         ];
@@ -98,7 +102,7 @@ class EntityControllerUpdateEntityTest extends TestCase
      * @param array $params
      * @param string $json
      */
-    public function test_UpdateEntity_GivenInvalidPathParams_Expect_Http400(array $params, string $json): void
+    public function test_AddEntity_GivenInvalidPathParams_Expect_Http400(array $params, string $json): void
     {
         $this->request->initialize([], [], [], [], [], [], $this->getRequestBodyAsJson());
         $this->request->headers->set('CONTENT_TYPE', 'application/json');
@@ -107,13 +111,13 @@ class EntityControllerUpdateEntityTest extends TestCase
             $this->request->query->set($name, $value);
         }
 
-        $response = $this->controller->updateEntity($this->request, new UpdateEntityInteractorStub());
+        $response = $this->controller->addMultiEntities($this->request, new AddMultiEntitiesInteractorStub());
 
         TestCase::assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         TestCase::assertEquals($json, $response->getContent());
     }
 
-    public function test_UpdateEntity_Expect_Http200(): void
+    public function test_AddEntity_Expect_Http200(): void
     {
         $this->request->initialize([], [], [], [], [], [], $this->getRequestBodyAsJson());
         $this->request->headers->set('CONTENT_TYPE', 'application/json');
@@ -121,9 +125,9 @@ class EntityControllerUpdateEntityTest extends TestCase
         $this->request->query->set('employerId', 1);
         $this->request->query->set('employerWorkingTimeId', 1);
 
-        $response = $this->controller->updateEntity($this->request, new UpdateEntityInteractorStub());
+        $response = $this->controller->addMultiEntities($this->request, new AddMultiEntitiesInteractorStub());
 
-        TestCase::assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        TestCase::assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         TestCase::assertEquals('{"code":1,"entities":[]}', $response->getContent());
     }
 

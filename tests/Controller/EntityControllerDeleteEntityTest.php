@@ -46,6 +46,7 @@ class EntityControllerDeleteEntityTest extends TestCase
             [['date' => '20-1-1'], '{"code":-1,"message":"Parameter date should be have the following format: YYYY-MM-TT"}'],
             [['date' => '20-01-1'], '{"code":-1,"message":"Parameter date should be have the following format: YYYY-MM-TT"}'],
             [['date' => '20-1-01'], '{"code":-1,"message":"Parameter date should be have the following format: YYYY-MM-TT"}'],
+
             [['employerId' => 'abc'], '{"code":-1,"message":"Invalid params transmitted"}'],
             [['employerWorkingTimeId' => 'abc'], '{"code":-1,"message":"Invalid params transmitted"}']
         ];
