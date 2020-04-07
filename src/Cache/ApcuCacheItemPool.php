@@ -120,6 +120,6 @@ class ApcuCacheItemPool implements CacheItemPoolInterface
      */
     protected function isKeyValid(string $key): bool
     {
-        return (bool) preg_match('/^[\w+]{4,30}$/', $key);
+        return (bool) preg_match('/^[a-z0-9]\w*[a-z0-9]$/i', $key);
     }
 }

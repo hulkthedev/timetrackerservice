@@ -29,8 +29,9 @@ class ApcuCacheItemPoolTest extends TestCase
             ['-ABC', false],
             ['ABC-', false],
             ['-ABC-', false],
-            ['ABC', false],
-            ['123', false],
+            ['_ABC_123', false],
+            ['ABC_123_', false],
+            ['_ABC_123_', false],
             [false, false],
             [true, false]
         ];
