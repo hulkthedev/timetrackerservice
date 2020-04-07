@@ -100,10 +100,6 @@ class DefaultController extends AbstractController
             $result = $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
         }
 
-        if ($result instanceof Response) {
-            return $result;
-        }
-
         return $result;
     }
 
