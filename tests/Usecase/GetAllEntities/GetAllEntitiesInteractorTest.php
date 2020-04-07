@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class GetAllEntitiesInteractorTest extends TestCase
 {
-    public function test_execute_expectDatabaseExceptionHandling(): void
+    public function test_Execute_ExpectDatabaseExceptionHandling(): void
     {
         $interactor = new GetAllEntitiesInteractor(
             new MariaDbTrackingRepositoryDatabaseExceptionStub(),
@@ -38,7 +38,7 @@ class GetAllEntitiesInteractorTest extends TestCase
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }
 
-    public function test_execute_expectExceptionHandling(): void
+    public function test_Execute_ExpectExceptionHandling(): void
     {
         $interactor = new GetAllEntitiesInteractor(
             new MariaDbTrackingRepositoryExceptionStub(),
@@ -53,7 +53,7 @@ class GetAllEntitiesInteractorTest extends TestCase
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }
 
-    public function test_execute_expectNoError(): void
+    public function test_Execute_ExpectNoError(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue(MariaDbFetcher::get());

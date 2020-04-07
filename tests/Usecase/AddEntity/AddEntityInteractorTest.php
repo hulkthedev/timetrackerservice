@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class AddEntityInteractorTest extends TestCase
 {
-    public function test_execute_expectDatabaseExceptionHandling(): void
+    public function test_Execute_ExpectDatabaseExceptionHandling(): void
     {
         $interactor = new AddEntityInteractor(
             new MariaDbTrackingRepositoryDatabaseExceptionStub(),
@@ -35,7 +35,7 @@ class AddEntityInteractorTest extends TestCase
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }
 
-    public function test_execute_expectExceptionHandling(): void
+    public function test_Execute_ExpectExceptionHandling(): void
     {
         $interactor = new AddEntityInteractor(
             new MariaDbTrackingRepositoryExceptionStub(),
@@ -50,7 +50,7 @@ class AddEntityInteractorTest extends TestCase
         TestCase::assertEmpty($response->presentResponse()['entities']);
     }
 
-    public function test_execute_expectNoError(): void
+    public function test_Execute_ExpectNoError(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(true);

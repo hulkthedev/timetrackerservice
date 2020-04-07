@@ -31,7 +31,7 @@ class MariaDbConfigRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getConfig_ExpectConfigFromCache(): void
+    public function test_GetConfig_ExpectConfigFromCache(): void
     {
         $item = new CacheItem(CacheItem::PREFIX_CONFIG . self::EMPLOYER_ID . '_' . self::EMPLOYER_WORKING_TIME_ID);
         $item->set($this->mapper->mapToConfig(MariaDbFetcher::getConfig()));
@@ -51,7 +51,7 @@ class MariaDbConfigRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getConfig_ExpectConfigFromRepo(): void
+    public function test_GetConfig_ExpectConfigFromRepo(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue([MariaDbFetcher::getConfig()]);
@@ -73,7 +73,7 @@ class MariaDbConfigRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getConfig_ExpectPDOException(): void
+    public function test_GetConfig_ExpectPDOException(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(false);

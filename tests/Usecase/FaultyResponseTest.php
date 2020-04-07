@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  */
 class FaultyResponseTest extends TestCase
 {
-    public function testSetAndGet(): void
+    public function test_SetAndGet(): void
     {
         $response = new FaultyResponse('UnitTest', 99);
         $result = $response->presentResponse();

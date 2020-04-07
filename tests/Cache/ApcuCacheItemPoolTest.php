@@ -43,7 +43,7 @@ class ApcuCacheItemPoolTest extends TestCase
      * @param bool $isValid
      * @throws Exception
      */
-    public function test_cacheKeyValidation($key, bool $isValid): void
+    public function test_CacheKeyValidation($key, bool $isValid): void
     {
         $pool = new ApcuCacheItemPoolStub();
         TestCase::assertEquals($isValid, $pool->isKeyValid($key));

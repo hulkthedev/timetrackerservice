@@ -44,7 +44,7 @@ class CalculationServiceTest extends TestCase
      * @param int $break
      * @param int $expectedResult
      */
-    public function test_calculateDelta_expectRightCalculation(
+    public function test_CalculateDelta_ExpectRightCalculation(
         int $beginTimestamp,
         int $endTimestamp,
         int $break,
@@ -57,7 +57,7 @@ class CalculationServiceTest extends TestCase
         TestCase::assertEquals($delta, $expectedResult);
     }
 
-    public function test_calculateDeltaWithException_expectFallback(): void
+    public function test_CalculateDeltaWithException_ExpectFallback(): void
     {
         $calculationService = new CalculationService();
         $calculationService->setConfig(new ConfigExceptionStub());

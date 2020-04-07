@@ -25,7 +25,7 @@ class MariaDbMapperTest extends TestCase
     /**
      * @throws Exception
      */
-    public function test_mapToList_expectRightDataMapping(): void
+    public function test_MapToList_ExpectRightDataMapping(): void
     {
         $result = $this->mapper->mapToList(MariaDbFetcher::getAll());
 
@@ -39,7 +39,7 @@ class MariaDbMapperTest extends TestCase
         TestCase::assertEquals('-00:45', $week->deltaFormatted);
     }
 
-    public function test_mapToConfig_expectRightDataMapping(): void
+    public function test_MapToConfig_ExpectRightDataMapping(): void
     {
         $result = $this->mapper->mapToConfig(MariaDbFetcher::getConfig());
 
