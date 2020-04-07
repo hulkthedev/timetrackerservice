@@ -15,6 +15,9 @@ class AddMultiEntitiesInteractorStub extends AddMultiEntitiesInteractor
     {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute(AddMultiEntitiesRequest $request): BaseResponse
     {
 

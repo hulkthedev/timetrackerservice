@@ -20,9 +20,7 @@ class GetAllEntitiesInteractorStub extends GetAllEntitiesInteractor
     }
 
     /**
-     * @param GetAllEntitiesRequest $request
-     * @return BaseResponse
-     * @throws Exception
+     * @inheritDoc
      */
     public function execute(GetAllEntitiesRequest $request): BaseResponse
     {

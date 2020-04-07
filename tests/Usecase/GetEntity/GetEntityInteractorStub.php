@@ -22,6 +22,9 @@ class GetEntityInteractorStub extends GetEntityInteractor
     {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute(GetEntityRequest $request): BaseResponse
     {
         try {

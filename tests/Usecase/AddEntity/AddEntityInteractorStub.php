@@ -15,6 +15,9 @@ class AddEntityInteractorStub extends AddEntityInteractor
     {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute(AddEntityRequest $request): BaseResponse
     {
 

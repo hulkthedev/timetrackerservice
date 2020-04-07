@@ -35,7 +35,7 @@ class EntityControllerGetEntityTest extends TestCase
     /**
      * @return array
      */
-    public function invalidParamsDataProvider(): array
+    public function invalidPathParamsDataProvider(): array
     {
         return [
             [['date' => '31-12-2020'], '{"code":-1,"message":"Parameter date should be have the following format: YYYY-MM-TT"}'],
@@ -52,7 +52,7 @@ class EntityControllerGetEntityTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidParamsDataProvider
+     * @dataProvider invalidPathParamsDataProvider
      * @param array $params
      * @param string $json
      */

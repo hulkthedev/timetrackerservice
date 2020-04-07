@@ -17,6 +17,9 @@ class DeleteEntityInteractorStub extends DeleteEntityInteractor
     {
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute(DeleteEntityRequest $request): BaseResponse
     {
         return new DeleteEntityResponse(ResultCodes::SUCCESS);
