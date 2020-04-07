@@ -22,39 +22,26 @@ Automatic time and vacation account management.
 ./build/phpunit.sh
 ```
 
-## Operations
+## Example Response
 
-* **GET**
-    * getAll
-    * getById
-    * getByDate
-* **PUT**
-    * add
-* **PATCH**
-    * updateById
-* **DELETE**
-    * updateById
-
-## Example Responses
-
-> [GET](http://localhost:3699/timetracking/1) /timetracking/{employerId}
+> [GET](http://localhost:3699/timetracking/1) /timetracking/1
 ```json
 {
     "code": 1,
     "entities": [
         {
-            "no": 1,
-            "delta": 0,
-            "deltaFormatted": "00:00",
+            "no": 15,
+            "delta": 30,
+            "deltaFormatted": "00:30",
             "days": [
                 {
-                    "weekday": 4,
-                    "date": "2020-01-01",
-                    "begin": "00:00",
-                    "end": "00:00",
-                    "mode": "holiday",
+                    "weekday": 1,
+                    "date": "2020-04-06",
+                    "begin": "08:00",
+                    "end": "16:30",
+                    "mode": "working",
                     "delta": 0,
-                    "break": 0,
+                    "break": 30,
                     "employerId": 1,
                     "employerName": "NASA",
                     "workingTimeId": 1,
@@ -62,7 +49,7 @@ Automatic time and vacation account management.
                 },
                 {
                     "weekday": 4,
-                    "date": "2020-01-02",
+                    "date": "2020-04-07",
                     "begin": "00:00",
                     "end": "00:00",
                     "mode": "vacation",
@@ -75,11 +62,37 @@ Automatic time and vacation account management.
                 },
                 {
                     "weekday": 4,
-                    "date": "2020-01-03",
+                    "date": "2020-04-08",
                     "begin": "08:00",
                     "end": "17:00",
-                    "mode": "working",
+                    "mode": "home_office",
                     "delta": 30,
+                    "break": 30,
+                    "employerId": 1,
+                    "employerName": "NASA",
+                    "workingTimeId": 1,
+                    "workingTimeDescription": "FullTime"
+                },
+                {
+                    "weekday": 4,
+                    "date": "2020-04-09",
+                    "begin": "00:00",
+                    "end": "00:00",
+                    "mode": "holiday",
+                    "delta": 0,
+                    "break": 0,
+                    "employerId": 1,
+                    "employerName": "NASA",
+                    "workingTimeId": 1,
+                    "workingTimeDescription": "FullTime"
+                },
+                {
+                    "weekday": 4,
+                    "date": "2020-04-10",
+                    "begin": "08:00",
+                    "end": "16:30",
+                    "mode": "working",
+                    "delta": 0,
                     "break": 30,
                     "employerId": 1,
                     "employerName": "NASA",
