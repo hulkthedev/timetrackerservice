@@ -2,7 +2,6 @@
 
 namespace App\Tests\Usecase\GetEntity;
 
-use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper;
 use App\Tests\Repository\MariaDbFetcher;
 use App\Usecase\BaseResponse;
@@ -28,12 +27,12 @@ class GetEntityInteractorStub extends GetEntityInteractor
     public function execute(GetEntityRequest $request): BaseResponse
     {
         try {
-            return new GetEntityResponse(ResultCodes::SUCCESS, $this->getEntity());
-        } catch (DatabaseException $exception) {
-            return $this->createUnsuccessfullyResponse($exception->getCode());
+            $entity = $this->getEntity();
         } catch (Throwable $throwable) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
+            $entity = [];
         }
+
+        return new GetEntityResponse(ResultCodes::SUCCESS, $entity);
     }
 
     /**
