@@ -22,6 +22,4 @@ docker run --rm -i -t \
 
 RESULT=$?
 
-echo
-
 exit ${RESULT}
