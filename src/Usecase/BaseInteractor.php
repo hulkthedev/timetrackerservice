@@ -8,7 +8,7 @@ use App\Service\CalculationService;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class BaseInteractor
 {

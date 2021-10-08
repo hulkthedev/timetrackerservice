@@ -3,11 +3,12 @@
 namespace App\Tests\Service;
 
 use App\Service\CalculationService;
+use App\Tests\Entity\ConfigExceptionStub;
 use App\Tests\Entity\ConfigStub;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class CalculationServiceTest extends TestCase
 {
@@ -43,7 +44,7 @@ class CalculationServiceTest extends TestCase
      * @param int $break
      * @param int $expectedResult
      */
-    public function test_calculateDelta_expectRightCalculation(
+    public function test_CalculateDelta_ExpectRightCalculation(
         int $beginTimestamp,
         int $endTimestamp,
         int $break,
@@ -54,5 +55,14 @@ class CalculationServiceTest extends TestCase
 
         $delta = $calculationService->calculateDelta($beginTimestamp, $endTimestamp, $break);
         TestCase::assertEquals($delta, $expectedResult);
+    }
+
+    public function test_CalculateDeltaWithException_ExpectFallback(): void
+    {
+        $calculationService = new CalculationService();
+        $calculationService->setConfig(new ConfigExceptionStub());
+
+        $delta = $calculationService->calculateDelta(1582012800, 1582048800, 60);
+        TestCase::assertEquals($delta, 0);
     }
 }

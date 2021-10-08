@@ -2,12 +2,14 @@
 
 namespace App\Repository;
 
+use App\Cache\CacheItem;
 use App\Repository\Exception\DatabaseException;
 use App\Usecase\ResultCodes;
 use PDO;
+use Psr\Cache\InvalidArgumentException;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepository extends MariaDbBaseRepository implements RepositoryInterface
 {
@@ -18,20 +20,37 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
     private const STORED_PROCEDURE_GET_BY_ID = 'CALL GetEntityById(:employerId, :employerWorkingTimeId, :date)';
     private const STORED_PROCEDURE_GET_BY_DATE = 'CALL GetEntityByDate(:employerId, :date)';
 
+    private const COLUMN_DATE = 'date';
+    private const COLUMN_MODE = 'mode';
+    private const COLUMN_BREAK = 'break';
+    private const COLUMN_DELTA = 'delta';
+    private const COLUMN_END_TIMESTAMP = 'end_timestamp';
+    private const COLUMN_BEGIN_TIMESTAMP = 'begin_timestamp';
+    private const COLUMN_EMPLOYER_ID = 'employerId';
+    private const COLUMN_EMPLOYER_WORKING_TIME_ID = 'employerWorkingTimeId';
+
     /**
      * @inheritDoc
      */
     public function getAll(int $employerId): array
     {
-        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_ALL);
-        $statement->execute(['employerId' => $employerId]);
+        $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+        if (false !== $list = $this->getFromCachePool($key)) {
+            return $list;
+        }
 
-        $list = $statement->fetchAll(PDO::FETCH_ASSOC);
-        if (empty($list)) {
+        $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_ALL);
+        $statement->execute([self::COLUMN_EMPLOYER_ID => $employerId]);
+
+        $unmappedList = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($unmappedList)) {
             throw new DatabaseException(ResultCodes::DATABASE_IS_EMPTY);
         }
 
-        return $this->getMapper()->mapToList($list);
+        $list = $this->getMapper()->mapToList($unmappedList);
+        $this->saveInCachePool($key, $list);
+
+        return $list;
     }
 
     /**
@@ -41,8 +60,8 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_BY_DATE);
         $statement->execute([
-            'date' => $date,
-            'employerId' => $employerId
+            self::COLUMN_DATE => $date,
+            self::COLUMN_EMPLOYER_ID => $employerId
         ]);
 
         $entity = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -60,9 +79,9 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_GET_BY_ID);
         $statement->execute([
-            'date' => $date,
-            'employerId' => $employerId,
-            'employerWorkingTimeId' => $employerWorkingTimeId
+            self::COLUMN_DATE => $date,
+            self::COLUMN_EMPLOYER_ID=> $employerId,
+            self::COLUMN_EMPLOYER_WORKING_TIME_ID => $employerWorkingTimeId
         ]);
 
         $entity = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -80,13 +99,19 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_DELETE);
         $result = $statement->execute([
-            'date' => $date,
-            'employerId' => $employerId,
-            'employerWorkingTimeId' => $employerWorkingTimeId
+            self::COLUMN_DATE => $date,
+            self::COLUMN_EMPLOYER_ID => $employerId,
+            self::COLUMN_EMPLOYER_WORKING_TIME_ID => $employerWorkingTimeId
         ]);
 
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_DELETED);
+        }
+
+        try {
+            $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+            $this->deleteFromCachePool($key);
+        } catch (InvalidArgumentException $exception) {
         }
 
         return true;
@@ -99,15 +124,21 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
     {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_SAVE);
         $result = $statement->execute([
-            'date' => $date,
-            'employerId' => $employerId,
-            'employerWorkingTimeId' => $employerWorkingTimeId,
-            'mode' => $mode,
-            'begin_timestamp' => $beginTimestamp
+            self::COLUMN_DATE => $date,
+            self::COLUMN_EMPLOYER_ID => $employerId,
+            self::COLUMN_EMPLOYER_WORKING_TIME_ID => $employerWorkingTimeId,
+            self::COLUMN_MODE => $mode,
+            self::COLUMN_BEGIN_TIMESTAMP => $beginTimestamp
         ]);
 
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_SAVED);
+        }
+
+        try {
+            $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+            $this->deleteFromCachePool($key);
+        } catch (InvalidArgumentException $exception) {
         }
 
         return true;
@@ -116,22 +147,36 @@ class MariaDbTrackingRepository extends MariaDbBaseRepository implements Reposit
     /**
      * @inheritDoc
      */
-    public function update(string $date, int $employerId, int $employerWorkingTimeId, string $mode, int $beginTimestamp, int $endTimestamp, int $break, int $delta): bool
-    {
+    public function update(
+        string $date,
+        int $employerId,
+        int $employerWorkingTimeId,
+        string $mode,
+        int $beginTimestamp,
+        int $endTimestamp,
+        int $break,
+        int $delta
+    ): bool {
         $statement = $this->getPdoDriver()->prepare(self::STORED_PROCEDURE_UPDATE);
         $result = $statement->execute([
-            'date' => $date,
-            'employerId' => $employerId,
-            'employerWorkingTimeId' => $employerWorkingTimeId,
-            'mode' => $mode,
-            'begin_timestamp' => $beginTimestamp,
-            'end_timestamp' => $endTimestamp,
-            'break' => $break,
-            'delta' => $delta
+            self::COLUMN_DATE => $date,
+            self::COLUMN_EMPLOYER_ID => $employerId,
+            self::COLUMN_EMPLOYER_WORKING_TIME_ID => $employerWorkingTimeId,
+            self::COLUMN_MODE => $mode,
+            self::COLUMN_BEGIN_TIMESTAMP => $beginTimestamp,
+            self::COLUMN_END_TIMESTAMP => $endTimestamp,
+            self::COLUMN_BREAK => $break,
+            self::COLUMN_DELTA=> $delta
         ]);
 
         if (true !== $result) {
             throw new DatabaseException(ResultCodes::ENTITY_CAN_NOT_BE_UPDATED);
+        }
+
+        try {
+            $key = CacheItem::PREFIX_WORKING_TIME . $employerId;
+            $this->deleteFromCachePool($key);
+        } catch (InvalidArgumentException $exception) {
         }
 
         return true;

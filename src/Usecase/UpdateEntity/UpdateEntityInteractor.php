@@ -6,12 +6,11 @@ use App\Repository\Exception\DatabaseException;
 use App\Usecase\BaseInteractor;
 use App\Usecase\BaseResponse;
 use App\Usecase\ResultCodes;
-use DateTime;
 use PDOException;
 use Throwable;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class UpdateEntityInteractor extends BaseInteractor
 {
@@ -38,8 +37,6 @@ class UpdateEntityInteractor extends BaseInteractor
             );
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
-        } catch (PDOException $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::PDO_EXCEPTION);
         } catch (Throwable $throwable) {
             return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }

@@ -2,17 +2,20 @@
 
 namespace App\Tests\Repository;
 
+use App\Tests\Entity\ConfigStub;
+
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbFetcher
 {
     /**
+     * @param int $index
      * @return array
      */
-    public static function get(): array
+    public static function get(int $index = 0): array
     {
-        return [static::getAll()[0]];
+        return [static::getAll()[$index]];
     }
 
     /**
@@ -43,7 +46,7 @@ class MariaDbFetcher
                 'begin_timestamp' => '1578390420',
                 'end_timestamp' => '1578419940',
                 'break' => '30',
-                'delta' => '-12',
+                'delta' => '-120',
                 'employer_name' => 'Google',
                 'working_time_description' => 'Fulltime',
             ],
@@ -86,6 +89,20 @@ class MariaDbFetcher
                 'employer_name' => 'Google',
                 'working_time_description' => 'Fulltime',
             ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getConfig(): array
+    {
+        $template = new ConfigStub();
+        return [
+            'vacation_days' => $template->vacationDays,
+            'working_time' => $template->workingTime,
+            'working_break' => $template->workingBreak,
+            'time_account' => $template->timeAccount,
         ];
     }
 }

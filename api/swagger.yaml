@@ -3,10 +3,9 @@ openapi: 3.0.1
 info:
   title: REST based TimeTracker Service
   contact:
-    name: Alexej Beirith
-    url: https://www.KOMMT-NOCH.de
+    url: https://www.%placeholder%.de
     email: fatal.error.27@gmail.com
-  version: "1.0"
+  version: "0.9"
 
 servers:
   - url: https://www.KOMMT-NOCH.de/tracking

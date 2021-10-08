@@ -4,9 +4,10 @@ namespace App\Service;
 
 use App\Entity\Config;
 use DateTime;
+use Throwable;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class CalculationService
 {
@@ -53,7 +54,7 @@ class CalculationService
 
             /** calculate overtime */
             $deltaInMinutes -= $this->config->workingTime;
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             return 0;
         }
 
@@ -68,15 +69,11 @@ class CalculationService
     private function getBreakTimeByDuration(int $workingTime, int $break): int
     {
         if ($workingTime < self::SHORT_WORKING_DAY_IN_MINUTES) {
-            return $break > self::SHORT_WORKING_DAY_BREAK ? $break : self::SHORT_WORKING_DAY_BREAK;
-        }
-
-        if ($workingTime > self::LONG_WORKING_DAY_IN_MINUTES) {
-            return $break > self::LONG_WORKING_DAY_BREAK ? $break : self::LONG_WORKING_DAY_BREAK;
-        }
-
-        if ($this->config->workingBreak > $break) {
-            return $this->config->workingBreak;
+            $break = $break > self::SHORT_WORKING_DAY_BREAK ? $break : self::SHORT_WORKING_DAY_BREAK;
+        } elseif ($workingTime > self::LONG_WORKING_DAY_IN_MINUTES) {
+            $break = $break > self::LONG_WORKING_DAY_BREAK ? $break : self::LONG_WORKING_DAY_BREAK;
+        } elseif ($this->config->workingBreak > $break) {
+            $break = $this->config->workingBreak;
         }
 
         return $break;

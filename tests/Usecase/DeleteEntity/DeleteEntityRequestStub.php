@@ -5,7 +5,7 @@ namespace App\Tests\Usecase\DeleteEntity;
 use App\Usecase\DeleteEntity\DeleteEntityRequest;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class DeleteEntityRequestStub extends DeleteEntityRequest
 {

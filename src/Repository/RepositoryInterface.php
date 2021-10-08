@@ -6,7 +6,7 @@ use App\Repository\Exception\DatabaseException;
 use Exception;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 interface RepositoryInterface
 {

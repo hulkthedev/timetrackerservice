@@ -6,7 +6,7 @@ use App\Repository\RepositoryInterface;
 use Exception;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
 {
@@ -36,6 +36,7 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function delete(string $date, int $employerId, int $employerWorkingTimeId): bool
     {
@@ -44,6 +45,7 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function save(
         string $date,
@@ -57,6 +59,7 @@ class MariaDbTrackingRepositoryExceptionStub implements RepositoryInterface
 
     /**
      * @inheritDoc
+     * @throws Exception
      */
     public function update(
         string $date,

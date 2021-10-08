@@ -2,17 +2,20 @@
 
 namespace App\Tests\Repository;
 
+use App\Cache\CacheItem;
 use App\Entity\Day;
 use App\Entity\Week;
 use App\Repository\Exception\DatabaseException;
 use App\Repository\Mapper\MariaDbMapper;
 use App\Repository\MariaDbTrackingRepository;
+use App\Tests\Cache\ApcuCacheItemPoolStub;
 use App\Usecase\Modes;
 use App\Usecase\ResultCodes;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class MariaDbTrackingRepositoryTest extends TestCase
 {
@@ -20,13 +23,13 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->repo = new MariaDbTrackingRepository(new MariaDbMapper());
+        $this->repo = new MariaDbTrackingRepository(new MariaDbMapper(), new ApcuCacheItemPoolStub());
     }
 
     /**
      * @throws DatabaseException
      */
-    public function test_getPdoDriver_NoLoginDataIsset_ExpectException(): void
+    public function test_GetPdoDriver_NoLoginDataIsset_ExpectException(): void
     {
         $this->clearEnv();
 
@@ -39,7 +42,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getAll_NoDataStored_ExpectException(): void
+    public function test_GetAll_NoDataStored_ExpectException(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue([]);
@@ -55,7 +58,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getAll_ExpectRightMapping(): void
+    public function test_GetAll_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue(MariaDbFetcher::getAll());
@@ -74,8 +77,36 @@ class MariaDbTrackingRepositoryTest extends TestCase
 
     /**
      * @throws DatabaseException
+     * @throws Exception
      */
-    public function test_getByDate_ExpectException(): void
+    public function test_GetAllFromCache_ExpectRightMapping(): void
+    {
+        $employerId = 1122;
+
+        $item = new CacheItem(CacheItem::PREFIX_WORKING_TIME . $employerId);
+        $item->set(MariaDbFetcher::getAll());
+
+        $pool = new ApcuCacheItemPoolStub();
+        $pool->save($item);
+
+        $mapper = new MariaDbMapper();
+        $repo = new MariaDbTrackingRepository($mapper, $pool);
+        $dbOutput= $repo->getAll($employerId);
+
+        $result = $mapper->mapToList($dbOutput);
+
+        /** @var Week $week */
+        $week = reset($result);
+        TestCase::assertInstanceOf(Week::class, $week);
+        TestCase::assertInstanceOf(Day::class, $week->days[0]);
+        TestCase::assertEquals(5, count($week->days));
+        TestCase::assertEquals(2, $week->no);
+    }
+
+    /**
+     * @throws DatabaseException
+     */
+    public function test_GetByDate_ExpectException(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue([]);
@@ -91,7 +122,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getByDate_ExpectRightMapping(): void
+    public function test_GetByDate_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue(MariaDbFetcher::get());
@@ -111,7 +142,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getById_ExpectException(): void
+    public function test_GetById_ExpectException(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue([]);
@@ -127,7 +158,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_getById_ExpectRightMapping(): void
+    public function test_GetById_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
         $pdo->setFetchAllReturnValue(MariaDbFetcher::get());
@@ -153,7 +184,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_delete_ExpectException(): void
+    public function test_Delete_ExpectException(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(false);
@@ -169,7 +200,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_delete_ExpectNoError(): void
+    public function test_Delete_ExpectNoError(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(true);
@@ -183,7 +214,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_save_ExpectException(): void
+    public function test_Save_ExpectException(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(false);
@@ -199,7 +230,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_save_ExpectNoError(): void
+    public function test_Save_ExpectNoError(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(true);
@@ -213,7 +244,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_update_ExpectException(): void
+    public function test_Update_ExpectException(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(false);
@@ -229,7 +260,7 @@ class MariaDbTrackingRepositoryTest extends TestCase
     /**
      * @throws DatabaseException
      */
-    public function test_update_ExpectRightMapping(): void
+    public function test_Update_ExpectRightMapping(): void
     {
         $pdo = new PdoStub();
         $pdo->setExecuteReturnValue(true);

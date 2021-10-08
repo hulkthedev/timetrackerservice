@@ -6,7 +6,7 @@ use App\Usecase\Modes;
 use App\Usecase\UpdateEntity\UpdateEntityRequest;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class UpdateEntityRequestStub extends UpdateEntityRequest
 {

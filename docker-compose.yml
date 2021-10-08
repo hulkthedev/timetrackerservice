@@ -1,11 +1,11 @@
 version: "3.7"
 services:
   timetrackerservice-php:
+    image: php-fpm-alpine:prod
     build:
       context: .
       dockerfile: Dockerfile
-    image: php-fpm-alpine:prod
-    restart: "always"
+    restart: "unless-stopped"
     env_file:
       - infrastructure/environment/prod/common.env
       - infrastructure/environment/prod/mariadb.env

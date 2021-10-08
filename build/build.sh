@@ -35,10 +35,3 @@ docker-compose up -d
 cd "${BUILD_DIR}" || exit
 chmod +x phpunit.sh
 ./phpunit.sh
-
-# add push hook
-chmod +x hook.sh
-./hook.sh
-
-# list images
-docker images

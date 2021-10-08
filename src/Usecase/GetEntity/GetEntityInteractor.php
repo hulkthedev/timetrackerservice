@@ -10,7 +10,7 @@ use PDOException;
 use Throwable;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class GetEntityInteractor extends BaseInteractor
 {
@@ -26,8 +26,6 @@ class GetEntityInteractor extends BaseInteractor
                 : $this->repository->getByDate($request->date, $request->employerId);
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
-        } catch (PDOException $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::PDO_EXCEPTION);
         } catch (Throwable $throwable) {
             return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }

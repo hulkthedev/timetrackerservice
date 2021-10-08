@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Throwable;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class DefaultController extends AbstractController
 {
@@ -98,10 +98,6 @@ class DefaultController extends AbstractController
         } catch (Throwable $throwable) {
             $response = new FaultyResponse('Invalid params transmitted');
             $result = $this->createResponse($response->presentResponse(), Response::HTTP_BAD_REQUEST);
-        }
-
-        if ($result instanceof Response) {
-            return $result;
         }
 
         return $result;

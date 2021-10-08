@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class AddMultiEntitiesInteractor extends BaseInteractor
 {
@@ -37,8 +37,6 @@ class AddMultiEntitiesInteractor extends BaseInteractor
             }
         } catch (DatabaseException $exception) {
             return $this->createUnsuccessfullyResponse($exception->getCode());
-        } catch (PDOException $exception) {
-            return $this->createUnsuccessfullyResponse(ResultCodes::PDO_EXCEPTION);
         } catch (Throwable $throwable) {
             return $this->createUnsuccessfullyResponse(ResultCodes::UNKNOWN_ERROR);
         }

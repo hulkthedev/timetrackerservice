@@ -6,7 +6,7 @@ use App\Usecase\AddMultiEntities\AddMultiEntitiesRequest;
 use App\Usecase\Modes;
 
 /**
- * @author Alexej Beirith <fatal.error.27@gmail.com>
+ * @author ~albei <fatal.error.27@gmail.com>
  */
 class AddMultiEntityRequestStub extends AddMultiEntitiesRequest
 {

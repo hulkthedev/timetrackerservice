@@ -1,11 +1,11 @@
 {
   "name": "sym5/timetrackerservice",
-  "version": "1.0.0",
+  "version": "1.0",
   "type": "project",
   "license": "MIT",
   "description": "REST based TimeTracker Service",
   "authors": [{
-      "name": "Alexej Beirith",
+      "name": "~albei",
       "email": "fatal.error.27@gmail.com",
       "role": "developer"
   }],
